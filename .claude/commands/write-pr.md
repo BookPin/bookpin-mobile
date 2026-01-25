@@ -48,7 +48,7 @@ PR 템플릿에 맞게 PR 내용을 작성합니다.
 1. **이슈 번호**: 브랜치명에서 추출 (예: `feature/#2` → `#2`)
 2. **변경된 점**: 커밋 메시지와 diff를 분석하여 의미있는 변경사항 정리
 3. **체크리스트**: 기본 항목 포함
-4. **적용**: `gh pr edit [PR번호] --body "..."` 또는 `gh pr create` 사용
+4. **적용**: `export PR_BODY="..."; gh pr edit [PR번호] --body "$PR_BODY"` 또는 `gh pr create` 사용
 
 ## 실행 절차
 
