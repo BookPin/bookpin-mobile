@@ -27,6 +27,9 @@ kotlin {
     }
 
     sourceSets {
+        commonMain.dependencies {
+            implementation(projects.designsystem)
+        }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
