@@ -20,6 +20,7 @@ object BookPinTheme {
 
 @Composable
 fun BookPinTheme(
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     val colors = bookPinLightColors
