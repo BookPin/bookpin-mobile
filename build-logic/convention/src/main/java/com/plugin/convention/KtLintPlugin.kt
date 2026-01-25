@@ -26,6 +26,7 @@ class KtLintPlugin : Plugin<Project> {
                         "ktlint_standard_string-template-indent" to "disabled",
                         "ktlint_standard_multiline-expression-wrapping" to "disabled",
                         "ktlint_standard_annotation" to "disabled",
+                        "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
                     )
                 )
                 reporters {
