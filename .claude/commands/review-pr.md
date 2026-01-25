@@ -49,12 +49,10 @@ PR의 변경사항을 리뷰하고 GitHub에 코멘트를 남깁니다.
 
    **High Priority 이슈**: 각 이슈별로 개별 라인 코멘트
    ```bash
-   gh api repos/{owner}/{repo}/pulls/{pr_number}/comments \
+    gh api repos/{owner}/{repo}/pulls/{pr_number}/comments \
      -f body="<details><summary>:rotating_light: [High] 이슈 제목</summary>
-
    **문제점**
    설명...
-
    **권장 수정**
    \`\`\`kotlin
    수정 코드
