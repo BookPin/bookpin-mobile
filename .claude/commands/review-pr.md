@@ -43,7 +43,6 @@ PR의 변경사항을 리뷰하고 GitHub에 코멘트를 남깁니다.
    ```
 
 2. 변경된 파일 분석
-   - `.gemini/styleguide.md` 기준에 따라 검토
    - 우선순위별로 이슈 분류
 
 3. GitHub 코멘트 작성
@@ -83,7 +82,7 @@ PR의 변경사항을 리뷰하고 GitHub에 코멘트를 남깁니다.
    설명...
 
    ---
-   *리뷰 기준: .gemini/styleguide.md*"
+   *리뷰 기준: .claude/skills/android-pr-review/SKILL.md"
    ```
 
 4. 리뷰 완료 후 요약 출력
@@ -95,19 +94,18 @@ PR의 변경사항을 리뷰하고 GitHub에 코멘트를 남깁니다.
 <details>
 <summary>:rotating_light: [High] 이슈 제목</summary>
 
-**카테고리**: 메모리 누수 / 크래시 위험 / 멀티플랫폼 위반
+**카테고리**
+- 메모리 누수
+- 크래시 위험
+- 멀티플랫폼 위반
 
 **문제점**
-현재 코드의 문제점 설명
+현재 코드에서 발생할 수 있는 문제와 그 영향에 대해 설명합니다.
+(예: 특정 조건에서 크래시가 발생할 수 있음, 생명주기 종료 후 객체가 유지됨 등)
 
 **권장 수정**
 ```kotlin
 수정된 코드 예시
-```
-
-**참고**
-- styleguide 관련 섹션 링크
-</details>
 ```
 
 ### Medium/Low Priority (전체 코멘트)
@@ -139,7 +137,7 @@ PR의 변경사항을 리뷰하고 GitHub에 코멘트를 남깁니다.
 
 위 조건을 만족한다면, 해당 구현은 충분히 수용 가능합니다.
 
-*리뷰 기준: .gemini/styleguide.md*
+*리뷰 기준: .claude/skills/android-pr-review/SKILL.md*
 ```
 
 ## 필수 규칙
