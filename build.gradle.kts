@@ -10,4 +10,5 @@ plugins {
     alias(libs.plugins.kotlinAndroid) apply false
     alias(libs.plugins.kotlinMultiplatformLibrary) apply false
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.android.lint) apply false
 }

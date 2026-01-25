@@ -2,12 +2,18 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinMultiplatformLibrary)
     alias(libs.plugins.bookpin.compose)
-    alias(libs.plugins.bookpin.ktlint)
+}
+
+compose {
+    resources {
+        publicResClass = true
+        packageOfResClass = "bookpin.designsystem.generated.resources"
+    }
 }
 
 kotlin {
     androidLibrary {
-        namespace = "com.phase.bookpin"
+        namespace = "com.phase.bookpin.designsystem"
         compileSdk = libs.versions.compileSdk
             .get()
             .toInt()
@@ -17,21 +23,18 @@ kotlin {
     }
 
     listOf(
+        iosX64(),
         iosArm64(),
         iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
+            baseName = "DesignSystemKit"
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.designsystem)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+            implementation(libs.jetbrains.compose.component)
         }
     }
 }
