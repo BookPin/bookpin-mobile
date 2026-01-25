@@ -16,10 +16,6 @@ class AndroidApplicationPlugin: Plugin<Project> {
             androidApplication {
                 configureKotlinAndroid(this)
 
-                namespace?.let {
-                    namespace = it
-                }
-
                 defaultConfig {
                     versionCode = libs.findVersion("versionCode").get().requiredVersion.toInt()
                     versionName = libs.findVersion("versionName").get().requiredVersion
