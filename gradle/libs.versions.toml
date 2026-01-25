@@ -82,7 +82,7 @@ compose-compiler-gradle = { group = "org.jetbrains.kotlin", name = "compose-comp
 firebase-analytics = { module = "dev.gitlive:firebase-analytics", version.ref = "firebase" }
 firebase-crashlytics = { module = "dev.gitlive:firebase-crashlytics", version.ref = "firebase"  }
 
-coil-network = { module = "io.coil-kt.coil3:coil-network-ktor2", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
