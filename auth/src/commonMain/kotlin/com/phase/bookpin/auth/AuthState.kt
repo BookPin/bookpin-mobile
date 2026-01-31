@@ -1,4 +1,3 @@
 package com.phase.bookpin.auth
 
-class AuthState {
-}
+class AuthState

@@ -5,6 +5,13 @@ plugins {
     alias(libs.plugins.bookpin.ktlint)
 }
 
+compose {
+    resources {
+        publicResClass = true
+        packageOfResClass = "bookpin.auth.generated.resources"
+    }
+}
+
 kotlin {
     androidLibrary {
         namespace = "com.phase.bookpin.auth"
@@ -14,6 +21,7 @@ kotlin {
         minSdk = libs.versions.minSdk
             .get()
             .toInt()
+        androidResources.enable = true
     }
 
     listOf(
@@ -21,7 +29,7 @@ kotlin {
         iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "Auth"
             isStatic = true
         }
     }
@@ -29,6 +37,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.designsystem)
+            implementation(projects.common)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

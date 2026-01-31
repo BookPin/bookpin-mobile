@@ -1,4 +1,7 @@
 package com.phase.bookpin.auth
 
-class AuthViewModel {
+import com.phase.bookpin.common.BaseViewModel
+
+class AuthViewModel : BaseViewModel<AuthState, AuthSideEffect>() {
+    override fun createInitialState(): AuthState = AuthState()
 }
