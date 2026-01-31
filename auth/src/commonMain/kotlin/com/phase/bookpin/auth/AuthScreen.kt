@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -19,6 +20,9 @@ import androidx.compose.ui.unit.dp
 import bookpin.auth.generated.resources.Res
 import bookpin.auth.generated.resources.app_name
 import bookpin.auth.generated.resources.apple_login
+import bookpin.auth.generated.resources.cd_apple_login
+import bookpin.auth.generated.resources.cd_app_icon
+import bookpin.auth.generated.resources.cd_kakao_login
 import bookpin.auth.generated.resources.kakao_login
 import bookpin.auth.generated.resources.login_subtitle
 import bookpin.auth.generated.resources.login_title
@@ -33,6 +37,8 @@ import bookpin.designsystem.generated.resources.Res as CommonRes
 
 @Composable
 fun AuthScreen() {
+    val currentPlatform = remember { platform() }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -48,7 +54,7 @@ fun AuthScreen() {
             Image(
                 modifier = Modifier.size(200.dp),
                 painter = painterResource(CommonRes.drawable.bookpin_icon),
-                contentDescription = "bookpin_icon",
+                contentDescription = stringResource(Res.string.cd_app_icon),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -86,17 +92,17 @@ fun AuthScreen() {
             Image(
                 modifier = Modifier.fillMaxWidth(),
                 painter = painterResource(Res.drawable.kakao_login),
-                contentDescription = "kakao_login",
+                contentDescription = stringResource(Res.string.cd_kakao_login),
                 contentScale = ContentScale.FillWidth,
             )
 
-            if (platform() == Platform.iOS) {
+            if (currentPlatform == Platform.iOS) {
                 Image(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 12.dp),
                     painter = painterResource(Res.drawable.apple_login),
-                    contentDescription = "apple_login",
+                    contentDescription = stringResource(Res.string.cd_apple_login),
                     contentScale = ContentScale.FillWidth,
                 )
             }
