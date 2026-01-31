@@ -20,6 +20,7 @@ kotlin {
         minSdk = libs.versions.minSdk
             .get()
             .toInt()
+        androidResources.enable = true
     }
 
     listOf(
