@@ -31,10 +31,4 @@ kotlin {
             baseName = "DesignSystemKit"
         }
     }
-
-    sourceSets {
-        commonMain.dependencies {
-            implementation(libs.jetbrains.compose.component)
-        }
-    }
 }
