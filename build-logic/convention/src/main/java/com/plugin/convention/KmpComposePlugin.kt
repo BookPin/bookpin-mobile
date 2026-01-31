@@ -19,6 +19,7 @@ class KmpComposePlugin : Plugin<Project> {
                     implementation(libs.findLibrary("jetbrains-compose-foundation").get().get())
                     implementation(libs.findLibrary("jetbrains-compose-ui").get().get())
                     implementation(libs.findLibrary("jetbrains-compose-animation").get().get())
+                    implementation(libs.findLibrary("jetbrains-compose-component").get().get())
                     implementation(libs.findLibrary("jetbrains-compose-material3").get().get())
                 }
 

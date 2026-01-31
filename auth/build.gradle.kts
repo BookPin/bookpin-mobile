@@ -2,18 +2,19 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinMultiplatformLibrary)
     alias(libs.plugins.bookpin.compose)
+    alias(libs.plugins.bookpin.ktlint)
 }
 
 compose {
     resources {
         publicResClass = true
-        packageOfResClass = "bookpin.designsystem.generated.resources"
+        packageOfResClass = "bookpin.auth.generated.resources"
     }
 }
 
 kotlin {
     androidLibrary {
-        namespace = "com.phase.bookpin.designsystem"
+        namespace = "com.phase.bookpin.auth"
         compileSdk = libs.versions.compileSdk
             .get()
             .toInt()
@@ -24,12 +25,22 @@ kotlin {
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "DesignSystemKit"
+            baseName = "Auth"
+            isStatic = true
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.designsystem)
+            implementation(projects.common)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
         }
     }
 }
