@@ -12,24 +12,11 @@ class KtLintPlugin : Plugin<Project> {
                 apply("org.jlleitschuh.gradle.ktlint")
             }
 
+            // additional EditorConfig : /.editorconfig
             extensions.configure<KtlintExtension> {
                 android.set(true)
                 verbose.set(true)
                 outputToConsole.set(true)
-                additionalEditorconfig.set (
-                    mapOf(
-                        "ktlint_standard_no-wildcard-imports" to "disabled",
-                        "ktlint_standard_filename" to "disabled",
-                        "ktlint_standard_package-name" to "disabled",
-                        "ktlint_standard_function-signature" to "disabled",
-                        "ktlint_standard_class-naming" to "disabled",
-                        "ktlint_standard_blank-line-before-declaration" to "disabled",
-                        "ktlint_standard_string-template-indent" to "disabled",
-                        "ktlint_standard_multiline-expression-wrapping" to "disabled",
-                        "ktlint_standard_annotation" to "disabled",
-                        "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
-                    )
-                )
                 reporters {
                     reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
                 }
