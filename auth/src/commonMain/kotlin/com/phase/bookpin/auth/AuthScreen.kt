@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import bookpin.auth.generated.resources.Res
 import bookpin.auth.generated.resources.app_name
 import bookpin.auth.generated.resources.apple_login
-import bookpin.auth.generated.resources.cd_apple_login
 import bookpin.auth.generated.resources.cd_app_icon
+import bookpin.auth.generated.resources.cd_apple_login
 import bookpin.auth.generated.resources.cd_kakao_login
 import bookpin.auth.generated.resources.kakao_login
 import bookpin.auth.generated.resources.login_subtitle
