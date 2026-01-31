@@ -20,6 +20,7 @@ class KtLintPlugin : Plugin<Project> {
                     mapOf(
                         "ktlint_standard_no-wildcard-imports" to "disabled",
                         "ktlint_standard_filename" to "disabled",
+                        "ktlint_standard_package-name" to "disabled",
                         "ktlint_standard_function-signature" to "disabled",
                         "ktlint_standard_class-naming" to "disabled",
                         "ktlint_standard_blank-line-before-declaration" to "disabled",
