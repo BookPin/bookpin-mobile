@@ -38,6 +38,8 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.designsystem)
             implementation(projects.common)
+            implementation(projects.model)
+            implementation(projects.domain)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
