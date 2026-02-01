@@ -157,6 +157,10 @@ private suspend fun isRefreshTokenExpired(local: BookPinPreferenceDataStore): Bo
         .getString(DataStoreKey.REFRESH_TOKEN_EXPIRED_AT)
         .first()
 
+    if (expiredAt.isEmpty()) {
+        return true
+    }
+
     return runCatching {
         Instant.parse(expiredAt) <= Clock.System.now()
     }.getOrDefault(true)
