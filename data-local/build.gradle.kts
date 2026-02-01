@@ -62,7 +62,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(projects.dataApi)
                 implementation(libs.kotlinx.coroutines)
-                implementation(libs.androidx.datastore.prefereces)
+                implementation(libs.androidx.datastore.preferences)
                 implementation(libs.koin.core)
             }
         }
