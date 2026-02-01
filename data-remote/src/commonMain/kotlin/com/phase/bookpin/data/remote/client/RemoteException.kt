@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 data class RemoteException(
     val view: NetworkExceptionViewType = NetworkExceptionViewType.TOAST,
     val type: String = "",
-    val title: String = "UnKnown Error",
+    val title: String = "알 수 없는 오류",
     val status: Int = -1,
-    val detail: String = "알 수 없는 에러가 발생하였습니다.",
+    val detail: String = "알 수 없는 오류가 발생하였습니다.",
     val instance: String = "",
 ) : Exception() {
     enum class NetworkExceptionViewType {
