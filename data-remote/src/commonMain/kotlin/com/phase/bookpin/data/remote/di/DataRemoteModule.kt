@@ -14,7 +14,7 @@ val dataRemoteModule = module {
     single(RefreshHttpClient) { createRefreshHttpClient(logger = get()) }
     single<HttpClient> {
         createHttpClient(
-            remote = get(),
+            refreshClient = get(RefreshHttpClient),
             local = get(),
             logger = get(),
         )
@@ -23,7 +23,6 @@ val dataRemoteModule = module {
     single<AuthRemoteDataSource> {
         AuthRemoteDataSourceImpl(
             client = get(),
-            refreshClient = get(RefreshHttpClient)
         )
     }
 }
