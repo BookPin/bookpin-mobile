@@ -9,10 +9,10 @@ import org.koin.core.context.startKoin
 class BookPinApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
         startKoin {
             androidContext(this@BookPinApplication)
             modules(appModule)
         }
+        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
     }
 }
