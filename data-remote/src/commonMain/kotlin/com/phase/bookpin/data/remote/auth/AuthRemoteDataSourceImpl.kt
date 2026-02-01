@@ -14,6 +14,7 @@ import io.ktor.http.path
 
 class AuthRemoteDataSourceImpl(
     private val client: HttpClient,
+    private val refreshClient: HttpClient,
 ) : AuthRemoteDataSource {
     override suspend fun login(request: SocialAuthTokenRequest): Result<LoginResponse> =
         client.safeRequest {
@@ -25,7 +26,7 @@ class AuthRemoteDataSourceImpl(
         }
 
     override suspend fun refreshToken(request: RefreshTokenRequest): Result<RefreshTokenResponse> =
-        client.safeRequest {
+        refreshClient.safeRequest {
             markAsRefreshTokenRequest()
             url {
                 method = HttpMethod.Post

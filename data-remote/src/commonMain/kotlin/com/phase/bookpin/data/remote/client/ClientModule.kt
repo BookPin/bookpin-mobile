@@ -2,10 +2,8 @@ package com.phase.bookpin.data.remote.client
 
 import com.phase.bookpin.data.api.auth.AuthRemoteDataSource
 import com.phase.bookpin.data.api.auth.RefreshTokenRequest
-import com.phase.bookpin.data.api.auth.RefreshTokenResponse
 import com.phase.bookpin.data.api.datastore.BookPinPreferenceDataStore
 import com.phase.bookpin.data.api.datastore.DataStoreKey
-import com.phase.bookpin.data.api.navigation.Navigator
 import com.phase.bookpin.data.remote.BuildKonfig
 import com.phase.bookpin.data.remote.BuildKonfig.AMAZON_S3
 import io.ktor.client.HttpClient
@@ -20,14 +18,10 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
-import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.first
-import kotlinx.serialization.json.Json
 import kotlin.time.Clock
 import kotlin.time.Instant
 import co.touchlab.kermit.Logger as KermitLogger
@@ -36,15 +30,11 @@ private const val REQUEST_TIMEOUT_MILLIS = 50_000L
 
 expect fun createPlatformHttpClient(block: HttpClientConfig<*>.() -> Unit): HttpClient
 
-fun createHttpClient(
+internal fun createHttpClient(
     remote: AuthRemoteDataSource,
     local: BookPinPreferenceDataStore,
-    navigator: Navigator,
     logger: KermitLogger,
-): HttpClient {
-    val refreshClient = createRefreshHttpClient(logger)
-
-    return createPlatformHttpClient {
+): HttpClient = createPlatformHttpClient {
         defaultRequest {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             url(BuildKonfig.BASE_URL)
@@ -61,8 +51,6 @@ fun createHttpClient(
 
                 refreshTokens {
                     if (isRefreshTokenExpired(local)) {
-                        local.clear()
-                        navigator.openAuth()
                         return@refreshTokens null
                     }
 
@@ -91,14 +79,7 @@ fun createHttpClient(
         }
 
         install(ContentNegotiation) {
-            json(
-                Json {
-                    encodeDefaults = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                    coerceInputValues = true
-                }
-            )
+            json(clientJson)
         }
 
         install(Logging) {
@@ -112,9 +93,9 @@ fun createHttpClient(
             }
         }
     }
-}
 
-private fun createRefreshHttpClient(logger: KermitLogger): HttpClient = createPlatformHttpClient {
+
+internal fun createRefreshHttpClient(logger: KermitLogger): HttpClient = createPlatformHttpClient {
     defaultRequest {
         header(HttpHeaders.ContentType, ContentType.Application.Json)
         url(BuildKonfig.BASE_URL)
@@ -125,14 +106,7 @@ private fun createRefreshHttpClient(logger: KermitLogger): HttpClient = createPl
     }
 
     install(ContentNegotiation) {
-        json(
-            Json {
-                encodeDefaults = true
-                isLenient = true
-                ignoreUnknownKeys = true
-                coerceInputValues = true
-            }
-        )
+        json(clientJson)
     }
 
     install(Logging) {
