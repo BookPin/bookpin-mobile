@@ -37,6 +37,9 @@ kotlin {
             implementation(projects.dataRemote)
             implementation(projects.dataLocal)
             implementation(projects.dataAuth)
+
+            implementation(libs.kermit)
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
