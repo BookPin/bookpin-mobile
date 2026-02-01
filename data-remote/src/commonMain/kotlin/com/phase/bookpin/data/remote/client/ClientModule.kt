@@ -1,5 +1,6 @@
 package com.phase.bookpin.data.remote.client
 
+import com.phase.bookpin.data.api.auth.AuthRemoteDataSource
 import com.phase.bookpin.data.api.auth.RefreshTokenRequest
 import com.phase.bookpin.data.api.auth.RefreshTokenResponse
 import com.phase.bookpin.data.api.datastore.BookPinPreferenceDataStore
@@ -36,6 +37,7 @@ private const val REQUEST_TIMEOUT_MILLIS = 50_000L
 expect fun createPlatformHttpClient(block: HttpClientConfig<*>.() -> Unit): HttpClient
 
 fun createHttpClient(
+    remote: AuthRemoteDataSource,
     local: BookPinPreferenceDataStore,
     navigator: Navigator,
     logger: KermitLogger,
@@ -65,14 +67,7 @@ fun createHttpClient(
                     }
 
                     val refreshToken = local.getString(DataStoreKey.REFRESH_TOKEN).first()
-                    val result = refreshClient.safeRequest<RefreshTokenResponse> {
-                        markAsRefreshTokenRequest()
-                        url {
-                            method = HttpMethod.Post
-                            path("api/v1/auth/refresh")
-                        }
-                        setBody(RefreshTokenRequest(refreshToken))
-                    }
+                    val result = remote.refreshToken(RefreshTokenRequest(refreshToken))
 
                     result.fold(
                         onSuccess = { response ->
