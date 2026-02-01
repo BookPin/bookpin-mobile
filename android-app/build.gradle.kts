@@ -36,6 +36,7 @@ android {
 
 dependencies {
     implementation(projects.composeApp)
+    implementation(projects.dataLocal)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
