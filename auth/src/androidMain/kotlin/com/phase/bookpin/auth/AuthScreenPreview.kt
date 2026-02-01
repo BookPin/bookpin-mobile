@@ -1,11 +1,12 @@
-package com.phase.bookpin
+package com.phase.bookpin.auth
 
 import androidx.compose.runtime.Composable
-import com.phase.bookpin.auth.AuthScreen
+import androidx.compose.ui.tooling.preview.Preview
 import com.phase.bookpin.designsystem.BookPinTheme
 
 @Composable
-fun BookPinApp() {
+@Preview
+fun AuthScreenPreview() {
     BookPinTheme {
         AuthScreen()
     }
