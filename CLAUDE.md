@@ -14,6 +14,7 @@ Android와 iOS를 동시에 지원하며, **MVI 패턴**과 **Clean Architecture
 | Architecture | MVI + Clean Architecture |
 | DI | Koin 4.1.1 |
 | Network | Ktor 3.4.0 |
+| Local Storage | DataStore |
 | Image Loading | Coil 3.3.0 |
 | Serialization | KotlinX Serialization 1.10.0 |
 | Async | KotlinX Coroutines 1.10.2 |
@@ -23,34 +24,79 @@ Android와 iOS를 동시에 지원하며, **MVI 패턴**과 **Clean Architecture
 
 ```
 BookPin/
-├── android-app/          # Android 진입점 (MainActivity)
+├── android-app/          # Android 진입점
 ├── iosApp/               # iOS 진입점 (Swift)
-├── compose-app/          # 공유 UI 모듈 (Compose Multiplatform)
+├── compose-app/          # 공유 UI 모듈, DI 설정, Navigation
+├── auth/                 # 인증 Feature 모듈
+├── common/               # 공통 유틸리티 (Snackbar, Extensions)
 ├── designsystem/         # 디자인 시스템 (Color, Typography, Theme)
+├── domain/               # Domain Layer (Repository 인터페이스)
+├── model/                # 비즈니스 모델
+├── data/                 # Data Layer (Repository 구현체)
+├── data-api/             # DataSource 인터페이스, DTO
+├── data-remote/          # Remote DataSource (Ktor)
+├── data-local/           # Local DataSource (DataStore)
+├── data-auth/            # 소셜 인증 구현체 (Kakao, Apple)
 ├── build-logic/          # Gradle Convention Plugins
-│   └── convention/
 └── gradle/
-    └── libs.versions.toml  # 의존성 버전 관리
+    └── libs.versions.toml
 ```
 
 ## 모듈 상세
 
-### android-app
-Android 앱 진입점. MainActivity에서 `BookPinApp()` 호출.
+### App 모듈
 
-### iosApp
+#### android-app
+Android 앱 진입점.
+- `BookPinApplication`: Koin 초기화
+- `MainActivity`: `BookPinApp()` 호출
+
+#### iosApp
 iOS 앱 진입점. Swift에서 `getBookPinViewController()` 호출.
 
-### compose-app
+#### compose-app
 플랫폼 공통 UI 모듈.
 ```
 src/
-├── commonMain/     # 공통 코드
-├── androidMain/    # Android 구현체
-└── iosMain/        # iOS 구현체
+├── commonMain/
+│   ├── BookPinApp.kt         # 앱 루트 Composable (Scaffold, Snackbar)
+│   ├── di/AppModule.kt       # Koin 모듈 통합
+│   └── navigation/           # Navigator 구현체
+├── androidMain/
+└── iosMain/
+    └── KoinHelper.kt         # iOS용 Koin 초기화 헬퍼
 ```
 
-### designsystem
+### Feature 모듈
+
+#### auth
+인증 화면 Feature 모듈.
+```
+src/commonMain/kotlin/com/phase/bookpin/auth/
+├── AuthScreen.kt         # 로그인 UI
+├── AuthViewModel.kt      # MVI ViewModel
+├── AuthState.kt          # UI State
+├── AuthSideEffect.kt     # Side Effects (Snackbar, Navigation)
+└── di/AuthModule.kt      # Koin 모듈
+```
+
+### Core 모듈
+
+#### common
+공통 유틸리티 모듈.
+```
+src/commonMain/kotlin/com/phase/bookpin/common/
+├── BaseViewModel.kt              # MVI 기반 ViewModel
+├── Platform.kt                   # 플랫폼 구분
+├── snackbar/
+│   ├── SnackbarHost.kt           # Snackbar 인터페이스
+│   ├── NoSnackbarHost.kt         # No-op 구현체
+│   └── SnackbarExtensions.kt     # LocalSnackbarHost
+└── extensions/
+    └── FlowExt.kt                # collectSideEffect 확장 함수
+```
+
+#### designsystem
 디자인 시스템 모듈.
 - `Color.kt`: BookPinColors, LocalBookPinColors
 - `Type.kt`: BookPinTypography, LocalBookPinTypography
@@ -62,101 +108,131 @@ src/
 - Background: Cream (#FFF8F0)
 - Text: Brown (#6B5744)
 
-## Clean Architecture 레이어 구조
+### Domain Layer
 
-### 1. Presentation Layer (compose-app)
+#### domain
+Repository 인터페이스 및 UseCase.
 ```
-compose-app/src/commonMain/kotlin/com/phase/bookpin/
-├── ui/
-│   └── feature/
-│       ├── FeatureScreen.kt      # @Composable UI
-│       ├── FeatureViewModel.kt   # MVI Intent 처리
-│       ├── FeatureState.kt       # UI State
-│       ├── FeatureIntent.kt      # User Actions
-│       └── FeatureSideEffect.kt  # One-time Events
+src/commonMain/kotlin/com/phase/bookpin/domain/
+├── auth/AuthRepository.kt        # 인증 Repository 인터페이스
+└── kakao/KakaoAuth.kt            # 카카오 인증 인터페이스
 ```
 
-### 2. Domain Layer (신규 모듈: domain)
+#### model
+비즈니스 모델.
 ```
-domain/src/commonMain/kotlin/com/phase/bookpin/domain/
-├── model/           # 비즈니스 모델
-├── repository/      # Repository 인터페이스
-└── usecase/         # UseCase (비즈니스 로직)
+src/commonMain/kotlin/com/phase/bookpin/model/
+└── SocialAuthToken.kt            # 소셜 인증 토큰 모델
 ```
 
-### 3. Data Layer (신규 모듈: data)
+### Data Layer
+
+#### data
+Repository 구현체 및 DI.
 ```
-data/src/commonMain/kotlin/com/phase/bookpin/data/
-├── repository/      # Repository 구현체
-├── datasource/
-│   ├── remote/      # API 호출 (Ktor)
-│   └── local/       # 로컬 저장소
-├── dto/             # Data Transfer Objects
-└── mapper/          # DTO <-> Domain Model 변환
+src/commonMain/kotlin/com/phase/bookpin/data/
+├── auth/AuthRepositoryImpl.kt    # AuthRepository 구현체
+└── di/DataModule.kt              # Koin 모듈
+```
+
+#### data-api
+DataSource 인터페이스 및 DTO.
+```
+src/commonMain/kotlin/com/phase/bookpin/data/api/
+├── auth/
+│   ├── AuthRemoteDataSource.kt   # Remote DataSource 인터페이스
+│   ├── LoginResponse.kt          # 로그인 응답 DTO
+│   ├── RefreshTokenRequest.kt
+│   ├── RefreshTokenResponse.kt
+│   └── SocialAuthTokenRequest.kt
+├── datastore/
+│   ├── BookPinPreferenceDataStore.kt  # Local DataSource 인터페이스
+│   └── DataStoreKey.kt
+└── navigation/
+    └── Navigator.kt              # Navigation 인터페이스
+```
+
+#### data-remote
+Remote DataSource 구현체 (Ktor).
+```
+src/commonMain/kotlin/com/phase/bookpin/data/remote/
+├── auth/AuthRemoteDataSourceImpl.kt  # API 호출 구현체
+├── client/
+│   ├── ClientModule.kt           # HttpClient 설정
+│   ├── HttpClientExtensions.kt   # 응답 처리 확장 함수
+│   └── RemoteException.kt        # API 에러 클래스
+└── di/DataRemoteModule.kt        # Koin 모듈
+```
+
+#### data-local
+Local DataSource 구현체 (DataStore).
+```
+src/
+├── commonMain/
+│   ├── datastore/
+│   │   ├── BookPinPreferenceDataStoreImpl.kt
+│   │   └── DataStoreFactory.kt   # expect 선언
+│   └── di/DataLocalModule.kt
+├── androidMain/
+│   └── datastore/DataStoreFactory.android.kt
+└── iosMain/
+    └── datastore/DataStoreFactory.ios.kt
+```
+
+#### data-auth
+소셜 인증 구현체.
+```
+src/androidMain/kotlin/com/phase/bookpin/data/auth/kakao/
+├── AndroidKakaoAuth.kt           # 카카오 로그인 구현체
+└── KaKaoLoginState.kt            # 로그인 상태 enum
 ```
 
 ## MVI 패턴 구현 가이드
 
-### State
-```kotlin
-@Immutable
-data class FeatureState(
-    val isLoading: Boolean = false,
-    val data: List<Item> = emptyList(),
-    val error: String? = null
-)
-```
-
-### Intent
-```kotlin
-sealed interface FeatureIntent {
-    data object LoadData : FeatureIntent
-    data class SelectItem(val id: String) : FeatureIntent
-    data object Refresh : FeatureIntent
-}
-```
-
-### SideEffect
-```kotlin
-sealed interface FeatureSideEffect {
-    data class ShowToast(val message: String) : FeatureSideEffect
-    data class Navigate(val route: String) : FeatureSideEffect
-}
-```
-
-### ViewModel
+### BaseViewModel 사용
 ```kotlin
 class FeatureViewModel(
-    private val useCase: FeatureUseCase
-) : ViewModel() {
+    private val repository: FeatureRepository
+) : BaseViewModel<FeatureState, FeatureSideEffect>() {
 
-    private val _state = MutableStateFlow(FeatureState())
-    val state: StateFlow<FeatureState> = _state.asStateFlow()
+    override fun createInitialState(): FeatureState = FeatureState()
 
-    private val _sideEffect = Channel<FeatureSideEffect>()
-    val sideEffect: Flow<FeatureSideEffect> = _sideEffect.receiveAsFlow()
-
-    fun onIntent(intent: FeatureIntent) {
-        when (intent) {
-            is FeatureIntent.LoadData -> loadData()
-            is FeatureIntent.SelectItem -> selectItem(intent.id)
-            is FeatureIntent.Refresh -> refresh()
-        }
-    }
-
-    private fun loadData() {
+    fun onAction() {
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            useCase()
+            reduce { copy(isLoading = true) }
+
+            repository.getData()
                 .onSuccess { data ->
-                    _state.update { it.copy(isLoading = false, data = data) }
+                    reduce { copy(isLoading = false, data = data) }
                 }
                 .onFailure { error ->
-                    _state.update { it.copy(isLoading = false, error = error.message) }
-                    _sideEffect.send(FeatureSideEffect.ShowToast(error.message ?: "Error"))
+                    reduce { copy(isLoading = false) }
+                    postSideEffect(FeatureSideEffect.ShowSnackbar(error.message))
                 }
         }
     }
+}
+```
+
+### SideEffect 처리
+```kotlin
+@Composable
+fun FeatureScreen(viewModel: FeatureViewModel = koinViewModel()) {
+    val state by viewModel.uiState.collectAsState()
+    val snackbarHost = LocalSnackbarHost.current
+
+    viewModel.sideEffect.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is FeatureSideEffect.ShowSnackbar -> {
+                snackbarHost.showSnackbar(sideEffect.message)
+            }
+            is FeatureSideEffect.NavigateToHome -> {
+                // Navigation 처리
+            }
+        }
+    }
+
+    // UI 구현
 }
 ```
 
@@ -190,16 +266,26 @@ class FeatureViewModel(
 ### 파일 명명 규칙
 - Screen: `FeatureScreen.kt`
 - ViewModel: `FeatureViewModel.kt`
-- State/Intent/SideEffect: `Feature{State|Intent|SideEffect}.kt`
-- UseCase: `GetFeatureUseCase.kt`, `UpdateFeatureUseCase.kt`
+- State/SideEffect: `Feature{State|SideEffect}.kt`
 - Repository: `FeatureRepository.kt` (인터페이스), `FeatureRepositoryImpl.kt` (구현체)
+- DataSource: `FeatureRemoteDataSource.kt` (인터페이스), `FeatureRemoteDataSourceImpl.kt` (구현체)
 
 ### 패키지 구조
 ```
 com.phase.bookpin
-├── ui.feature.{featureName}   # Presentation
-├── domain.{featureName}       # Domain
-└── data.{featureName}         # Data
+├── {feature}/              # Feature 모듈 (auth, home, etc.)
+│   ├── FeatureScreen.kt
+│   ├── FeatureViewModel.kt
+│   ├── FeatureState.kt
+│   ├── FeatureSideEffect.kt
+│   └── di/FeatureModule.kt
+├── domain/{feature}/       # Domain 모듈
+│   └── FeatureRepository.kt
+├── data/{feature}/         # Data 모듈
+│   └── FeatureRepositoryImpl.kt
+└── data/api/{feature}/     # Data-API 모듈
+    ├── FeatureRemoteDataSource.kt
+    └── FeatureDto.kt
 ```
 
 ### KtLint 규칙
@@ -225,7 +311,7 @@ fun MyScreen() {
 ## Git 워크플로우
 
 - **Main Branch**: `develop`
-- **Feature Branch**: `feature/#이슈번호`
+- **Feature Branch**: `feature/#이슈번호` 또는 `feature/#이슈번호-기능명`
 - **Commit Message**: `#이슈번호 : 작업내용`
 
 ## CI/CD
@@ -235,34 +321,20 @@ GitHub Actions (`ci.yml`):
 2. `testDebugUnitTest` - 유닛 테스트
 3. `ktlintCheck` - 코드 스타일 검사
 
-## 향후 추가 예정 모듈
-
-```
-BookPin/
-├── domain/           # Domain Layer (UseCase, Model, Repository Interface)
-├── data/             # Data Layer (Repository Impl, DataSource, DTO)
-├── core/             # 공통 유틸리티
-│   ├── common/       # 공통 확장 함수, 유틸
-│   ├── network/      # Ktor 설정, API Client
-│   └── database/     # 로컬 DB 설정
-└── feature/          # Feature별 모듈 (선택적)
-    ├── home/
-    ├── search/
-    └── profile/
-```
-
 ## 주요 파일 경로
 
 | 구분 | 경로 |
 |------|------|
 | Android 진입점 | `android-app/src/main/java/.../MainActivity.kt` |
+| Android Application | `android-app/src/main/java/.../BookPinApplication.kt` |
 | iOS 진입점 | `compose-app/src/iosMain/.../getBookPinViewController.kt` |
+| iOS Koin Helper | `compose-app/src/iosMain/.../KoinHelper.kt` |
 | 공통 App | `compose-app/src/commonMain/.../BookPinApp.kt` |
+| App DI Module | `compose-app/src/commonMain/.../di/AppModule.kt` |
+| BaseViewModel | `common/src/commonMain/.../BaseViewModel.kt` |
+| Snackbar | `common/src/commonMain/.../snackbar/` |
 | 테마 | `designsystem/src/commonMain/.../Theme.kt` |
-| 색상 | `designsystem/src/commonMain/.../Color.kt` |
-| 타이포그래피 | `designsystem/src/commonMain/.../Type.kt` |
 | 버전 카탈로그 | `gradle/libs.versions.toml` |
-| Convention Plugin | `build-logic/convention/src/main/java/com/plugin/convention/` |
 
 ## SDK 버전
 
