@@ -138,7 +138,7 @@ fun AuthScreen(
         if (state.isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(color = BookPinTheme.colors.onSecondary)
             }
