@@ -4,23 +4,15 @@ plugins {
     alias(libs.plugins.bookpin.compose)
 }
 
-compose {
-    resources {
-        publicResClass = true
-        packageOfResClass = "bookpin.designsystem.generated.resources"
-    }
-}
-
 kotlin {
     androidLibrary {
-        namespace = "com.phase.bookpin.designsystem"
+        namespace = "com.phase.bookpin.common"
         compileSdk = libs.versions.compileSdk
             .get()
             .toInt()
         minSdk = libs.versions.minSdk
             .get()
             .toInt()
-        androidResources.enable = true
     }
 
     listOf(
@@ -29,7 +21,13 @@ kotlin {
         iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "DesignSystemKit"
+            baseName = "Common"
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.kotlinx.coroutines)
         }
     }
 }
