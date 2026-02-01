@@ -4,6 +4,8 @@ plugins {
 }
 
 kotlin {
+    compilerOptions.freeCompilerArgs.add("-Xexpect-actual-classes")
+
     androidLibrary {
         namespace = "com.phase.bookpin.data.auth"
         compileSdk = libs.versions.compileSdk
@@ -28,12 +30,17 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.core.ktx)
             implementation(libs.kakao.user)
+            implementation(libs.koin.core)
         }
         commonMain.dependencies {
             implementation(projects.domain)
             implementation(projects.model)
             implementation(libs.kotlinx.coroutines)
             implementation(libs.kermit)
+            implementation(libs.koin.core)
+        }
+        iosMain.dependencies {
+            implementation(libs.koin.core)
         }
     }
 }
