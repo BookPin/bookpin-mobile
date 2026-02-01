@@ -61,23 +61,33 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 3. **실행 절차**:
    ```bash
-   # 1. 모든 변경사항 stash
-   git stash --include-untracked
-
-   # 2. develop에서 첫 번째 브랜치 생성
-   git checkout -b feature/#이슈번호-기능명 develop
-
-   # 3. stash pop 후 해당 기능 파일만 add & commit
-   git stash pop
-   git add <관련파일들>
-   git commit -m "#이슈번호 : 제목"
-
-   # 4. 다음 브랜치 생성 (현재 브랜치에서)
-   git checkout -b feature/#이슈번호-다음기능
-   git add <관련파일들>
-   git commit -m "#이슈번호 : 제목"
-
-   # 5. 반복...
+    # 0. 현재 변경사항 전체 stash (untracked 포함)
+    git stash push --include-untracked -m "split-pr-base"
+    
+    # 1. develop 기준으로 첫 번째 브랜치 생성
+    git checkout develop
+    git checkout -b feature/#이슈번호-첫기능
+    
+    # 2. 필요한 변경사항만 복원
+    git stash pop
+    
+    # 3. 첫 기능에 해당하는 파일만 커밋
+    git add <첫기능 관련 파일>
+    git commit -m "#이슈번호 : 첫 기능 설명"
+    
+    # 4. 남은 변경사항 다시 stash (안전)
+    git stash push --include-untracked -m "split-pr-remain"
+    
+    # 5. 다음 브랜치 생성 (이전 브랜치 기반, 의존성 유지)
+    git checkout -b feature/#이슈번호-다음기능
+    
+    # 6. stash pop 후 해당 기능만 커밋
+    git stash pop
+    git add <다음기능 관련 파일>
+    git commit -m "#이슈번호 : 다음 기능 설명"
+    
+    # 7. 필요 시 다시 stash 후 반복
+    git stash push --include-untracked -m "split-pr-remain"
    ```
 
 4. **브랜치 분리 기준**:
