@@ -29,7 +29,6 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines)
             implementation(projects.model)
-            implementation(projects.domain)
             implementation(libs.kermit)
         }
     }
