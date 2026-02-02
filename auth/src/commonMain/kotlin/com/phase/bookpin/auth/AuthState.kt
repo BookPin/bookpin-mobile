@@ -1,3 +1,5 @@
 package com.phase.bookpin.auth
 
-class AuthState
+data class AuthState(
+    val isLoading: Boolean = false,
+)

@@ -26,6 +26,7 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven { url = java.net.URI("https://devrepo.kakao.com/nexus/content/groups/public/") }
     }
 }
 
@@ -34,3 +35,10 @@ include(":android-app")
 include(":designsystem")
 include(":auth")
 include(":common")
+include(":data")
+include(":data-remote")
+include(":domain")
+include(":model")
+include(":data-auth")
+include(":data-api")
+include(":data-local")
