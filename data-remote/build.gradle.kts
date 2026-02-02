@@ -59,6 +59,7 @@ kotlin {
             implementation(libs.ktor.client.core)
         }
         commonMain.dependencies {
+            implementation(projects.model)
             implementation(projects.dataApi)
             implementation(libs.kotlinx.coroutines)
             implementation(libs.kermit)

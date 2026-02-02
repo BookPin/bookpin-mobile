@@ -4,6 +4,7 @@ import com.phase.bookpin.data.api.auth.RefreshTokenRequest
 import com.phase.bookpin.data.api.auth.RefreshTokenResponse
 import com.phase.bookpin.data.api.datastore.BookPinPreferenceDataStore
 import com.phase.bookpin.data.api.datastore.DataStoreKey
+import com.phase.bookpin.data.api.session.SessionEventDataSource
 import com.phase.bookpin.data.remote.BuildKonfig
 import com.phase.bookpin.data.remote.BuildKonfig.AMAZON_S3
 import io.ktor.client.HttpClient
@@ -37,6 +38,7 @@ expect fun createPlatformHttpClient(block: HttpClientConfig<*>.() -> Unit): Http
 internal fun createHttpClient(
     refreshClient: HttpClient,
     local: BookPinPreferenceDataStore,
+    sessionEventDataSource: SessionEventDataSource,
     logger: KermitLogger,
 ): HttpClient = createPlatformHttpClient {
 
@@ -52,7 +54,7 @@ internal fun createHttpClient(
             }
 
             refreshTokens {
-                refreshBearerTokens(refreshClient, local)
+                refreshBearerTokens(refreshClient, local, sessionEventDataSource)
             }
 
             sendWithoutRequest {
@@ -93,11 +95,18 @@ private suspend fun loadBearerTokens(
 private suspend fun refreshBearerTokens(
     refreshClient: HttpClient,
     local: BookPinPreferenceDataStore,
+    sessionEventDataSource: SessionEventDataSource,
 ): BearerTokens? {
-    if (isRefreshTokenExpired(local)) return null
+    if (isRefreshTokenExpired(local)) {
+        sessionEventDataSource.emitSessionExpired()
+        return null
+    }
 
     val refreshToken = local.getString(DataStoreKey.REFRESH_TOKEN).first()
-    if (refreshToken.isBlank()) return null
+    if (refreshToken.isBlank()) {
+        sessionEventDataSource.emitSessionExpired()
+        return null
+    }
 
     return runCatching {
         refreshClient.post {
@@ -108,6 +117,10 @@ private suspend fun refreshBearerTokens(
         local.saveString(DataStoreKey.ACCESS_TOKEN, response.accessToken)
         local.saveString(DataStoreKey.REFRESH_TOKEN, response.refreshToken)
         BearerTokens(response.accessToken, response.refreshToken)
+    }.onFailure { throwable ->
+        if (throwable.shouldLogoutOnRefreshFailure()) {
+            sessionEventDataSource.emitInvalidRefreshToken()
+        }
     }.getOrNull()
 }
 

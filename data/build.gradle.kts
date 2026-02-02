@@ -30,6 +30,7 @@ kotlin {
             implementation(projects.domain)
             implementation(projects.dataApi)
             implementation(libs.koin.core)
+            implementation(libs.kotlinx.coroutines)
         }
     }
 }
