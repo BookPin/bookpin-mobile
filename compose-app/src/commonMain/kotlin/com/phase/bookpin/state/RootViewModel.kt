@@ -24,7 +24,7 @@ class RootViewModel(
                     -> {
                         sessionRepository.clearSession()
                         postSideEffect(RootSideEffect.ShowSnackbar("세션이 만료되었습니다. 다시 로그인해주세요."))
-                        // TODO: Navigation 구현 후 AuthScreen으로 이동
+                        postSideEffect(RootSideEffect.NavigateToAuth)
                     }
                 }
             }

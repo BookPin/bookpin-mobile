@@ -4,4 +4,6 @@ sealed interface RootSideEffect {
     data class ShowSnackbar(
         val message: String,
     ) : RootSideEffect
+
+    data object NavigateToAuth : RootSideEffect
 }

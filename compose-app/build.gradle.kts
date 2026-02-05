@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatformLibrary)
     alias(libs.plugins.bookpin.compose)
     alias(libs.plugins.bookpin.ktlint)
+    alias(libs.plugins.bookpin.kotlin.serialization)
 }
 
 kotlin {
@@ -29,6 +30,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.auth)
+            implementation(projects.home)
             implementation(projects.designsystem)
             implementation(projects.common)
             implementation(projects.model)
@@ -39,6 +41,7 @@ kotlin {
             implementation(projects.dataLocal)
             implementation(projects.dataAuth)
 
+            implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.kermit)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
