@@ -39,6 +39,7 @@ import bookpin.designsystem.generated.resources.Res as DesignRes
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
+    onNavigateToSearch: () -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHost = LocalSnackbarHost.current
@@ -50,7 +51,7 @@ fun HomeScreen(
             }
             HomeSideEffect.NavigateToSettings -> {}
             is HomeSideEffect.NavigateToBookDetail -> {}
-            HomeSideEffect.NavigateToAddBook -> {}
+            HomeSideEffect.NavigateToAddBook -> onNavigateToSearch()
         }
     }
 

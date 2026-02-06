@@ -7,11 +7,14 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.phase.bookpin.auth.AuthScreen
 import com.phase.bookpin.home.HomeScreen
+import com.phase.bookpin.search.SearchScreen
 
 @Composable
 fun BookPinNavHost(
     backStack: NavBackStack<NavKey>,
     onNavigateToHome: () -> Unit,
+    onNavigateToSearch: () -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     NavDisplay(
         backStack = backStack,
@@ -23,7 +26,15 @@ fun BookPinNavHost(
             }
 
             entry<HomeRoute> {
-                HomeScreen()
+                HomeScreen(
+                    onNavigateToSearch = onNavigateToSearch,
+                )
+            }
+
+            entry<SearchRoute> {
+                SearchScreen(
+                    onNavigateBack = onNavigateBack,
+                )
             }
         },
     )
