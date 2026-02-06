@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="search_title">책 검색</string>
+    <string name="search_placeholder">책 제목 또는 저자를 검색하세요</string>
+    <string name="search_empty_initial">읽고 있는 책을 검색해보세요</string>
+    <string name="search_empty_no_results">검색 결과가 없어요.</string>
+    <string name="search_manual_input">직접 입력하기</string>
+    <string name="search_manual_input_link">또는 직접 입력하기</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_close">닫기</string>
+    <string name="cd_search">검색</string>
+    <string name="cd_book">책</string>
+</resources>
