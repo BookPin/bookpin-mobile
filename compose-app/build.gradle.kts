@@ -32,6 +32,7 @@ kotlin {
             implementation(projects.auth)
             implementation(projects.home)
             implementation(projects.search)
+            implementation(projects.bookdetail)
             implementation(projects.designsystem)
             implementation(projects.common)
             implementation(projects.model)
