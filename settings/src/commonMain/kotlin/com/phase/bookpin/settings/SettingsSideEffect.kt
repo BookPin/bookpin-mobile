@@ -6,4 +6,5 @@ sealed interface SettingsSideEffect {
     ) : SettingsSideEffect
     data object NavigateBack : SettingsSideEffect
     data object Logout : SettingsSideEffect
+    data object DeleteAccount : SettingsSideEffect
 }

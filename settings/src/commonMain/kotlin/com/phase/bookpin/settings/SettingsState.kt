@@ -3,6 +3,8 @@ package com.phase.bookpin.settings
 data class SettingsState(
     val profileName: String = "독서하는 사람",
     val accountType: String = "카카오 계정",
+    val showLogoutDialog: Boolean = false,
+    val showDeleteAccountDialog: Boolean = false,
     val achievements: List<Achievement> = listOf(
         Achievement(
             emoji = "\uD83D\uDCD6",
