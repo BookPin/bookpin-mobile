@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">설정</string>
+    <string name="cd_back">뒤로 가기</string>
+    <string name="achievements_title">내가 기록한 순간들</string>
+    <string name="settings_section_title">설정</string>
+    <string name="contact">문의하기</string>
+    <string name="logout">로그아웃</string>
+    <string name="delete_account">회원 탈퇴</string>
+    <string name="app_version">BookPin v1.0.0</string>
+</resources>
