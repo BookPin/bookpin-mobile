@@ -9,6 +9,7 @@ import com.phase.bookpin.data.local.di.dataLocalModule
 import com.phase.bookpin.data.remote.di.dataRemoteModule
 import com.phase.bookpin.home.di.homeModule
 import com.phase.bookpin.search.di.searchModule
+import com.phase.bookpin.settings.di.settingsModule
 import com.phase.bookpin.state.RootViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -19,6 +20,7 @@ val appModule = module {
         homeModule,
         searchModule,
         bookDetailModule,
+        settingsModule,
         dataModule,
         dataAuthModule,
         dataLocalModule,
