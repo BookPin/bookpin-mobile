@@ -10,16 +10,16 @@ PR 템플릿에 맞게 PR 내용을 작성합니다.
 ## 현재 상태
 
 - 브랜치: !`git branch --show-current`
-- Base 브랜치: develop
+- Base 브랜치: !`CURRENT=$(git branch --show-current) && BASE=$(git reflog --format='%gs' | grep -m1 "to ${CURRENT}$" | sed 's/checkout: moving from \([^ ]*\) to .*/\1/') && echo "${BASE:-develop}"`
 
 ### 변경된 파일
-!`git diff develop...HEAD --stat`
+!`CURRENT=$(git branch --show-current) && BASE=$(git reflog --format='%gs' | grep -m1 "to ${CURRENT}$" | sed 's/checkout: moving from \([^ ]*\) to .*/\1/') && BASE="${BASE:-develop}" && git diff "$BASE"...HEAD --stat`
 
 ### 커밋 목록
-!`git log develop..HEAD --oneline`
+!`CURRENT=$(git branch --show-current) && BASE=$(git reflog --format='%gs' | grep -m1 "to ${CURRENT}$" | sed 's/checkout: moving from \([^ ]*\) to .*/\1/') && BASE="${BASE:-develop}" && git log "$BASE"..HEAD --oneline`
 
 ### 상세 변경 내용
-!`git diff develop...HEAD --name-status`
+!`CURRENT=$(git branch --show-current) && BASE=$(git reflog --format='%gs' | grep -m1 "to ${CURRENT}$" | sed 's/checkout: moving from \([^ ]*\) to .*/\1/') && BASE="${BASE:-develop}" && git diff "$BASE"...HEAD --name-status`
 
 ## PR 템플릿
 
@@ -48,7 +48,8 @@ PR 템플릿에 맞게 PR 내용을 작성합니다.
 1. **이슈 번호**: 브랜치명에서 추출 (예: `feature/#2` → `#2`)
 2. **변경된 점**: 커밋 메시지와 diff를 분석하여 의미있는 변경사항 정리
 3. **체크리스트**: 기본 항목 포함
-4. **적용**: `export PR_BODY="..."; gh pr edit [PR번호] --body "$PR_BODY"` 또는 `gh pr create` 사용
+4. **Base 브랜치**: 위에서 감지된 Base 브랜치를 `gh pr create --base` 옵션에 사용
+5. **적용**: `gh pr create --base {BASE_BRANCH}` 또는 `gh pr edit [PR번호] --body "$PR_BODY"` 사용
 
 ## 실행 절차
 
