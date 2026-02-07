@@ -1,4 +1,4 @@
-package com.phase.bookpin.bookdetail
+package com.phase.bookpin.bookmark
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import bookpin.bookdetail.generated.resources.*
+import bookpin.bookmark.generated.resources.*
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme

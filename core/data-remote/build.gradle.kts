@@ -60,7 +60,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.model)
-            implementation(projects.dataApi)
+            implementation(projects.core.dataApi)
             implementation(libs.kotlinx.coroutines)
             implementation(libs.kermit)
             implementation(libs.bundles.ktor.shared)
