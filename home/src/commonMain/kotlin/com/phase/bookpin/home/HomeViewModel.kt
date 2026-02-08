@@ -4,10 +4,6 @@ import com.phase.bookpin.common.BaseViewModel
 
 class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>() {
     override fun createInitialState(): HomeState = HomeState(
-        dailyQuote = DailyQuote(
-            text = "\"독서는 마음에 대한 휴식이다.\"",
-            author = "— 공자",
-        ),
         books = listOf(
             Book(
                 id = "1",
@@ -17,6 +13,7 @@ class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>() {
                 currentPage = 208,
                 totalPages = 320,
                 bookmarkCount = 12,
+                readingDays = 1,
             ),
             Book(
                 id = "2",
@@ -40,5 +37,9 @@ class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>() {
 
     fun onBookClick(bookId: String) {
         postSideEffect(HomeSideEffect.NavigateToBookDetail(bookId))
+    }
+
+    fun onAddBookmarkClick(bookId: String) {
+        postSideEffect(HomeSideEffect.NavigateToAddBookmark(bookId))
     }
 }

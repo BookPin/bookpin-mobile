@@ -1,7 +1,7 @@
 package com.phase.bookpin.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -10,6 +10,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -19,14 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import bookpin.designsystem.generated.resources.bookpin_icon
 import bookpin.home.generated.resources.*
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
@@ -34,7 +33,6 @@ import com.phase.bookpin.designsystem.BookPinTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import bookpin.designsystem.generated.resources.Res as DesignRes
 
 @Composable
 fun HomeScreen(
@@ -51,6 +49,7 @@ fun HomeScreen(
             HomeSideEffect.NavigateToSettings -> {}
             is HomeSideEffect.NavigateToBookDetail -> {}
             HomeSideEffect.NavigateToAddBook -> {}
+            is HomeSideEffect.NavigateToAddBookmark -> {}
         }
     }
 
@@ -59,24 +58,21 @@ fun HomeScreen(
             .fillMaxSize()
             .background(BookPinTheme.colors.background)
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = 20.dp)
             .padding(top = 24.dp),
     ) {
         HomeTopBar(onSettingsClick = viewModel::onSettingsClick)
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = stringResource(Res.string.tagline),
-            style = BookPinTheme.typography.bodyMedium,
-            color = BookPinTheme.colors.onSurfaceVariant,
-        )
-
         Spacer(modifier = Modifier.height(32.dp))
 
-        DailyQuoteCard(dailyQuote = state.dailyQuote)
+        state.books.firstOrNull()?.let { book ->
+            CurrentlyReadingSection(
+                book = book,
+                onAddBookmarkClick = { viewModel.onAddBookmarkClick(book.id) },
+            )
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(32.dp))
+        }
 
         BookShelfSection(
             books = state.books,
@@ -97,27 +93,14 @@ private fun HomeTopBar(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Image(
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(RoundedCornerShape(7.dp)),
-                painter = painterResource(DesignRes.drawable.bookpin_icon),
-                contentDescription = stringResource(Res.string.cd_bookpin_icon),
-                contentScale = ContentScale.Crop,
-            )
-
-            Text(
-                text = stringResource(Res.string.app_name),
-                style = BookPinTheme.typography.displaySmall.copy(
-                    fontSize = 30.sp,
-                ),
-                color = BookPinTheme.colors.onSecondary,
-            )
-        }
+        Text(
+            text = stringResource(Res.string.app_name),
+            style = BookPinTheme.typography.headlineLarge.copy(
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+            ),
+            color = BookPinTheme.colors.onSecondary,
+        )
 
         IconButton(
             onClick = onSettingsClick,
@@ -139,65 +122,202 @@ private fun HomeTopBar(
 }
 
 @Composable
-private fun DailyQuoteCard(
-    dailyQuote: DailyQuote,
+private fun CurrentlyReadingSection(
+    book: Book,
+    onAddBookmarkClick: () -> Unit,
 ) {
+    Text(
+        text = stringResource(Res.string.currently_reading),
+        style = BookPinTheme.typography.headlineMedium.copy(
+            fontSize = 19.sp,
+            fontWeight = FontWeight.Bold,
+        ),
+        color = BookPinTheme.colors.onSurface,
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    CurrentlyReadingCard(
+        book = book,
+        onAddBookmarkClick = onAddBookmarkClick,
+    )
+}
+
+@Composable
+private fun CurrentlyReadingCard(
+    book: Book,
+    onAddBookmarkClick: () -> Unit,
+) {
+    val coverColors = listOf(
+        BookPinTheme.colors.secondary,
+        BookPinTheme.colors.secondaryContainer,
+    )
+    val colorIndex = book.id.hashCode().let { kotlin.math.abs(it) % coverColors.size }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 2.dp,
-                shape = RoundedCornerShape(16.dp),
+                elevation = 8.dp,
+                shape = RoundedCornerShape(28.dp),
+                ambientColor = Color(0x0F6B5744),
+                spotColor = Color(0x0F6B5744),
             ).background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        BookPinTheme.colors.surfaceVariant,
-                        Color(0xFFDCC7A8),
-                    ),
-                ),
-                shape = RoundedCornerShape(16.dp),
+                color = Color.White,
+                shape = RoundedCornerShape(28.dp),
+            ).border(
+                width = 0.615.dp,
+                color = Color(0xFFF5EFE6),
+                shape = RoundedCornerShape(28.dp),
             ).padding(24.dp),
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Box(
                 modifier = Modifier
-                    .size(40.dp)
-                    .background(
-                        color = Color.White.copy(alpha = 0.5f),
-                        shape = CircleShape,
-                    ),
+                    .width(96.dp)
+                    .height(144.dp)
+                    .shadow(
+                        elevation = 4.dp,
+                        shape = RoundedCornerShape(12.dp),
+                    ).background(
+                        color = coverColors[colorIndex],
+                        shape = RoundedCornerShape(12.dp),
+                    ).clip(RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.Center,
             ) {
-                Icon(
-                    painter = painterResource(Res.drawable.quote),
-                    contentDescription = stringResource(Res.string.cd_quote),
-                    modifier = Modifier.size(20.dp),
-                    tint = BookPinTheme.colors.onSurface,
+                Text(
+                    text = book.title.take(2),
+                    style = BookPinTheme.typography.headlineLarge,
+                    color = Color.White.copy(alpha = 0.5f),
                 )
             }
 
+            Spacer(modifier = Modifier.width(20.dp))
+
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .height(144.dp),
             ) {
                 Text(
-                    text = stringResource(Res.string.daily_quote_label),
-                    style = BookPinTheme.typography.bodySmall,
-                    color = BookPinTheme.colors.onSurface.copy(alpha = 0.8f),
-                )
-
-                Text(
-                    text = dailyQuote.text,
-                    style = BookPinTheme.typography.bodyLarge,
+                    text = book.title,
+                    style = BookPinTheme.typography.headlineSmall.copy(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                    ),
                     color = BookPinTheme.colors.onSurface,
+                    maxLines = 1,
                 )
 
-                Text(
-                    text = dailyQuote.author,
-                    style = BookPinTheme.typography.bodyMedium,
-                    color = Color(0xFF8B7355),
-                )
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    Text(
+                        text = book.author,
+                        style = BookPinTheme.typography.titleSmall.copy(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                        color = BookPinTheme.colors.onSurfaceVariant,
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .size(4.dp)
+                            .background(
+                                color = BookPinTheme.colors.outline,
+                                shape = CircleShape,
+                            ),
+                    )
+
+                    Text(
+                        text = "${book.readingDays}일째",
+                        style = BookPinTheme.typography.labelMedium.copy(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                        color = BookPinTheme.colors.primary,
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    Text(
+                        text = "${book.currentPage}p / ${book.totalPages}p ",
+                        style = BookPinTheme.typography.titleSmall.copy(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                        ),
+                        color = BookPinTheme.colors.onSurfaceVariant,
+                    )
+
+                    Text(
+                        text = "${book.progressPercent}%",
+                        style = BookPinTheme.typography.titleSmall.copy(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                        ),
+                        color = BookPinTheme.colors.primary,
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(6.dp)
+                        .background(
+                            color = BookPinTheme.colors.surface,
+                            shape = CircleShape,
+                        ),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth(book.progressPercent / 100f)
+                            .background(
+                                color = BookPinTheme.colors.primary,
+                                shape = CircleShape,
+                            ),
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Button(
+                    onClick = onAddBookmarkClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(32.dp)
+                        .shadow(
+                            elevation = 2.dp,
+                            shape = RoundedCornerShape(16.dp),
+                        ),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = BookPinTheme.colors.onSurface,
+                        contentColor = Color.White,
+                    ),
+                    contentPadding = PaddingValues(0.dp),
+                ) {
+                    Text(
+                        text = stringResource(Res.string.leave_bookmark),
+                        style = BookPinTheme.typography.labelMedium.copy(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                        color = Color.White,
+                    )
+                }
             }
         }
     }
