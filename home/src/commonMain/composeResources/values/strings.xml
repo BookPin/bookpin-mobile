@@ -6,6 +6,9 @@
     <string name="currently_reading">읽고 있는 책</string>
     <string name="leave_bookmark">책갈피 남기기</string>
     <string name="reading_days">%d일째</string>
+    <string name="empty_reading_title">BookPin이 처음이신가요?</string>
+    <string name="empty_reading_subtitle">내 책장에 책 추가하기</string>
+    <string name="empty_bookshelf">추가된 책이 없습니다.</string>
 
     <!-- Content Descriptions -->
     <string name="cd_bookpin_icon">BookPin 아이콘</string>

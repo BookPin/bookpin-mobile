@@ -1,5 +1,6 @@
 package com.phase.bookpin.home
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -23,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -65,14 +69,13 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        state.books.firstOrNull()?.let { book ->
-            CurrentlyReadingSection(
-                book = book,
-                onAddBookmarkClick = { viewModel.onAddBookmarkClick(book.id) },
-            )
+        CurrentlyReadingSection(
+            book = state.books.firstOrNull(),
+            onAddBookmarkClick = { state.books.firstOrNull()?.let { viewModel.onAddBookmarkClick(it.id) } },
+            onAddBookClick = viewModel::onAddBookClick,
+        )
 
-            Spacer(modifier = Modifier.height(32.dp))
-        }
+        Spacer(modifier = Modifier.height(32.dp))
 
         BookShelfSection(
             books = state.books,
@@ -123,8 +126,9 @@ private fun HomeTopBar(
 
 @Composable
 private fun CurrentlyReadingSection(
-    book: Book,
+    book: Book?,
     onAddBookmarkClick: () -> Unit,
+    onAddBookClick: () -> Unit,
 ) {
     Text(
         text = stringResource(Res.string.currently_reading),
@@ -137,10 +141,73 @@ private fun CurrentlyReadingSection(
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    CurrentlyReadingCard(
-        book = book,
-        onAddBookmarkClick = onAddBookmarkClick,
-    )
+    if (book != null) {
+        CurrentlyReadingCard(
+            book = book,
+            onAddBookmarkClick = onAddBookmarkClick,
+        )
+    } else {
+        EmptyReadingCard(onClick = onAddBookClick)
+    }
+}
+
+@Composable
+private fun EmptyReadingCard(
+    onClick: () -> Unit,
+) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 2.dp,
+                shape = RoundedCornerShape(16.dp),
+                ambientColor = Color(0x0F6B5744),
+                spotColor = Color(0x0F6B5744),
+            ),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        border = BorderStroke(
+            width = 0.615.dp,
+            color = BookPinTheme.colors.outline,
+        ),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(Res.string.empty_reading_title),
+                    style = BookPinTheme.typography.headlineSmall.copy(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                    ),
+                    color = BookPinTheme.colors.onSurface,
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = stringResource(Res.string.empty_reading_subtitle),
+                    style = BookPinTheme.typography.titleSmall.copy(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                    ),
+                    color = Color(0xFF8B7355),
+                )
+            }
+
+            Icon(
+                painter = painterResource(Res.drawable.chevron_right),
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+                tint = BookPinTheme.colors.onSurfaceVariant,
+            )
+        }
+    }
 }
 
 @Composable
@@ -342,42 +409,59 @@ private fun BookShelfSection(
             color = BookPinTheme.colors.onSurface,
         )
 
-        Row(
-            modifier = Modifier
-                .background(
-                    color = BookPinTheme.colors.surfaceVariant,
-                    shape = CircleShape,
-                ).clickable(onClick = onAddBookClick)
-                .padding(horizontal = 16.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.add),
-                contentDescription = null,
-                modifier = Modifier.size(16.dp),
-                tint = BookPinTheme.colors.onSurface,
-            )
+        if (books.isNotEmpty()) {
+            Row(
+                modifier = Modifier
+                    .background(
+                        color = BookPinTheme.colors.surfaceVariant,
+                        shape = CircleShape,
+                    ).clickable(onClick = onAddBookClick)
+                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.add),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                    tint = BookPinTheme.colors.onSurface,
+                )
 
-            Text(
-                text = stringResource(Res.string.add_book),
-                style = BookPinTheme.typography.titleMedium,
-                color = BookPinTheme.colors.onSurface,
-            )
+                Text(
+                    text = stringResource(Res.string.add_book),
+                    style = BookPinTheme.typography.titleMedium,
+                    color = BookPinTheme.colors.onSurface,
+                )
+            }
         }
     }
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        items(books, key = { it.id }) { book ->
-            BookCard(
-                book = book,
-                onClick = { onBookClick(book.id) },
-            )
+    if (books.isNotEmpty()) {
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            items(books, key = { it.id }) { book ->
+                BookCard(
+                    book = book,
+                    onClick = { onBookClick(book.id) },
+                )
+            }
         }
+    } else {
+        Text(
+            text = stringResource(Res.string.empty_bookshelf),
+            style = BookPinTheme.typography.titleSmall.copy(
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+            ),
+            color = BookPinTheme.colors.onSurfaceVariant,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 24.dp),
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
