@@ -219,7 +219,7 @@ private fun CurrentlyReadingCard(
         BookPinTheme.colors.secondary,
         BookPinTheme.colors.secondaryContainer,
     )
-    val colorIndex = book.id.hashCode().let { kotlin.math.abs(it) % coverColors.size }
+    val colorIndex = book.id.hashCode().absoluteValue % coverColors.size
 
     Box(
         modifier = Modifier
@@ -474,7 +474,7 @@ private fun BookCard(
         BookPinTheme.colors.secondary,
         BookPinTheme.colors.secondaryContainer,
     )
-    val colorIndex = book.id.hashCode().let { kotlin.math.abs(it) % coverColors.size }
+    val colorIndex = book.id.hashCode().absoluteValue % coverColors.size
 
     Column(
         modifier = Modifier
