@@ -45,6 +45,7 @@ import bookpin.designsystem.generated.resources.Res as CommonRes
 
 @Composable
 fun AuthScreen(
+    onNavigateToHome: () -> Unit = {},
     viewModel: AuthViewModel = koinViewModel(),
 ) {
     val currentPlatform = remember { platform() }
@@ -54,6 +55,7 @@ fun AuthScreen(
     viewModel.sideEffect.collectSideEffect {
         when (it) {
             AuthSideEffect.NavigateToHome -> {
+                onNavigateToHome()
             }
 
             is AuthSideEffect.ShowSnackbar -> {

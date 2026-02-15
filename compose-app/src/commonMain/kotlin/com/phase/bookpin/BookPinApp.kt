@@ -8,10 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.phase.bookpin.auth.AuthScreen
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.savedstate.serialization.SavedStateConfiguration
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.navigation.AuthRoute
+import com.phase.bookpin.navigation.BookPinNavHost
+import com.phase.bookpin.navigation.HomeRoute
+import com.phase.bookpin.navigation.navSerializersModule
 import com.phase.bookpin.state.RootSideEffect
 import com.phase.bookpin.state.RootViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -32,10 +37,22 @@ fun BookPinApp(
             }
         }
 
+        val backStack = rememberNavBackStack(
+            SavedStateConfiguration {
+                serializersModule = navSerializersModule
+            },
+            HomeRoute,
+        )
+
         viewModel.sideEffect.collectSideEffect { sideEffect ->
             when (sideEffect) {
                 is RootSideEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(sideEffect.message)
+                }
+
+                is RootSideEffect.NavigateToAuth -> {
+                    backStack.clear()
+                    backStack.add(AuthRoute)
                 }
             }
         }
@@ -47,7 +64,13 @@ fun BookPinApp(
                 snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
                 modifier = Modifier.fillMaxSize(),
             ) {
-                AuthScreen()
+                BookPinNavHost(
+                    backStack = backStack,
+                    onNavigateToHome = {
+                        backStack.clear()
+                        backStack.add(HomeRoute)
+                    },
+                )
             }
         }
     }
