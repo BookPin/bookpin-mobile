@@ -27,6 +27,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.model)
+            implementation(libs.kotlinx.coroutines)
         }
     }
 }

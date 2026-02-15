@@ -7,24 +7,33 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.phase.bookpin.auth.AuthScreen
+import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
-import kotlinx.coroutines.launch
+import com.phase.bookpin.state.RootSideEffect
+import com.phase.bookpin.state.RootViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import com.phase.bookpin.common.snackbar.SnackbarHost as BookPinSnackbarHost
 
 @Composable
-fun BookPinApp() {
+fun BookPinApp(
+    viewModel: RootViewModel = koinViewModel(),
+) {
     BookPinTheme {
         val snackbarHostState = remember { SnackbarHostState() }
-        val scope = rememberCoroutineScope()
 
         val snackbarHost = object : BookPinSnackbarHost {
             override fun showSnackbar(message: String) {
-                scope.launch {
-                    snackbarHostState.showSnackbar(message)
+                viewModel.handleShowSnackbarEvent(message)
+            }
+        }
+
+        viewModel.sideEffect.collectSideEffect { sideEffect ->
+            when (sideEffect) {
+                is RootSideEffect.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(sideEffect.message)
                 }
             }
         }

@@ -20,8 +20,8 @@ buildkonfig {
 
     defaultConfigs {
         buildConfigField(BOOLEAN, "IS_DEBUG", "false")
-        buildConfigField(STRING, "BASE_URL", "\"${localProperties.getProperty("BASE_URL", "https://api.bookpin.com/")}\"")
-        buildConfigField(STRING, "AMAZON_S3", "\"s3.ap-northeast-2.amazonaws.com/\"")
+        buildConfigField(STRING, "BASE_URL", localProperties.getProperty("BASE_URL", "https://api.bookpin.com/"))
+        buildConfigField(STRING, "AMAZON_S3", "s3.ap-northeast-2.amazonaws.com/")
     }
 
     defaultConfigs("debug") {
@@ -59,6 +59,7 @@ kotlin {
             implementation(libs.ktor.client.core)
         }
         commonMain.dependencies {
+            implementation(projects.model)
             implementation(projects.dataApi)
             implementation(libs.kotlinx.coroutines)
             implementation(libs.kermit)

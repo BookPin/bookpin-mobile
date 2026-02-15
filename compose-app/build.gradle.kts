@@ -31,6 +31,7 @@ kotlin {
             implementation(projects.auth)
             implementation(projects.designsystem)
             implementation(projects.common)
+            implementation(projects.model)
             implementation(projects.data)
             implementation(projects.domain)
             implementation(projects.dataApi)
@@ -40,6 +41,8 @@ kotlin {
 
             implementation(libs.kermit)
             implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
