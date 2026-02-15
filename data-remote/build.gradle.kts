@@ -19,13 +19,13 @@ buildkonfig {
     packageName = "com.phase.bookpin.data.remote"
 
     defaultConfigs {
-        buildConfigField(BOOLEAN, "IS_DEBUG", "false")
+        buildConfigField(BOOLEAN, "IS_DEBUG", "true")
         buildConfigField(STRING, "BASE_URL", localProperties.getProperty("BASE_URL", "https://api.bookpin.com/"))
         buildConfigField(STRING, "AMAZON_S3", "s3.ap-northeast-2.amazonaws.com/")
     }
 
-    defaultConfigs("debug") {
-        buildConfigField(BOOLEAN, "IS_DEBUG", "true")
+    defaultConfigs("release") {
+        buildConfigField(BOOLEAN, "IS_DEBUG", "false")
     }
 }
 
