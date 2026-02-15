@@ -24,9 +24,11 @@ fun BookPinApp(
     BookPinTheme {
         val snackbarHostState = remember { SnackbarHostState() }
 
-        val snackbarHost = object : BookPinSnackbarHost {
-            override fun showSnackbar(message: String) {
-                viewModel.handleShowSnackbarEvent(message)
+        val snackbarHost = remember(viewModel) {
+            object : BookPinSnackbarHost {
+                override fun showSnackbar(message: String) {
+                    viewModel.handleShowSnackbarEvent(message)
+                }
             }
         }
 
