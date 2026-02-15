@@ -37,6 +37,7 @@ import com.phase.bookpin.designsystem.BookPinTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.math.absoluteValue
 
 @Composable
 fun HomeScreen(
