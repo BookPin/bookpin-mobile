@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="app_name">BookPin</string>
-    <string name="tagline">멈춘 자리마다 책갈피를 남기세요</string>
-    <string name="daily_quote_label">오늘의 문구</string>
     <string name="my_bookshelf">내 책장</string>
     <string name="add_book">책 추가</string>
+    <string name="currently_reading">읽고 있는 책</string>
+    <string name="leave_bookmark">책갈피 남기기</string>
+    <string name="reading_days">%d일째</string>
+    <string name="empty_reading_title">BookPin이 처음이신가요?</string>
+    <string name="empty_reading_subtitle">내 책장에 책 추가하기</string>
+    <string name="empty_bookshelf">추가된 책이 없습니다.</string>
 
     <!-- Content Descriptions -->
     <string name="cd_bookpin_icon">BookPin 아이콘</string>
     <string name="cd_settings">설정</string>
-    <string name="cd_quote">인용</string>
     <string name="cd_bookmark">북마크</string>
 </resources>

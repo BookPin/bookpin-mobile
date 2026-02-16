@@ -9,4 +9,7 @@ sealed interface HomeSideEffect {
         val bookId: String,
     ) : HomeSideEffect
     data object NavigateToAddBook : HomeSideEffect
+    data class NavigateToAddBookmark(
+        val bookId: String,
+    ) : HomeSideEffect
 }
