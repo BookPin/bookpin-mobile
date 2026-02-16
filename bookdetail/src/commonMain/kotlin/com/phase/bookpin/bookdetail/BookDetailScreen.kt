@@ -84,7 +84,8 @@ fun BookDetailScreen(
 
             item {
                 BookDetailStats(
-                    bookmarkCount = state.book.bookmarkCount,
+                    currentPage = state.book.currentPage,
+                    totalPages = state.book.totalPages,
                     progressPercent = state.book.progressPercent,
                     onMarkAsCompleteClick = viewModel::onMarkAsCompleteClick,
                 )
@@ -164,7 +165,8 @@ private fun BookDetailHeader(
 
 @Composable
 private fun BookDetailStats(
-    bookmarkCount: Int,
+    currentPage: Int,
+    totalPages: Int,
     progressPercent: Int,
     onMarkAsCompleteClick: () -> Unit,
 ) {
@@ -187,24 +189,55 @@ private fun BookDetailStats(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom,
             ) {
-                StatItem(
-                    value = "$bookmarkCount",
-                    label = stringResource(Res.string.bookmarks),
-                )
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    Text(
+                        text = "$currentPage",
+                        style = BookPinTheme.typography.headlineLarge.copy(
+                            fontWeight = FontWeight.SemiBold,
+                        ),
+                        color = BookPinTheme.colors.onSurface,
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(Res.string.pages_format, totalPages),
+                        style = BookPinTheme.typography.bodyMedium,
+                        color = BookPinTheme.colors.onSurfaceVariant,
+                    )
+                }
 
+                Text(
+                    text = stringResource(Res.string.progress_format, progressPercent),
+                    style = BookPinTheme.typography.titleSmall.copy(
+                        fontWeight = FontWeight.Medium,
+                    ),
+                    color = BookPinTheme.colors.primary,
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .background(
+                        color = BookPinTheme.colors.surface,
+                        shape = RoundedCornerShape(4.dp),
+                    ),
+            ) {
                 Box(
                     modifier = Modifier
-                        .width(1.dp)
-                        .height(40.dp)
-                        .background(BookPinTheme.colors.surface),
-                )
-
-                StatItem(
-                    value = "$progressPercent%",
-                    label = stringResource(Res.string.progress),
+                        .fillMaxHeight()
+                        .fillMaxWidth(fraction = progressPercent / 100f)
+                        .background(
+                            color = BookPinTheme.colors.primary,
+                            shape = RoundedCornerShape(4.dp),
+                        ),
                 )
             }
 
@@ -224,31 +257,10 @@ private fun BookDetailStats(
                 Text(
                     text = stringResource(Res.string.mark_as_complete),
                     style = BookPinTheme.typography.titleSmall,
-                    color = BookPinTheme.colors.onSurface,
+                    color = BookPinTheme.colors.onSurfaceVariant,
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun StatItem(
-    value: String,
-    label: String,
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(
-            text = value,
-            style = BookPinTheme.typography.headlineLarge,
-            color = BookPinTheme.colors.onSurface,
-        )
-        Text(
-            text = label,
-            style = BookPinTheme.typography.labelMedium,
-            color = BookPinTheme.colors.onSurfaceVariant,
-        )
     }
 }
 
@@ -341,7 +353,7 @@ private fun BookmarkItem(
             ).padding(16.dp),
     ) {
         Text(
-            text = "p.${bookmark.pageNumber}",
+            text = stringResource(Res.string.page_format, bookmark.pageNumber),
             style = BookPinTheme.typography.labelMedium,
             color = BookPinTheme.colors.onSurfaceVariant,
         )
