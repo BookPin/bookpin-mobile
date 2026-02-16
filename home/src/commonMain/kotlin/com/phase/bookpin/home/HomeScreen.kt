@@ -4,13 +4,24 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -30,7 +41,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import bookpin.home.generated.resources.*
+import bookpin.home.generated.resources.Res
+import bookpin.home.generated.resources.add
+import bookpin.home.generated.resources.add_book
+import bookpin.home.generated.resources.app_name
+import bookpin.home.generated.resources.bookmark
+import bookpin.home.generated.resources.cd_bookmark
+import bookpin.home.generated.resources.cd_settings
+import bookpin.home.generated.resources.chevron_right
+import bookpin.home.generated.resources.currently_reading
+import bookpin.home.generated.resources.empty_bookshelf
+import bookpin.home.generated.resources.empty_reading_subtitle
+import bookpin.home.generated.resources.empty_reading_title
+import bookpin.home.generated.resources.leave_bookmark
+import bookpin.home.generated.resources.my_bookshelf
+import bookpin.home.generated.resources.setting
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
@@ -63,7 +88,6 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(BookPinTheme.colors.background)
-            .verticalScroll(rememberScrollState())
             .padding(horizontal = 20.dp)
             .padding(top = 24.dp),
     ) {
@@ -360,22 +384,18 @@ private fun CurrentlyReadingCard(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
                     onClick = onAddBookmarkClick,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(32.dp)
-                        .shadow(
-                            elevation = 2.dp,
-                            shape = RoundedCornerShape(16.dp),
-                        ),
+                        .height(32.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = BookPinTheme.colors.onSurface,
-                        contentColor = Color.White,
+                        containerColor = BookPinTheme.colors.surfaceVariant,
                     ),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp),
                     contentPadding = PaddingValues(0.dp),
                 ) {
                     Text(
@@ -384,7 +404,7 @@ private fun CurrentlyReadingCard(
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Medium,
                         ),
-                        color = Color.White,
+                        color = BookPinTheme.colors.onSurface,
                     )
                 }
             }
@@ -406,7 +426,7 @@ private fun BookShelfSection(
         Text(
             text = stringResource(Res.string.my_bookshelf),
             style = BookPinTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Bold,
             ),
             color = BookPinTheme.colors.onSurface,
         )
@@ -441,8 +461,11 @@ private fun BookShelfSection(
     Spacer(modifier = Modifier.height(16.dp))
 
     if (books.isNotEmpty()) {
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(bottom = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             items(books, key = { it.id }) { book ->
                 BookCard(
@@ -480,7 +503,7 @@ private fun BookCard(
 
     Column(
         modifier = Modifier
-            .width(165.dp)
+            .fillMaxWidth()
             .shadow(
                 elevation = 2.dp,
                 shape = RoundedCornerShape(16.dp),
@@ -556,7 +579,7 @@ private fun BookCard(
                     painter = painterResource(Res.drawable.bookmark),
                     contentDescription = stringResource(Res.string.cd_bookmark),
                     modifier = Modifier.size(14.dp),
-                    tint = BookPinTheme.colors.onSurface.copy(alpha = 0.8f),
+                    tint = Color.Unspecified,
                 )
 
                 Text(
