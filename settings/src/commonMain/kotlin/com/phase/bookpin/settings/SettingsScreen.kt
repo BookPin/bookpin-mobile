@@ -23,6 +23,7 @@ import bookpin.settings.generated.resources.*
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.designsystem.component.BPConfirmDialog
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -41,6 +42,7 @@ fun SettingsScreen(
             is SettingsSideEffect.ShowSnackbar -> snackbarHost.showSnackbar(it.message)
             SettingsSideEffect.NavigateBack -> onNavigateBack()
             SettingsSideEffect.Logout -> onLogout()
+            SettingsSideEffect.DeleteAccount -> onLogout()
         }
     }
 
@@ -84,6 +86,30 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
         }
+    }
+
+    if (state.showLogoutDialog) {
+        BPConfirmDialog(
+            title = stringResource(Res.string.logout_title),
+            description = stringResource(Res.string.logout_description),
+            cancelText = stringResource(Res.string.cancel),
+            confirmText = stringResource(Res.string.confirm_logout),
+            confirmButtonColor = BookPinTheme.colors.primary,
+            onDismiss = viewModel::onLogoutDismiss,
+            onConfirm = viewModel::onLogoutConfirm,
+        )
+    }
+
+    if (state.showDeleteAccountDialog) {
+        BPConfirmDialog(
+            title = stringResource(Res.string.delete_account_title),
+            description = stringResource(Res.string.delete_account_description),
+            cancelText = stringResource(Res.string.cancel),
+            confirmText = stringResource(Res.string.confirm_delete),
+            confirmButtonColor = BookPinTheme.colors.error,
+            onDismiss = viewModel::onDeleteAccountDismiss,
+            onConfirm = viewModel::onDeleteAccountConfirm,
+        )
     }
 }
 
