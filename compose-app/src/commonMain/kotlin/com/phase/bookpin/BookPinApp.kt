@@ -18,6 +18,7 @@ import com.phase.bookpin.navigation.BookDetailRoute
 import com.phase.bookpin.navigation.BookPinNavHost
 import com.phase.bookpin.navigation.HomeRoute
 import com.phase.bookpin.navigation.SearchRoute
+import com.phase.bookpin.navigation.SettingsRoute
 import com.phase.bookpin.navigation.navSerializersModule
 import com.phase.bookpin.state.RootSideEffect
 import com.phase.bookpin.state.RootViewModel
@@ -78,8 +79,15 @@ fun BookPinApp(
                     onNavigateToBookDetail = { bookId ->
                         backStack.add(BookDetailRoute(bookId))
                     },
+                    onNavigateToSettings = {
+                        backStack.add(SettingsRoute)
+                    },
                     onNavigateBack = {
                         backStack.removeLastOrNull()
+                    },
+                    onLogout = {
+                        backStack.clear()
+                        backStack.add(AuthRoute)
                     },
                 )
             }

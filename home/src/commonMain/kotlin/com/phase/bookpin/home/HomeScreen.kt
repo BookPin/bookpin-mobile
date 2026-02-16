@@ -70,6 +70,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     onNavigateToSearch: () -> Unit = {},
     onNavigateToBookDetail: (String) -> Unit = {},
+    onNavigateToSettings: () -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHost = LocalSnackbarHost.current
@@ -79,7 +80,7 @@ fun HomeScreen(
             is HomeSideEffect.ShowSnackbar -> {
                 snackbarHost.showSnackbar(it.message)
             }
-            HomeSideEffect.NavigateToSettings -> {}
+            HomeSideEffect.NavigateToSettings -> onNavigateToSettings()
             is HomeSideEffect.NavigateToBookDetail -> onNavigateToBookDetail(it.bookId)
             is HomeSideEffect.NavigateToAddBookmark -> {}
             HomeSideEffect.NavigateToAddBook -> onNavigateToSearch()
