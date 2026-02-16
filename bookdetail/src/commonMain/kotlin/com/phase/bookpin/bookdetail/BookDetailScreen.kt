@@ -1,6 +1,7 @@
 package com.phase.bookpin.bookdetail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,11 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bookpin.bookdetail.generated.resources.*
+import coil3.compose.AsyncImage
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
@@ -101,8 +105,30 @@ fun BookDetailScreen(
             }
 
             val filteredBookmarks = state.bookmarks.filter { it.type == state.selectedTab }
-            items(filteredBookmarks, key = { it.id }) { bookmark ->
-                BookmarkItem(bookmark = bookmark)
+            if (state.selectedTab == BookmarkTab.TEXT) {
+                items(filteredBookmarks, key = { it.id }) { bookmark ->
+                    BookmarkItem(bookmark = bookmark)
+                }
+            } else {
+                items(filteredBookmarks.chunked(2)) { rowItems ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp)
+                            .padding(top = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        rowItems.forEach { bookmark ->
+                            PhotoBookmarkItem(
+                                bookmark = bookmark,
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                        if (rowItems.size == 1) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
             }
         }
     }
@@ -376,6 +402,85 @@ private fun BookmarkItem(
                 ),
                 color = BookPinTheme.colors.onSurfaceVariant,
             )
+        }
+    }
+}
+
+@Composable
+private fun PhotoBookmarkItem(
+    bookmark: Bookmark,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .shadow(
+                elevation = 2.dp,
+                shape = RoundedCornerShape(16.dp),
+            ).background(
+                color = Color.White,
+                shape = RoundedCornerShape(16.dp),
+            ).border(
+                width = 0.5.dp,
+                color = BookPinTheme.colors.surface,
+                shape = RoundedCornerShape(16.dp),
+            ).clip(RoundedCornerShape(16.dp)),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
+                .background(BookPinTheme.colors.surface),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (bookmark.photoUrl.isNullOrEmpty()) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_photo),
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp),
+                    tint = BookPinTheme.colors.onSurfaceVariant,
+                )
+            } else {
+                AsyncImage(
+                    model = bookmark.photoUrl,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                )
+            }
+        }
+
+        Column(
+            modifier = Modifier.padding(12.dp),
+        ) {
+            Text(
+                text = stringResource(Res.string.page_format, bookmark.pageNumber),
+                style = BookPinTheme.typography.labelMedium,
+                color = BookPinTheme.colors.onSurfaceVariant,
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = bookmark.quote,
+                style = BookPinTheme.typography.bodyMedium,
+                color = BookPinTheme.colors.onSurface,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+            )
+
+            if (bookmark.memo.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = bookmark.memo,
+                    style = BookPinTheme.typography.labelSmall.copy(
+                        fontStyle = FontStyle.Italic,
+                    ),
+                    color = BookPinTheme.colors.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }
