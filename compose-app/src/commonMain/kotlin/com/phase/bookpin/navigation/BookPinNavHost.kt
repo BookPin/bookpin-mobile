@@ -6,9 +6,10 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.phase.bookpin.auth.AuthScreen
-import com.phase.bookpin.bookdetail.BookDetailScreen
+import com.phase.bookpin.bookmark.BookDetailScreen
 import com.phase.bookpin.home.HomeScreen
 import com.phase.bookpin.search.SearchScreen
+import com.phase.bookpin.settings.SettingsScreen
 
 @Composable
 fun BookPinNavHost(
@@ -16,7 +17,9 @@ fun BookPinNavHost(
     onNavigateToHome: () -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToBookDetail: (String) -> Unit,
+    onNavigateToSettings: () -> Unit,
     onNavigateBack: () -> Unit,
+    onLogout: () -> Unit,
 ) {
     NavDisplay(
         backStack = backStack,
@@ -31,6 +34,7 @@ fun BookPinNavHost(
                 HomeScreen(
                     onNavigateToSearch = onNavigateToSearch,
                     onNavigateToBookDetail = onNavigateToBookDetail,
+                    onNavigateToSettings = onNavigateToSettings,
                 )
             }
 
@@ -44,6 +48,13 @@ fun BookPinNavHost(
                 BookDetailScreen(
                     bookId = route.bookId,
                     onNavigateBack = onNavigateBack,
+                )
+            }
+
+            entry<SettingsRoute> {
+                SettingsScreen(
+                    onNavigateBack = onNavigateBack,
+                    onLogout = onLogout,
                 )
             }
         },

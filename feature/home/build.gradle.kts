@@ -3,18 +3,25 @@ plugins {
     alias(libs.plugins.kotlinMultiplatformLibrary)
     alias(libs.plugins.bookpin.compose)
     alias(libs.plugins.bookpin.ktlint)
-    alias(libs.plugins.bookpin.kotlin.serialization)
+}
+
+compose {
+    resources {
+        publicResClass = true
+        packageOfResClass = "bookpin.home.generated.resources"
+    }
 }
 
 kotlin {
     androidLibrary {
-        namespace = "com.phase.bookpin"
+        namespace = "com.phase.bookpin.home"
         compileSdk = libs.versions.compileSdk
             .get()
             .toInt()
         minSdk = libs.versions.minSdk
             .get()
             .toInt()
+        androidResources.enable = true
     }
 
     listOf(
@@ -22,32 +29,17 @@ kotlin {
         iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "Home"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.feature.auth)
-            implementation(projects.feature.home)
-            implementation(projects.feature.search)
-            implementation(projects.feature.bookmark)
-            implementation(projects.feature.settings)
             implementation(projects.designsystem)
             implementation(projects.core.common)
             implementation(projects.model)
-            implementation(projects.core.data)
             implementation(projects.domain)
-            implementation(projects.core.dataApi)
-            implementation(projects.core.dataRemote)
-            implementation(projects.core.dataLocal)
-            implementation(projects.core.dataAuth)
-
-            implementation(libs.jetbrains.navigation3.ui)
-            implementation(libs.kermit)
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
         }
         commonTest.dependencies {

@@ -14,6 +14,7 @@ private val LightBrown = Color(0xFFA0826D)
 private val Placeholder = Color(0xFFD4B896)
 private val Teal = Color(0xFF9DBEB7)
 private val Peach = Color(0xFFE8B4A0)
+private val Terracotta = Color(0xFFD08C7E)
 
 @Immutable
 data class BookPinColors(
@@ -33,6 +34,7 @@ data class BookPinColors(
     val onSurfaceVariant: Color,
     val outline: Color,
     val outlineVariant: Color,
+    val error: Color,
 )
 
 internal val bookPinLightColors = BookPinColors(
@@ -52,6 +54,7 @@ internal val bookPinLightColors = BookPinColors(
     onSurfaceVariant = LightBrown,
     outline = Tan,
     outlineVariant = Placeholder,
+    error = Terracotta,
 )
 
 val LocalBookPinColors = staticCompositionLocalOf { bookPinLightColors }

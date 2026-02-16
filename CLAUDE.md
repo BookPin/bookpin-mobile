@@ -27,16 +27,22 @@ BookPin/
 ├── android-app/          # Android 진입점
 ├── iosApp/               # iOS 진입점 (Swift)
 ├── compose-app/          # 공유 UI 모듈, DI 설정, Navigation
-├── auth/                 # 인증 Feature 모듈
-├── common/               # 공통 유틸리티 (Snackbar, Extensions)
+├── feature/              # Feature 모듈
+│   ├── auth/             # 인증 Feature 모듈
+│   ├── home/             # 홈 Feature 모듈
+│   ├── search/           # 검색 Feature 모듈
+│   ├── bookmark/         # 책 상세/북마크 Feature 모듈
+│   └── settings/         # 설정 Feature 모듈
+├── core/                 # Core 모듈
+│   ├── common/           # 공통 유틸리티 (Snackbar, Extensions)
+│   ├── data/             # Data Layer (Repository 구현체)
+│   ├── data-api/         # DataSource 인터페이스, DTO
+│   ├── data-remote/      # Remote DataSource (Ktor)
+│   ├── data-local/       # Local DataSource (DataStore)
+│   └── data-auth/        # 소셜 인증 구현체 (Kakao, Apple)
 ├── designsystem/         # 디자인 시스템 (Color, Typography, Theme)
 ├── domain/               # Domain Layer (Repository 인터페이스)
 ├── model/                # 비즈니스 모델
-├── data/                 # Data Layer (Repository 구현체)
-├── data-api/             # DataSource 인터페이스, DTO
-├── data-remote/          # Remote DataSource (Ktor)
-├── data-local/           # Local DataSource (DataStore)
-├── data-auth/            # 소셜 인증 구현체 (Kakao, Apple)
 ├── build-logic/          # Gradle Convention Plugins
 └── gradle/
     └── libs.versions.toml
@@ -67,9 +73,9 @@ src/
     └── KoinHelper.kt         # iOS용 Koin 초기화 헬퍼
 ```
 
-### Feature 모듈
+### Feature 모듈 (`feature/`)
 
-#### auth
+#### feature/auth
 인증 화면 Feature 모듈.
 ```
 src/commonMain/kotlin/com/phase/bookpin/auth/
@@ -80,9 +86,20 @@ src/commonMain/kotlin/com/phase/bookpin/auth/
 └── di/AuthModule.kt      # Koin 모듈
 ```
 
-### Core 모듈
+#### feature/bookmark
+책 상세/북마크 Feature 모듈.
+```
+src/commonMain/kotlin/com/phase/bookpin/bookmark/
+├── BookDetailScreen.kt       # 책 상세 UI
+├── BookDetailViewModel.kt    # MVI ViewModel
+├── BookDetailState.kt        # UI State
+├── BookDetailSideEffect.kt   # Side Effects
+└── di/BookDetailModule.kt    # Koin 모듈
+```
 
-#### common
+### Core 모듈 (`core/`)
+
+#### core/common
 공통 유틸리티 모듈.
 ```
 src/commonMain/kotlin/com/phase/bookpin/common/
@@ -125,9 +142,9 @@ src/commonMain/kotlin/com/phase/bookpin/model/
 └── SocialAuthToken.kt            # 소셜 인증 토큰 모델
 ```
 
-### Data Layer
+### Data Layer (`core/`)
 
-#### data
+#### core/data
 Repository 구현체 및 DI.
 ```
 src/commonMain/kotlin/com/phase/bookpin/data/
@@ -135,7 +152,7 @@ src/commonMain/kotlin/com/phase/bookpin/data/
 └── di/DataModule.kt              # Koin 모듈
 ```
 
-#### data-api
+#### core/data-api
 DataSource 인터페이스 및 DTO.
 ```
 src/commonMain/kotlin/com/phase/bookpin/data/api/
@@ -152,7 +169,7 @@ src/commonMain/kotlin/com/phase/bookpin/data/api/
     └── Navigator.kt              # Navigation 인터페이스
 ```
 
-#### data-remote
+#### core/data-remote
 Remote DataSource 구현체 (Ktor).
 ```
 src/commonMain/kotlin/com/phase/bookpin/data/remote/
@@ -164,7 +181,7 @@ src/commonMain/kotlin/com/phase/bookpin/data/remote/
 └── di/DataRemoteModule.kt        # Koin 모듈
 ```
 
-#### data-local
+#### core/data-local
 Local DataSource 구현체 (DataStore).
 ```
 src/
@@ -179,7 +196,7 @@ src/
     └── datastore/DataStoreFactory.ios.kt
 ```
 
-#### data-auth
+#### core/data-auth
 소셜 인증 구현체.
 ```
 src/androidMain/kotlin/com/phase/bookpin/data/auth/kakao/
@@ -331,8 +348,8 @@ GitHub Actions (`ci.yml`):
 | iOS Koin Helper | `compose-app/src/iosMain/.../KoinHelper.kt` |
 | 공통 App | `compose-app/src/commonMain/.../BookPinApp.kt` |
 | App DI Module | `compose-app/src/commonMain/.../di/AppModule.kt` |
-| BaseViewModel | `common/src/commonMain/.../BaseViewModel.kt` |
-| Snackbar | `common/src/commonMain/.../snackbar/` |
+| BaseViewModel | `core/common/src/commonMain/.../BaseViewModel.kt` |
+| Snackbar | `core/common/src/commonMain/.../snackbar/` |
 | 테마 | `designsystem/src/commonMain/.../Theme.kt` |
 | 버전 카탈로그 | `gradle/libs.versions.toml` |
 
