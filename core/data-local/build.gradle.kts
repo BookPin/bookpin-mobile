@@ -60,7 +60,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-                implementation(projects.dataApi)
+                implementation(projects.core.dataApi)
                 implementation(libs.kotlinx.coroutines)
                 implementation(libs.androidx.datastore.preferences)
                 implementation(libs.koin.core)

@@ -8,13 +8,13 @@ plugins {
 compose {
     resources {
         publicResClass = true
-        packageOfResClass = "bookpin.home.generated.resources"
+        packageOfResClass = "bookpin.auth.generated.resources"
     }
 }
 
 kotlin {
     androidLibrary {
-        namespace = "com.phase.bookpin.home"
+        namespace = "com.phase.bookpin.auth"
         compileSdk = libs.versions.compileSdk
             .get()
             .toInt()
@@ -29,7 +29,7 @@ kotlin {
         iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Home"
+            baseName = "Auth"
             isStatic = true
         }
     }
@@ -37,7 +37,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.designsystem)
-            implementation(projects.common)
+            implementation(projects.core.common)
             implementation(projects.model)
             implementation(projects.domain)
             implementation(libs.koin.compose.viewmodel)

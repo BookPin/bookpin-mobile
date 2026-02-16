@@ -37,7 +37,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.designsystem)
-            implementation(projects.common)
+            implementation(projects.core.common)
             implementation(projects.model)
             implementation(projects.domain)
             implementation(libs.koin.compose.viewmodel)
