@@ -341,7 +341,7 @@ private fun BookmarkItem(
             ).padding(16.dp),
     ) {
         Text(
-            text = "p.${bookmark.pageNumber}",
+            text = stringResource(Res.string.page_format, bookmark.pageNumber),
             style = BookPinTheme.typography.labelMedium,
             color = BookPinTheme.colors.onSurfaceVariant,
         )
