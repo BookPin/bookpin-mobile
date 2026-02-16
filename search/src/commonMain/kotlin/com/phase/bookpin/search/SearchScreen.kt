@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -253,8 +252,7 @@ private fun SearchResultItem(
             ).background(
                 color = Color.White,
                 shape = RoundedCornerShape(16.dp),
-            ).clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick)
+            ).clickable(onClick = onClick)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -267,8 +265,7 @@ private fun SearchResultItem(
                 .shadow(
                     elevation = 4.dp,
                     shape = RoundedCornerShape(12.dp),
-                ).clip(RoundedCornerShape(12.dp))
-                .background(BookPinTheme.colors.surface),
+                ).background(BookPinTheme.colors.surface),
             contentScale = ContentScale.Crop,
         )
 

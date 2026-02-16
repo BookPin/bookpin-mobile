@@ -14,10 +14,16 @@ data object HomeRoute : NavKey
 @Serializable
 data object SearchRoute : NavKey
 
+@Serializable
+data class BookDetailRoute(
+    val bookId: String,
+) : NavKey
+
 val navSerializersModule = SerializersModule {
     polymorphic(NavKey::class) {
         subclass(AuthRoute::class, AuthRoute.serializer())
         subclass(HomeRoute::class, HomeRoute.serializer())
         subclass(SearchRoute::class, SearchRoute.serializer())
+        subclass(BookDetailRoute::class, BookDetailRoute.serializer())
     }
 }

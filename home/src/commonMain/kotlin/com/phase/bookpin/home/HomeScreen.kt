@@ -69,6 +69,7 @@ import kotlin.math.absoluteValue
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     onNavigateToSearch: () -> Unit = {},
+    onNavigateToBookDetail: (String) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHost = LocalSnackbarHost.current
@@ -79,7 +80,7 @@ fun HomeScreen(
                 snackbarHost.showSnackbar(it.message)
             }
             HomeSideEffect.NavigateToSettings -> {}
-            is HomeSideEffect.NavigateToBookDetail -> {}
+            is HomeSideEffect.NavigateToBookDetail -> onNavigateToBookDetail(it.bookId)
             is HomeSideEffect.NavigateToAddBookmark -> {}
             HomeSideEffect.NavigateToAddBook -> onNavigateToSearch()
         }

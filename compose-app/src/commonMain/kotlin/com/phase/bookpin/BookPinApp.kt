@@ -14,6 +14,7 @@ import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
 import com.phase.bookpin.navigation.AuthRoute
+import com.phase.bookpin.navigation.BookDetailRoute
 import com.phase.bookpin.navigation.BookPinNavHost
 import com.phase.bookpin.navigation.HomeRoute
 import com.phase.bookpin.navigation.SearchRoute
@@ -73,6 +74,9 @@ fun BookPinApp(
                     },
                     onNavigateToSearch = {
                         backStack.add(SearchRoute)
+                    },
+                    onNavigateToBookDetail = { bookId ->
+                        backStack.add(BookDetailRoute(bookId))
                     },
                     onNavigateBack = {
                         backStack.removeLastOrNull()

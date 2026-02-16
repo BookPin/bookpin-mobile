@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="pages_format">/ %1$d 페이지</string>
+    <string name="progress_format">%1$d%% 진행중</string>
+    <string name="mark_as_complete">완독으로 표시하기</string>
+    <string name="tab_text">텍스트</string>
+    <string name="tab_photo">사진</string>
+    <string name="page_format">p.%1$d</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_back">뒤로가기</string>
+    <string name="cd_add_bookmark">북마크 추가</string>
+    <string name="cd_text_bookmark">텍스트 북마크</string>
+    <string name="cd_photo_bookmark">사진 북마크</string>
+</resources>

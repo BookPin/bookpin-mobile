@@ -3,18 +3,25 @@ plugins {
     alias(libs.plugins.kotlinMultiplatformLibrary)
     alias(libs.plugins.bookpin.compose)
     alias(libs.plugins.bookpin.ktlint)
-    alias(libs.plugins.bookpin.kotlin.serialization)
+}
+
+compose {
+    resources {
+        publicResClass = true
+        packageOfResClass = "bookpin.bookdetail.generated.resources"
+    }
 }
 
 kotlin {
     androidLibrary {
-        namespace = "com.phase.bookpin"
+        namespace = "com.phase.bookpin.bookdetail"
         compileSdk = libs.versions.compileSdk
             .get()
             .toInt()
         minSdk = libs.versions.minSdk
             .get()
             .toInt()
+        androidResources.enable = true
     }
 
     listOf(
@@ -22,32 +29,20 @@ kotlin {
         iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "BookDetail"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.auth)
-            implementation(projects.home)
-            implementation(projects.search)
-            implementation(projects.bookdetail)
             implementation(projects.designsystem)
             implementation(projects.common)
             implementation(projects.model)
-            implementation(projects.data)
             implementation(projects.domain)
-            implementation(projects.dataApi)
-            implementation(projects.dataRemote)
-            implementation(projects.dataLocal)
-            implementation(projects.dataAuth)
-
-            implementation(libs.jetbrains.navigation3.ui)
-            implementation(libs.kermit)
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
