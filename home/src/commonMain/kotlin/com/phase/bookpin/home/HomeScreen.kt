@@ -28,6 +28,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -84,32 +85,38 @@ fun HomeScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BookPinTheme.colors.background)
-            .padding(horizontal = 20.dp)
-            .padding(top = 24.dp),
-    ) {
-        HomeTopBar(onSettingsClick = viewModel::onSettingsClick)
+    Scaffold(
+        topBar = {
+            HomeTopBar(onSettingsClick = viewModel::onSettingsClick)
+        },
+        floatingActionButton = {
+            BookAddButton(
+                onClick = viewModel::onAddBookClick,
+            )
+        },
+        containerColor = BookPinTheme.colors.background,
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(horizontal = 20.dp),
+        ) {
+            CurrentlyReadingSection(
+                book = state.books.firstOrNull(),
+                onAddBookmarkClick = { state.books.firstOrNull()?.let { viewModel.onAddBookmarkClick(it.id) } },
+                onAddBookClick = viewModel::onAddBookClick,
+            )
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-        CurrentlyReadingSection(
-            book = state.books.firstOrNull(),
-            onAddBookmarkClick = { state.books.firstOrNull()?.let { viewModel.onAddBookmarkClick(it.id) } },
-            onAddBookClick = viewModel::onAddBookClick,
-        )
+            BookShelfSection(
+                books = state.books,
+                onBookClick = viewModel::onBookClick,
+            )
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        BookShelfSection(
-            books = state.books,
-            onAddBookClick = viewModel::onAddBookClick,
-            onBookClick = viewModel::onBookClick,
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
+        }
     }
 }
 
@@ -118,7 +125,9 @@ private fun HomeTopBar(
     onSettingsClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -174,6 +183,40 @@ private fun CurrentlyReadingSection(
         )
     } else {
         EmptyReadingCard(onClick = onAddBookClick)
+    }
+}
+
+@Composable
+private fun BookAddButton(
+    onClick: () -> Unit,
+) {
+    Button(
+        onClick = onClick,
+        shape = CircleShape,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = BookPinTheme.colors.surfaceVariant,
+            contentColor = BookPinTheme.colors.onSurface,
+        ),
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 2.dp,
+            pressedElevation = 6.dp,
+        ),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Icon(
+                painter = painterResource(Res.drawable.add),
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
+            )
+            Text(
+                text = stringResource(Res.string.add_book),
+                style = BookPinTheme.typography.titleMedium,
+            )
+        }
     }
 }
 
@@ -395,7 +438,10 @@ private fun CurrentlyReadingCard(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = BookPinTheme.colors.surfaceVariant,
                     ),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp),
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 2.dp,
+                        pressedElevation = 6.dp,
+                    ),
                     contentPadding = PaddingValues(0.dp),
                 ) {
                     Text(
@@ -415,48 +461,15 @@ private fun CurrentlyReadingCard(
 @Composable
 private fun BookShelfSection(
     books: List<Book>,
-    onAddBookClick: () -> Unit,
     onBookClick: (String) -> Unit,
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(
-            text = stringResource(Res.string.my_bookshelf),
-            style = BookPinTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold,
-            ),
-            color = BookPinTheme.colors.onSurface,
-        )
-
-        if (books.isNotEmpty()) {
-            Row(
-                modifier = Modifier
-                    .background(
-                        color = BookPinTheme.colors.surfaceVariant,
-                        shape = CircleShape,
-                    ).clickable(onClick = onAddBookClick)
-                    .padding(horizontal = 16.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.add),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                    tint = BookPinTheme.colors.onSurface,
-                )
-
-                Text(
-                    text = stringResource(Res.string.add_book),
-                    style = BookPinTheme.typography.titleMedium,
-                    color = BookPinTheme.colors.onSurface,
-                )
-            }
-        }
-    }
+    Text(
+        text = stringResource(Res.string.my_bookshelf),
+        style = BookPinTheme.typography.headlineMedium.copy(
+            fontWeight = FontWeight.Bold,
+        ),
+        color = BookPinTheme.colors.onSurface,
+    )
 
     Spacer(modifier = Modifier.height(16.dp))
 
@@ -552,7 +565,7 @@ private fun BookCard(
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Row(verticalAlignment = Alignment.Bottom) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "${book.currentPage} / ${book.totalPages} ",
                     style = BookPinTheme.typography.labelSmall.copy(
