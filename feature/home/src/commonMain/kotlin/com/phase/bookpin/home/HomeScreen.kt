@@ -37,10 +37,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bookpin.home.generated.resources.Res
 import bookpin.home.generated.resources.add
@@ -96,7 +94,7 @@ fun HomeScreen(
                 onClick = viewModel::onAddBookClick,
             )
         },
-        containerColor = BookPinTheme.colors.background,
+        containerColor = BookPinTheme.colors.bgCanvas,
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -135,11 +133,8 @@ private fun HomeTopBar(
     ) {
         Text(
             text = stringResource(Res.string.app_name),
-            style = BookPinTheme.typography.headlineLarge.copy(
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-            ),
-            color = BookPinTheme.colors.onSecondary,
+            style = BookPinTheme.typography.headlineLarge,
+            color = BookPinTheme.colors.textPrimary,
         )
 
         IconButton(
@@ -147,7 +142,7 @@ private fun HomeTopBar(
             modifier = Modifier
                 .size(36.dp)
                 .background(
-                    color = BookPinTheme.colors.surface,
+                    color = BookPinTheme.colors.bgSurface,
                     shape = CircleShape,
                 ),
         ) {
@@ -155,7 +150,7 @@ private fun HomeTopBar(
                 painter = painterResource(Res.drawable.setting),
                 contentDescription = stringResource(Res.string.cd_settings),
                 modifier = Modifier.size(20.dp),
-                tint = BookPinTheme.colors.onSurfaceVariant,
+                tint = BookPinTheme.colors.iconDefault,
             )
         }
     }
@@ -169,11 +164,8 @@ private fun CurrentlyReadingSection(
 ) {
     Text(
         text = stringResource(Res.string.currently_reading),
-        style = BookPinTheme.typography.headlineMedium.copy(
-            fontSize = 19.sp,
-            fontWeight = FontWeight.Bold,
-        ),
-        color = BookPinTheme.colors.onSurface,
+        style = BookPinTheme.typography.headlineMedium,
+        color = BookPinTheme.colors.textPrimary,
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -196,8 +188,8 @@ private fun BookAddButton(
         onClick = onClick,
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
-            containerColor = BookPinTheme.colors.surfaceVariant,
-            contentColor = BookPinTheme.colors.onSurface,
+            containerColor = BookPinTheme.colors.bgMuted,
+            contentColor = BookPinTheme.colors.textPrimary,
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 2.dp,
@@ -233,14 +225,14 @@ private fun EmptyReadingCard(
             .shadow(
                 elevation = 2.dp,
                 shape = RoundedCornerShape(16.dp),
-                ambientColor = Color(0x0F6B5744),
-                spotColor = Color(0x0F6B5744),
+                ambientColor = BookPinTheme.colors.shadow.copy(alpha = 0.06f),
+                spotColor = BookPinTheme.colors.shadow.copy(alpha = 0.06f),
             ),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = BookPinTheme.colors.bgElevated),
         border = BorderStroke(
             width = 0.615.dp,
-            color = BookPinTheme.colors.outline,
+            color = BookPinTheme.colors.borderDefault,
         ),
     ) {
         Row(
@@ -252,22 +244,16 @@ private fun EmptyReadingCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = stringResource(Res.string.empty_reading_title),
-                    style = BookPinTheme.typography.headlineSmall.copy(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    color = BookPinTheme.colors.onSurface,
+                    style = BookPinTheme.typography.titleLarge,
+                    color = BookPinTheme.colors.textPrimary,
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
                     text = stringResource(Res.string.empty_reading_subtitle),
-                    style = BookPinTheme.typography.titleSmall.copy(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium,
-                    ),
-                    color = Color(0xFF8B7355),
+                    style = BookPinTheme.typography.titleSmall,
+                    color = BookPinTheme.colors.textTertiary,
                 )
             }
 
@@ -275,7 +261,7 @@ private fun EmptyReadingCard(
                 painter = painterResource(Res.drawable.chevron_right),
                 contentDescription = null,
                 modifier = Modifier.size(20.dp),
-                tint = BookPinTheme.colors.onSurfaceVariant,
+                tint = BookPinTheme.colors.iconDefault,
             )
         }
     }
@@ -287,8 +273,8 @@ private fun CurrentlyReadingCard(
     onAddBookmarkClick: () -> Unit,
 ) {
     val coverColors = listOf(
-        BookPinTheme.colors.secondary,
-        BookPinTheme.colors.secondaryContainer,
+        BookPinTheme.colors.accentPrimary,
+        BookPinTheme.colors.accentSecondary,
     )
     val colorIndex = book.id.hashCode().absoluteValue % coverColors.size
 
@@ -298,14 +284,14 @@ private fun CurrentlyReadingCard(
             .shadow(
                 elevation = 8.dp,
                 shape = RoundedCornerShape(28.dp),
-                ambientColor = Color(0x0F6B5744),
-                spotColor = Color(0x0F6B5744),
+                ambientColor = BookPinTheme.colors.shadow.copy(alpha = 0.06f),
+                spotColor = BookPinTheme.colors.shadow.copy(alpha = 0.06f),
             ).background(
-                color = Color.White,
+                color = BookPinTheme.colors.bgElevated,
                 shape = RoundedCornerShape(28.dp),
             ).border(
                 width = 0.615.dp,
-                color = Color(0xFFF5EFE6),
+                color = BookPinTheme.colors.bgSurface,
                 shape = RoundedCornerShape(28.dp),
             ).padding(24.dp),
     ) {
@@ -327,8 +313,8 @@ private fun CurrentlyReadingCard(
             ) {
                 Text(
                     text = book.title.take(2),
-                    style = BookPinTheme.typography.headlineLarge,
-                    color = Color.White.copy(alpha = 0.5f),
+                    style = BookPinTheme.typography.headlineMedium,
+                    color = BookPinTheme.colors.textOnAccent.copy(alpha = 0.5f),
                 )
             }
 
@@ -341,11 +327,8 @@ private fun CurrentlyReadingCard(
             ) {
                 Text(
                     text = book.title,
-                    style = BookPinTheme.typography.headlineSmall.copy(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    color = BookPinTheme.colors.onSurface,
+                    style = BookPinTheme.typography.headlineSmall,
+                    color = BookPinTheme.colors.textPrimary,
                     maxLines = 1,
                 )
 
@@ -357,29 +340,23 @@ private fun CurrentlyReadingCard(
                 ) {
                     Text(
                         text = book.author,
-                        style = BookPinTheme.typography.titleSmall.copy(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium,
-                        ),
-                        color = BookPinTheme.colors.onSurfaceVariant,
+                        style = BookPinTheme.typography.titleSmall,
+                        color = BookPinTheme.colors.textSecondary,
                     )
 
                     Box(
                         modifier = Modifier
                             .size(4.dp)
                             .background(
-                                color = BookPinTheme.colors.outline,
+                                color = BookPinTheme.colors.borderDefault,
                                 shape = CircleShape,
                             ),
                     )
 
                     Text(
                         text = "${book.readingDays}일째",
-                        style = BookPinTheme.typography.labelMedium.copy(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                        ),
-                        color = BookPinTheme.colors.primary,
+                        style = BookPinTheme.typography.labelMedium,
+                        color = BookPinTheme.colors.textAccent,
                     )
                 }
 
@@ -390,20 +367,14 @@ private fun CurrentlyReadingCard(
                 ) {
                     Text(
                         text = "${book.currentPage}p / ${book.totalPages}p ",
-                        style = BookPinTheme.typography.titleSmall.copy(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                        ),
-                        color = BookPinTheme.colors.onSurfaceVariant,
+                        style = BookPinTheme.typography.titleSmall,
+                        color = BookPinTheme.colors.textSecondary,
                     )
 
                     Text(
                         text = "${book.progressPercent}%",
-                        style = BookPinTheme.typography.titleSmall.copy(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                        ),
-                        color = BookPinTheme.colors.primary,
+                        style = BookPinTheme.typography.titleSmall,
+                        color = BookPinTheme.colors.textAccent,
                     )
                 }
 
@@ -414,7 +385,7 @@ private fun CurrentlyReadingCard(
                         .fillMaxWidth()
                         .height(6.dp)
                         .background(
-                            color = BookPinTheme.colors.surface,
+                            color = BookPinTheme.colors.bgSurface,
                             shape = CircleShape,
                         ),
                 ) {
@@ -423,7 +394,7 @@ private fun CurrentlyReadingCard(
                             .fillMaxHeight()
                             .fillMaxWidth(book.progressPercent / 100f)
                             .background(
-                                color = BookPinTheme.colors.primary,
+                                color = BookPinTheme.colors.buttonPrimary,
                                 shape = CircleShape,
                             ),
                     )
@@ -438,7 +409,7 @@ private fun CurrentlyReadingCard(
                         .height(32.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = BookPinTheme.colors.surfaceVariant,
+                        containerColor = BookPinTheme.colors.bgMuted,
                     ),
                     elevation = ButtonDefaults.buttonElevation(
                         defaultElevation = 2.dp,
@@ -448,11 +419,8 @@ private fun CurrentlyReadingCard(
                 ) {
                     Text(
                         text = stringResource(Res.string.leave_bookmark),
-                        style = BookPinTheme.typography.labelMedium.copy(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                        ),
-                        color = BookPinTheme.colors.onSurface,
+                        style = BookPinTheme.typography.labelMedium,
+                        color = BookPinTheme.colors.textPrimary,
                     )
                 }
             }
@@ -467,10 +435,8 @@ private fun BookShelfSection(
 ) {
     Text(
         text = stringResource(Res.string.my_bookshelf),
-        style = BookPinTheme.typography.headlineMedium.copy(
-            fontWeight = FontWeight.Bold,
-        ),
-        color = BookPinTheme.colors.onSurface,
+        style = BookPinTheme.typography.headlineSmall,
+        color = BookPinTheme.colors.textPrimary,
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -492,11 +458,8 @@ private fun BookShelfSection(
     } else {
         Text(
             text = stringResource(Res.string.empty_bookshelf),
-            style = BookPinTheme.typography.titleSmall.copy(
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-            ),
-            color = BookPinTheme.colors.onSurfaceVariant,
+            style = BookPinTheme.typography.titleSmall,
+            color = BookPinTheme.colors.textSecondary,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 24.dp),
@@ -511,8 +474,8 @@ private fun BookCard(
     onClick: () -> Unit,
 ) {
     val coverColors = listOf(
-        BookPinTheme.colors.secondary,
-        BookPinTheme.colors.secondaryContainer,
+        BookPinTheme.colors.accentPrimary,
+        BookPinTheme.colors.accentSecondary,
     )
     val colorIndex = book.id.hashCode().absoluteValue % coverColors.size
 
@@ -523,7 +486,7 @@ private fun BookCard(
                 elevation = 2.dp,
                 shape = RoundedCornerShape(16.dp),
             ).background(
-                color = Color.White,
+                color = BookPinTheme.colors.bgElevated,
                 shape = RoundedCornerShape(16.dp),
             ).clickable(onClick = onClick)
             .padding(16.dp),
@@ -540,8 +503,8 @@ private fun BookCard(
         ) {
             Text(
                 text = book.title.take(2),
-                style = BookPinTheme.typography.headlineLarge,
-                color = Color.White.copy(alpha = 0.5f),
+                style = BookPinTheme.typography.titleLarge,
+                color = BookPinTheme.colors.textOnAccent.copy(alpha = 0.5f),
             )
         }
 
@@ -550,14 +513,14 @@ private fun BookCard(
         Text(
             text = book.title,
             style = BookPinTheme.typography.titleSmall,
-            color = BookPinTheme.colors.onSurface,
+            color = BookPinTheme.colors.textPrimary,
             maxLines = 1,
         )
 
         Text(
             text = book.author,
             style = BookPinTheme.typography.labelMedium,
-            color = BookPinTheme.colors.onSurfaceVariant,
+            color = BookPinTheme.colors.textSecondary,
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -570,18 +533,14 @@ private fun BookCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "${book.currentPage} / ${book.totalPages} ",
-                    style = BookPinTheme.typography.labelSmall.copy(
-                        fontSize = 10.sp,
-                    ),
-                    color = BookPinTheme.colors.onSurfaceVariant,
+                    style = BookPinTheme.typography.labelSmall,
+                    color = BookPinTheme.colors.textSecondary,
                 )
 
                 Text(
                     text = "(${book.progressPercent}%)",
-                    style = BookPinTheme.typography.labelMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    color = BookPinTheme.colors.primary,
+                    style = BookPinTheme.typography.labelMedium,
+                    color = BookPinTheme.colors.textAccent,
                 )
             }
 
@@ -600,7 +559,7 @@ private fun BookCard(
                 Text(
                     text = "${book.bookmarkCount}",
                     style = BookPinTheme.typography.labelMedium,
-                    color = BookPinTheme.colors.onSurface.copy(alpha = 0.8f),
+                    color = BookPinTheme.colors.textPrimary.copy(alpha = 0.8f),
                 )
             }
         }
@@ -612,7 +571,7 @@ private fun BookCard(
                 .fillMaxWidth()
                 .height(6.dp)
                 .background(
-                    color = BookPinTheme.colors.surface,
+                    color = BookPinTheme.colors.bgSurface,
                     shape = CircleShape,
                 ),
         ) {
@@ -621,7 +580,7 @@ private fun BookCard(
                     .fillMaxHeight()
                     .fillMaxWidth(book.progressPercent / 100f)
                     .background(
-                        color = BookPinTheme.colors.primary,
+                        color = BookPinTheme.colors.buttonPrimary,
                         shape = CircleShape,
                     ),
             )

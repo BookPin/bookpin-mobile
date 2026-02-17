@@ -2,14 +2,19 @@ package com.phase.bookpin.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import com.phase.bookpin.designsystem.BookPinTheme
@@ -33,18 +38,18 @@ fun BPTextField(
                 shape = shape,
             )
             .background(
-                color = Color.White,
+                color = BookPinTheme.colors.bgElevated,
                 shape = shape,
             )
             .border(
                 width = 1.8.dp,
-                color = BookPinTheme.colors.surface,
+                color = BookPinTheme.colors.borderSubtle,
                 shape = shape,
             ),
         textStyle = BookPinTheme.typography.headlineSmall.copy(
-            color = BookPinTheme.colors.onSurface,
+            color = BookPinTheme.colors.textPrimary,
         ),
-        cursorBrush = SolidColor(BookPinTheme.colors.primary),
+        cursorBrush = SolidColor(BookPinTheme.colors.buttonPrimary),
         singleLine = true,
         decorationBox = { innerTextField ->
             Row(
@@ -65,10 +70,10 @@ fun BPTextField(
 
                 Box(modifier = Modifier.weight(1f)) {
                     if (value.isEmpty()) {
-                        androidx.compose.material3.Text(
+                        Text(
                             text = placeholder,
                             style = BookPinTheme.typography.headlineSmall,
-                            color = BookPinTheme.colors.outlineVariant,
+                            color = BookPinTheme.colors.textPlaceholder,
                         )
                     }
                     innerTextField()

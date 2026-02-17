@@ -10,6 +10,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import bookpin.designsystem.generated.resources.Res
 import bookpin.designsystem.generated.resources.applesdgothicneo_bold
+import bookpin.designsystem.generated.resources.applesdgothicneo_extrabold
 import bookpin.designsystem.generated.resources.applesdgothicneo_medium
 import bookpin.designsystem.generated.resources.applesdgothicneo_regular
 import bookpin.designsystem.generated.resources.applesdgothicneo_semibold
@@ -33,13 +34,14 @@ private fun AppleSDGothicNeo() = FontFamily(
         resource = Res.font.applesdgothicneo_bold,
         weight = FontWeight.Bold,
     ),
+    Font(
+        resource = Res.font.applesdgothicneo_extrabold,
+        weight = FontWeight.ExtraBold,
+    )
 )
 
 @Immutable
 data class BookPinTypography(
-    val displayLarge: TextStyle,
-    val displayMedium: TextStyle,
-    val displaySmall: TextStyle,
     val headlineLarge: TextStyle,
     val headlineMedium: TextStyle,
     val headlineSmall: TextStyle,
@@ -56,9 +58,6 @@ data class BookPinTypography(
 
 val LocalBookPinTypography = staticCompositionLocalOf {
     BookPinTypography(
-        displayLarge = TextStyle.Default,
-        displayMedium = TextStyle.Default,
-        displaySmall = TextStyle.Default,
         headlineLarge = TextStyle.Default,
         headlineMedium = TextStyle.Default,
         headlineSmall = TextStyle.Default,
@@ -79,110 +78,77 @@ internal fun bookPinTypography(): BookPinTypography {
     val appleFontFamily = AppleSDGothicNeo()
     return remember(appleFontFamily) {
         BookPinTypography(
-            displayLarge = TextStyle(
-                fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Medium,
-                fontSize = 36.sp,
-                lineHeight = 44.sp,
-                letterSpacing = 0.sp,
-            ),
-            displayMedium = TextStyle(
-                fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Medium,
-                fontSize = 32.sp,
-                lineHeight = 40.sp,
-                letterSpacing = 0.sp,
-            ),
-            displaySmall = TextStyle(
-                fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Medium,
-                fontSize = 28.sp,
-                lineHeight = 36.sp,
-                letterSpacing = 0.sp,
-            ),
             headlineLarge = TextStyle(
                 fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.ExtraBold,
                 fontSize = 24.sp,
                 lineHeight = 32.sp,
-                letterSpacing = 0.sp,
             ),
             headlineMedium = TextStyle(
                 fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 lineHeight = 28.sp,
-                letterSpacing = 0.sp,
             ),
             headlineSmall = TextStyle(
                 fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Medium,
                 fontSize = 18.sp,
                 lineHeight = 26.sp,
-                letterSpacing = 0.sp,
             ),
             titleLarge = TextStyle(
                 fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 lineHeight = 28.sp,
-                letterSpacing = 0.sp,
             ),
             titleMedium = TextStyle(
                 fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
                 lineHeight = 24.sp,
-                letterSpacing = 0.15.sp,
             ),
             titleSmall = TextStyle(
                 fontFamily = appleFontFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
-                letterSpacing = 0.1.sp,
             ),
             bodyLarge = TextStyle(
                 fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 lineHeight = 24.sp,
-                letterSpacing = 0.5.sp,
             ),
             bodyMedium = TextStyle(
                 fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
-                letterSpacing = 0.25.sp,
             ),
             bodySmall = TextStyle(
                 fontFamily = appleFontFamily,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
                 lineHeight = 16.sp,
-                letterSpacing = 0.4.sp,
             ),
             labelLarge = TextStyle(
                 fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
-                letterSpacing = 0.1.sp,
             ),
             labelMedium = TextStyle(
                 fontFamily = appleFontFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 12.sp,
                 lineHeight = 16.sp,
-                letterSpacing = 0.5.sp,
             ),
             labelSmall = TextStyle(
                 fontFamily = appleFontFamily,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Normal,
                 fontSize = 11.sp,
                 lineHeight = 16.sp,
-                letterSpacing = 0.5.sp,
             ),
         )
     }

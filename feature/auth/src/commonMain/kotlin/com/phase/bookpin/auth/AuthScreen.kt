@@ -67,7 +67,7 @@ fun AuthScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(BookPinTheme.colors.background)
+            .background(BookPinTheme.colors.bgCanvas)
             .padding(horizontal = 24.dp, vertical = 32.dp),
     ) {
         Column(
@@ -86,15 +86,15 @@ fun AuthScreen(
 
             Text(
                 text = stringResource(Res.string.app_name),
-                style = BookPinTheme.typography.displayLarge,
-                color = BookPinTheme.colors.onSecondary,
+                style = BookPinTheme.typography.headlineLarge,
+                color = BookPinTheme.colors.textPrimary,
             )
 
             Text(
                 modifier = Modifier.padding(top = 8.dp),
                 text = stringResource(Res.string.tagline),
                 style = BookPinTheme.typography.bodyMedium,
-                color = BookPinTheme.colors.onSurfaceVariant,
+                color = BookPinTheme.colors.textSecondary,
             )
 
             Spacer(modifier = Modifier.weight(0.5f))
@@ -102,14 +102,14 @@ fun AuthScreen(
             Text(
                 text = stringResource(Res.string.login_title),
                 style = BookPinTheme.typography.bodyMedium,
-                color = BookPinTheme.colors.onSecondary,
+                color = BookPinTheme.colors.textPrimary,
             )
 
             Text(
                 modifier = Modifier.padding(top = 8.dp),
                 text = stringResource(Res.string.login_subtitle),
                 style = BookPinTheme.typography.bodySmall,
-                color = BookPinTheme.colors.onSurfaceVariant,
+                color = BookPinTheme.colors.textSecondary,
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -142,7 +142,7 @@ fun AuthScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
             ) {
-                CircularProgressIndicator(color = BookPinTheme.colors.onSecondary)
+                CircularProgressIndicator(color = BookPinTheme.colors.textPrimary)
             }
         }
     }

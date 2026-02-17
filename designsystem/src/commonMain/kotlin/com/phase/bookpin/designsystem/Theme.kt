@@ -27,22 +27,22 @@ fun BookPinTheme(
     val typography = bookPinTypography()
 
     val materialColorScheme = lightColorScheme(
-        primary = colors.primary,
-        onPrimary = colors.onPrimary,
-        primaryContainer = colors.primaryContainer,
-        onPrimaryContainer = colors.onPrimaryContainer,
-        secondary = colors.secondary,
-        onSecondary = colors.onSecondary,
-        secondaryContainer = colors.secondaryContainer,
-        onSecondaryContainer = colors.onSecondaryContainer,
-        background = colors.background,
-        onBackground = colors.onBackground,
-        surface = colors.surface,
-        onSurface = colors.onSurface,
-        surfaceVariant = colors.surfaceVariant,
-        onSurfaceVariant = colors.onSurfaceVariant,
-        outline = colors.outline,
-        outlineVariant = colors.outlineVariant,
+        primary = colors.buttonPrimary,
+        onPrimary = colors.bgCanvas,
+        primaryContainer = colors.textAccentMuted,
+        onPrimaryContainer = colors.bgCanvas,
+        secondary = colors.accentPrimary,
+        onSecondary = colors.textPrimary,
+        secondaryContainer = colors.accentSecondary,
+        onSecondaryContainer = colors.textPrimary,
+        background = colors.bgCanvas,
+        onBackground = colors.textPrimary,
+        surface = colors.bgSurface,
+        onSurface = colors.textPrimary,
+        surfaceVariant = colors.bgMuted,
+        onSurfaceVariant = colors.textSecondary,
+        outline = colors.borderDefault,
+        outlineVariant = colors.textPlaceholder,
     )
 
     CompositionLocalProvider(

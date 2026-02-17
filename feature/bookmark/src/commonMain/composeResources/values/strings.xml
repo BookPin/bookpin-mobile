@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="pages_format">/ %1$d 페이지</string>
-    <string name="progress_format">%1$d%% 진행중</string>
+    <string name="progress_format">%1$d% 진행중</string>
     <string name="mark_as_complete">완독으로 표시하기</string>
     <string name="tab_text">텍스트</string>
     <string name="tab_photo">사진</string>
