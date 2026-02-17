@@ -4,42 +4,60 @@
 
 ## Color Mapping (Figma → BookPinTheme)
 
-### Primary Colors
+### Text Colors
 | Figma Hex | Color Name | Theme Token | 용도 |
 |-----------|------------|-------------|------|
-| `#C9A87C` | Gold | `colors.primary` | 주요 액션, 진행 바, 강조 |
-| `#FFF8F0` | Cream | `colors.onPrimary` | Primary 위의 텍스트 |
-| `#B8956B` | MutedGold | `colors.primaryContainer` | Primary 컨테이너 |
+| `#6B5744` | Brown400 | `colors.textPrimary` | 제목, 본문, 주요 텍스트 |
+| `#A0826D` | Brown200 | `colors.textSecondary` | 부가 정보, 저자명 |
+| `#8B7355` | Brown300 | `colors.textTertiary` | 서브타이틀 |
+| `#C9A87C` | Gold100 | `colors.textAccent` | 강조 (진행률, 일수) |
+| `#B8956B` | Gold200 | `colors.textAccentMuted` | 약한 강조 (버전, 날짜) |
+| `#D4B896` | Brown100 | `colors.textPlaceholder` | 플레이스홀더 |
+| `#FFFFFF` | White | `colors.textOnAccent` | 색상 배경 위 텍스트 |
 
-### Secondary Colors
+### Icon Colors
 | Figma Hex | Color Name | Theme Token | 용도 |
 |-----------|------------|-------------|------|
-| `#9DBEB7` | Teal | `colors.secondary` | 보조 색상, 책 표지 배경 1 |
-| `#6B5744` | Brown | `colors.onSecondary` | 제목 텍스트, 주요 텍스트 |
-| `#E8B4A0` | Peach | `colors.secondaryContainer` | 책 표지 배경 2 |
+| `#A0826D` | Brown200 | `colors.iconDefault` | 기본 아이콘 |
+| `#FFFFFF` | White | `colors.iconOnAccent` | 색상 배경 위 아이콘 |
 
-### Surface & Background
+### Background Colors
 | Figma Hex | Color Name | Theme Token | 용도 |
 |-----------|------------|-------------|------|
-| `#FFF8F0` | Cream | `colors.background` | 앱 배경 |
-| `#6B5744` | Brown | `colors.onBackground` | 배경 위 텍스트 |
-| `#F5EFE6` | LightBeige | `colors.surface` | 카드 배경, 버튼 배경, 진행 바 배경 |
-| `#6B5744` | Brown | `colors.onSurface` | Surface 위 텍스트 |
-| `#E8DCC4` | Tan | `colors.surfaceVariant` | 그라데이션 카드, "책 추가" 버튼 |
-| `#A0826D` | LightBrown | `colors.onSurfaceVariant` | 부가 텍스트, 저자명 |
+| `#FFF8F0` | Cream100 | `colors.bgCanvas` | 화면 배경 |
+| `#F5EFE6` | Cream200 | `colors.bgSurface` | 카드 내부, 진행 트랙, 구분선 배경 |
+| `#FFFFFF` | White | `colors.bgElevated` | 카드/컨테이너 배경 |
+| `#E8DCC4` | Cream300 | `colors.bgMuted` | 보조 버튼, variant 배경 |
 
-### Other Colors
+### Border Colors
 | Figma Hex | Color Name | Theme Token | 용도 |
 |-----------|------------|-------------|------|
-| `#E8DCC4` | Tan | `colors.outline` | 테두리 |
-| `#D4B896` | Placeholder | `colors.outlineVariant` | 플레이스홀더 |
+| `#E8DCC4` | Cream300 | `colors.borderDefault` | 카드 테두리 |
+| `#F5EFE6` | Cream200 | `colors.borderSubtle` | 약한 테두리 |
 
-### 자주 사용되는 특수 색상
-| Figma Hex | 직접 사용 | 용도 |
-|-----------|----------|------|
-| `#DCC7A8` | `Color(0xFFDCC7A8)` | 그라데이션 하단 색상 |
-| `#8B7355` | `Color(0xFF8B7355)` | 인용문 저자 텍스트 |
-| `#FFFFFF` 50% | `Color.White.copy(alpha = 0.5f)` | 반투명 배경 |
+### Action Colors
+| Figma Hex | Color Name | Theme Token | 용도 |
+|-----------|------------|-------------|------|
+| `#C9A87C` | Gold100 | `colors.buttonPrimary` | FAB, 확인 버튼, 진행바 채움 |
+
+### Accent Colors
+| Figma Hex | Color Name | Theme Token | 용도 |
+|-----------|------------|-------------|------|
+| `#9DBEB7` | Teal100 | `colors.accentPrimary` | 책 표지 1, 상세 헤더 |
+| `#E8B4A0` | Peach100 | `colors.accentSecondary` | 책 표지 2 |
+
+### State Colors
+| Figma Hex | Color Name | Theme Token | 용도 |
+|-----------|------------|-------------|------|
+| `#D08C7E` | Terracotta100 | `colors.error` | 에러/위험 |
+| `#6B5744` | Brown400 | `colors.shadow` | 그림자 (.copy(alpha=0.06f)로 사용) |
+
+### 특수 색상 매핑
+| Figma 표현 | 테마 토큰 사용법 | 용도 |
+|-----------|----------------|------|
+| `#DCC7A8` | `Color(0xFFDCC7A8)` | 그라데이션 하단 색상 (테마 외) |
+| `#FFFFFF` 50% | `colors.textOnAccent.copy(alpha = 0.5f)` | 반투명 텍스트 |
+| Brown 6% alpha | `colors.shadow.copy(alpha = 0.06f)` | 그림자 색상 |
 
 ---
 
@@ -81,8 +99,8 @@ Modifier.shadow(
 ```kotlin
 Brush.verticalGradient(
     colors = listOf(
-        BookPinTheme.colors.surfaceVariant,  // #E8DCC4
-        Color(0xFFDCC7A8),                    // 하단 색상
+        BookPinTheme.colors.bgMuted,          // #E8DCC4
+        Color(0xFFDCC7A8),                     // 하단 색상
     ),
 )
 ```
@@ -90,7 +108,7 @@ Brush.verticalGradient(
 ### 원형 버튼/아이콘 배경
 ```kotlin
 Modifier.background(
-    color = BookPinTheme.colors.surface,  // #F5EFE6
+    color = BookPinTheme.colors.bgSurface,  // #F5EFE6
     shape = CircleShape,
 )
 ```
@@ -98,9 +116,9 @@ Modifier.background(
 ### 진행 바
 ```kotlin
 // 배경
-BookPinTheme.colors.surface  // #F5EFE6
+BookPinTheme.colors.bgSurface       // #F5EFE6
 // 채움
-BookPinTheme.colors.primary  // #C9A87C
+BookPinTheme.colors.buttonPrimary   // #C9A87C
 // 높이: 6.dp
 // 모양: CircleShape
 ```
@@ -128,7 +146,7 @@ fun ExampleCard() {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        BookPinTheme.colors.surfaceVariant,
+                        BookPinTheme.colors.bgMuted,
                         Color(0xFFDCC7A8),
                     ),
                 ),
@@ -139,7 +157,7 @@ fun ExampleCard() {
         Text(
             text = "제목",
             style = BookPinTheme.typography.headlineMedium,
-            color = BookPinTheme.colors.onSurface,
+            color = BookPinTheme.colors.textPrimary,
         )
     }
 }
@@ -156,3 +174,5 @@ fun ExampleCard() {
 3. **`.copy()` 사용 금지**: 가장 가까운 토큰을 선택하세요. fontFamily 변경이 필요한 예외적 경우만 `.copy()` 허용됩니다.
 
 4. **이미지 에셋**: Figma의 localhost URL 이미지는 임시 참고용이며, 실제 구현 시 `composeResources/drawable/`에 에셋을 추가해야 합니다.
+
+5. **색상 추가 시 하드코딩 금지**: 새로운 색상이 필요할 경우 `Color(0xFF...)` 형태로 직접 사용하지 말고, 반드시 `Color.kt`에 private val로 정의한 뒤 `BookPinColors`에 토큰을 추가하여 `BookPinTheme.colors.*`를 통해 사용하세요.

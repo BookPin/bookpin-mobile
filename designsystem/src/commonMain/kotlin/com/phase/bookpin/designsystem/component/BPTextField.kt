@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import com.phase.bookpin.designsystem.BookPinTheme
@@ -39,18 +38,18 @@ fun BPTextField(
                 shape = shape,
             )
             .background(
-                color = Color.White,
+                color = BookPinTheme.colors.bgElevated,
                 shape = shape,
             )
             .border(
                 width = 1.8.dp,
-                color = BookPinTheme.colors.surface,
+                color = BookPinTheme.colors.borderSubtle,
                 shape = shape,
             ),
         textStyle = BookPinTheme.typography.headlineSmall.copy(
-            color = BookPinTheme.colors.onSurface,
+            color = BookPinTheme.colors.textPrimary,
         ),
-        cursorBrush = SolidColor(BookPinTheme.colors.primary),
+        cursorBrush = SolidColor(BookPinTheme.colors.buttonPrimary),
         singleLine = true,
         decorationBox = { innerTextField ->
             Row(
@@ -74,7 +73,7 @@ fun BPTextField(
                         Text(
                             text = placeholder,
                             style = BookPinTheme.typography.headlineSmall,
-                            color = BookPinTheme.colors.outlineVariant,
+                            color = BookPinTheme.colors.textPlaceholder,
                         )
                     }
                     innerTextField()

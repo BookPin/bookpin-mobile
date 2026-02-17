@@ -59,8 +59,8 @@ fun BookDetailScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = viewModel::onAddBookmarkClick,
-                containerColor = BookPinTheme.colors.primary,
-                contentColor = Color.White,
+                containerColor = BookPinTheme.colors.buttonPrimary,
+                contentColor = BookPinTheme.colors.iconOnAccent,
                 shape = CircleShape,
                 modifier = Modifier.size(56.dp),
             ) {
@@ -75,7 +75,7 @@ fun BookDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BookPinTheme.colors.background),
+                .background(BookPinTheme.colors.bgCanvas),
             contentPadding = PaddingValues(bottom = paddingValues.calculateBottomPadding() + 80.dp),
         ) {
             item {
@@ -142,7 +142,7 @@ private fun BookDetailHeader(
         modifier = Modifier
             .fillMaxWidth()
             .height(192.dp)
-            .background(BookPinTheme.colors.secondary),
+            .background(BookPinTheme.colors.accentPrimary),
     ) {
         Column(
             modifier = Modifier
@@ -155,7 +155,7 @@ private fun BookDetailHeader(
                 modifier = Modifier
                     .size(40.dp)
                     .background(
-                        color = Color.White.copy(alpha = 0.2f),
+                        color = BookPinTheme.colors.bgElevated.copy(alpha = 0.2f),
                         shape = CircleShape,
                     ),
             ) {
@@ -163,7 +163,7 @@ private fun BookDetailHeader(
                     painter = painterResource(Res.drawable.ic_arrow_back),
                     contentDescription = stringResource(Res.string.cd_back),
                     modifier = Modifier.size(24.dp),
-                    tint = Color.White,
+                    tint = BookPinTheme.colors.iconOnAccent,
                 )
             }
 
@@ -172,7 +172,7 @@ private fun BookDetailHeader(
             Text(
                 text = book.title,
                 style = BookPinTheme.typography.headlineMedium,
-                color = Color.White,
+                color = BookPinTheme.colors.textOnAccent,
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -180,7 +180,7 @@ private fun BookDetailHeader(
             Text(
                 text = book.author,
                 style = BookPinTheme.typography.bodyMedium,
-                color = Color.White.copy(alpha = 0.8f),
+                color = BookPinTheme.colors.textOnAccent.copy(alpha = 0.8f),
             )
         }
     }
@@ -206,7 +206,7 @@ private fun BookDetailStats(
                     elevation = 4.dp,
                     shape = RoundedCornerShape(16.dp),
                 ).background(
-                    color = Color.White,
+                    color = BookPinTheme.colors.bgElevated,
                     shape = RoundedCornerShape(16.dp),
                 ).padding(24.dp),
         ) {
@@ -220,21 +220,21 @@ private fun BookDetailStats(
                 ) {
                     Text(
                         text = "$currentPage",
-                        style = BookPinTheme.typography.headlineMedium,
-                        color = BookPinTheme.colors.onSurface,
+                        style = BookPinTheme.typography.bodyLarge,
+                        color = BookPinTheme.colors.textPrimary,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = stringResource(Res.string.pages_format, totalPages),
                         style = BookPinTheme.typography.bodyMedium,
-                        color = BookPinTheme.colors.onSurfaceVariant,
+                        color = BookPinTheme.colors.textSecondary,
                     )
                 }
 
                 Text(
                     text = stringResource(Res.string.progress_format, progressPercent),
                     style = BookPinTheme.typography.titleSmall,
-                    color = BookPinTheme.colors.primary,
+                    color = BookPinTheme.colors.textAccent,
                 )
             }
 
@@ -245,7 +245,7 @@ private fun BookDetailStats(
                     .fillMaxWidth()
                     .height(8.dp)
                     .background(
-                        color = BookPinTheme.colors.surface,
+                        color = BookPinTheme.colors.bgSurface,
                         shape = RoundedCornerShape(4.dp),
                     ),
             ) {
@@ -254,7 +254,7 @@ private fun BookDetailStats(
                         .fillMaxHeight()
                         .fillMaxWidth(fraction = progressPercent / 100f)
                         .background(
-                            color = BookPinTheme.colors.primary,
+                            color = BookPinTheme.colors.buttonPrimary,
                             shape = RoundedCornerShape(4.dp),
                         ),
                 )
@@ -267,7 +267,7 @@ private fun BookDetailStats(
                     .fillMaxWidth()
                     .height(40.dp)
                     .background(
-                        color = BookPinTheme.colors.surface,
+                        color = BookPinTheme.colors.bgSurface,
                         shape = RoundedCornerShape(12.dp),
                     ).clip(RoundedCornerShape(12.dp))
                     .clickable(onClick = onMarkAsCompleteClick),
@@ -276,7 +276,7 @@ private fun BookDetailStats(
                 Text(
                     text = stringResource(Res.string.mark_as_complete),
                     style = BookPinTheme.typography.titleSmall,
-                    color = BookPinTheme.colors.onSurfaceVariant,
+                    color = BookPinTheme.colors.textSecondary,
                 )
             }
         }
@@ -296,7 +296,7 @@ private fun BookDetailTabs(
             .offset(y = (-8).dp)
             .padding(horizontal = 24.dp)
             .background(
-                color = BookPinTheme.colors.surface,
+                color = BookPinTheme.colors.bgSurface,
                 shape = RoundedCornerShape(12.dp),
             ).padding(4.dp),
     ) {
@@ -336,7 +336,7 @@ private fun TabItem(
                     Modifier
                 },
             ).background(
-                color = if (isSelected) Color.White else Color.Transparent,
+                color = if (isSelected) BookPinTheme.colors.bgElevated else Color.Transparent,
                 shape = RoundedCornerShape(12.dp),
             ).clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick),
@@ -346,9 +346,9 @@ private fun TabItem(
             text = text,
             style = BookPinTheme.typography.titleSmall,
             color = if (isSelected) {
-                BookPinTheme.colors.onSurface
+                BookPinTheme.colors.textPrimary
             } else {
-                BookPinTheme.colors.onSurfaceVariant
+                BookPinTheme.colors.textSecondary
             },
         )
     }
@@ -367,14 +367,14 @@ private fun BookmarkItem(
                 elevation = 2.dp,
                 shape = RoundedCornerShape(16.dp),
             ).background(
-                color = Color.White,
+                color = BookPinTheme.colors.bgElevated,
                 shape = RoundedCornerShape(16.dp),
             ).padding(16.dp),
     ) {
         Text(
             text = stringResource(Res.string.page_format, bookmark.pageNumber),
             style = BookPinTheme.typography.labelMedium,
-            color = BookPinTheme.colors.onSurfaceVariant,
+            color = BookPinTheme.colors.textSecondary,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -382,7 +382,7 @@ private fun BookmarkItem(
         Text(
             text = bookmark.quote,
             style = BookPinTheme.typography.bodyLarge,
-            color = BookPinTheme.colors.onSurface,
+            color = BookPinTheme.colors.textPrimary,
         )
 
         if (bookmark.memo.isNotEmpty()) {
@@ -393,7 +393,7 @@ private fun BookmarkItem(
                 style = BookPinTheme.typography.bodyMedium.copy(
                     fontStyle = FontStyle.Italic,
                 ),
-                color = BookPinTheme.colors.onSurfaceVariant,
+                color = BookPinTheme.colors.textSecondary,
             )
         }
     }
@@ -410,11 +410,11 @@ private fun PhotoBookmarkItem(
                 elevation = 2.dp,
                 shape = RoundedCornerShape(16.dp),
             ).background(
-                color = Color.White,
+                color = BookPinTheme.colors.bgElevated,
                 shape = RoundedCornerShape(16.dp),
             ).border(
                 width = 0.5.dp,
-                color = BookPinTheme.colors.surface,
+                color = BookPinTheme.colors.borderSubtle,
                 shape = RoundedCornerShape(16.dp),
             ).clip(RoundedCornerShape(16.dp)),
     ) {
@@ -422,7 +422,7 @@ private fun PhotoBookmarkItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .background(BookPinTheme.colors.surface),
+                .background(BookPinTheme.colors.bgSurface),
             contentAlignment = Alignment.Center,
         ) {
             if (bookmark.photoUrl.isNullOrEmpty()) {
@@ -430,7 +430,7 @@ private fun PhotoBookmarkItem(
                     painter = painterResource(Res.drawable.ic_photo),
                     contentDescription = null,
                     modifier = Modifier.size(32.dp),
-                    tint = BookPinTheme.colors.onSurfaceVariant,
+                    tint = BookPinTheme.colors.iconDefault,
                 )
             } else {
                 AsyncImage(
@@ -448,7 +448,7 @@ private fun PhotoBookmarkItem(
             Text(
                 text = stringResource(Res.string.page_format, bookmark.pageNumber),
                 style = BookPinTheme.typography.labelMedium,
-                color = BookPinTheme.colors.onSurfaceVariant,
+                color = BookPinTheme.colors.textSecondary,
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -456,7 +456,7 @@ private fun PhotoBookmarkItem(
             Text(
                 text = bookmark.quote,
                 style = BookPinTheme.typography.bodyMedium,
-                color = BookPinTheme.colors.onSurface,
+                color = BookPinTheme.colors.textPrimary,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -469,7 +469,7 @@ private fun PhotoBookmarkItem(
                     style = BookPinTheme.typography.labelSmall.copy(
                         fontStyle = FontStyle.Italic,
                     ),
-                    color = BookPinTheme.colors.onSurfaceVariant,
+                    color = BookPinTheme.colors.textSecondary,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )

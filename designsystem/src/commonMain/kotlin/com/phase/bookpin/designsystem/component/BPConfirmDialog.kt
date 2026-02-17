@@ -35,7 +35,7 @@ fun BPConfirmDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(24.dp))
-                .background(BookPinTheme.colors.background),
+                .background(BookPinTheme.colors.bgCanvas),
         ) {
             Column(
                 modifier = Modifier
@@ -48,7 +48,7 @@ fun BPConfirmDialog(
                 Text(
                     text = title,
                     style = BookPinTheme.typography.headlineMedium,
-                    color = BookPinTheme.colors.onSurface,
+                    color = BookPinTheme.colors.textPrimary,
                     textAlign = TextAlign.Center,
                 )
 
@@ -57,7 +57,7 @@ fun BPConfirmDialog(
                 Text(
                     text = description,
                     style = BookPinTheme.typography.bodyMedium,
-                    color = BookPinTheme.colors.onSurfaceVariant,
+                    color = BookPinTheme.colors.textSecondary,
                     textAlign = TextAlign.Center,
                 )
 
@@ -70,21 +70,21 @@ fun BPConfirmDialog(
                     Text(
                         text = cancelText,
                         style = BookPinTheme.typography.titleMedium,
-                        color = BookPinTheme.colors.onSurface,
+                        color = BookPinTheme.colors.textPrimary,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .weight(1f)
                             .height(48.dp)
                             .clip(RoundedCornerShape(16.dp))
                             .clickable(onClick = onDismiss)
-                            .background(BookPinTheme.colors.surface)
+                            .background(BookPinTheme.colors.bgSurface)
                             .wrapContentHeight(Alignment.CenterVertically),
                     )
 
                     Text(
                         text = confirmText,
                         style = BookPinTheme.typography.titleMedium,
-                        color = Color.White,
+                        color = BookPinTheme.colors.textOnAccent,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .weight(1f)
@@ -108,7 +108,7 @@ fun BPConfirmDialog(
                     painter = painterResource(Res.drawable.ic_close),
                     contentDescription = null,
                     modifier = Modifier.size(20.dp),
-                    tint = BookPinTheme.colors.onSurfaceVariant,
+                    tint = BookPinTheme.colors.iconDefault,
                 )
             }
         }

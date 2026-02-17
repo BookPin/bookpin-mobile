@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,7 +56,7 @@ fun SearchScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BookPinTheme.colors.background),
+            .background(BookPinTheme.colors.bgCanvas),
     ) {
         SearchTopBar(
             onCloseClick = viewModel::onCloseClick,
@@ -80,7 +79,7 @@ fun SearchScreen(
                         painter = painterResource(Res.drawable.ic_search),
                         contentDescription = stringResource(Res.string.cd_search),
                         modifier = Modifier.size(24.dp),
-                        tint = BookPinTheme.colors.onSurfaceVariant,
+                        tint = BookPinTheme.colors.iconDefault,
                     )
                 },
             )
@@ -120,7 +119,7 @@ private fun SearchTopBar(
         Text(
             text = stringResource(Res.string.search_title),
             style = BookPinTheme.typography.headlineMedium,
-            color = BookPinTheme.colors.onSurface,
+            color = BookPinTheme.colors.textPrimary,
         )
 
         IconButton(
@@ -128,7 +127,7 @@ private fun SearchTopBar(
             modifier = Modifier
                 .size(40.dp)
                 .background(
-                    color = BookPinTheme.colors.surface,
+                    color = BookPinTheme.colors.bgSurface,
                     shape = CircleShape,
                 ),
         ) {
@@ -136,7 +135,7 @@ private fun SearchTopBar(
                 painter = painterResource(Res.drawable.ic_close),
                 contentDescription = stringResource(Res.string.cd_close),
                 modifier = Modifier.size(24.dp),
-                tint = BookPinTheme.colors.onSurfaceVariant,
+                tint = BookPinTheme.colors.iconDefault,
             )
         }
     }
@@ -156,7 +155,7 @@ private fun SearchEmptyInitial(
             painter = painterResource(Res.drawable.ic_book_open),
             contentDescription = stringResource(Res.string.cd_book),
             modifier = Modifier.size(64.dp),
-            tint = BookPinTheme.colors.onSurfaceVariant,
+            tint = BookPinTheme.colors.iconDefault,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -164,7 +163,7 @@ private fun SearchEmptyInitial(
         Text(
             text = stringResource(Res.string.search_empty_initial),
             style = BookPinTheme.typography.headlineSmall,
-            color = BookPinTheme.colors.onSurfaceVariant,
+            color = BookPinTheme.colors.textSecondary,
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -174,7 +173,7 @@ private fun SearchEmptyInitial(
             style = BookPinTheme.typography.titleMedium.copy(
                 textDecoration = TextDecoration.Underline,
             ),
-            color = BookPinTheme.colors.primary,
+            color = BookPinTheme.colors.textAccent,
             modifier = Modifier.clickable(onClick = onManualInputClick),
         )
     }
@@ -191,7 +190,7 @@ private fun SearchEmptyNoResults(
         Text(
             text = stringResource(Res.string.search_empty_no_results),
             style = BookPinTheme.typography.headlineSmall,
-            color = BookPinTheme.colors.onSurfaceVariant,
+            color = BookPinTheme.colors.textSecondary,
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -199,7 +198,7 @@ private fun SearchEmptyNoResults(
         Box(
             modifier = Modifier
                 .background(
-                    color = BookPinTheme.colors.surfaceVariant,
+                    color = BookPinTheme.colors.bgMuted,
                     shape = RoundedCornerShape(24.dp),
                 ).clickable(onClick = onManualInputClick)
                 .padding(horizontal = 24.dp, vertical = 12.dp),
@@ -207,7 +206,7 @@ private fun SearchEmptyNoResults(
             Text(
                 text = stringResource(Res.string.search_manual_input),
                 style = BookPinTheme.typography.titleMedium,
-                color = BookPinTheme.colors.onSurface,
+                color = BookPinTheme.colors.textPrimary,
             )
         }
     }
@@ -244,10 +243,10 @@ private fun SearchResultItem(
             .height(113.dp)
             .border(
                 width = 1.dp,
-                color = BookPinTheme.colors.surface,
+                color = BookPinTheme.colors.borderSubtle,
                 shape = RoundedCornerShape(16.dp),
             ).background(
-                color = Color.White,
+                color = BookPinTheme.colors.bgElevated,
                 shape = RoundedCornerShape(16.dp),
             ).clickable(onClick = onClick)
             .padding(16.dp),
@@ -262,7 +261,7 @@ private fun SearchResultItem(
                 .shadow(
                     elevation = 4.dp,
                     shape = RoundedCornerShape(12.dp),
-                ).background(BookPinTheme.colors.surface),
+                ).background(BookPinTheme.colors.bgSurface),
             contentScale = ContentScale.Crop,
         )
 
@@ -277,7 +276,7 @@ private fun SearchResultItem(
             Text(
                 text = book.title,
                 style = BookPinTheme.typography.headlineMedium,
-                color = BookPinTheme.colors.onSurface,
+                color = BookPinTheme.colors.textPrimary,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -287,7 +286,7 @@ private fun SearchResultItem(
             Text(
                 text = book.author,
                 style = BookPinTheme.typography.titleMedium,
-                color = BookPinTheme.colors.onSurfaceVariant,
+                color = BookPinTheme.colors.textSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -299,7 +298,7 @@ private fun SearchResultItem(
             painter = painterResource(Res.drawable.ic_chevron_right),
             contentDescription = null,
             modifier = Modifier.size(20.dp),
-            tint = BookPinTheme.colors.onSurfaceVariant,
+            tint = BookPinTheme.colors.iconDefault,
         )
     }
 }

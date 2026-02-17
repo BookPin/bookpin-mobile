@@ -49,7 +49,7 @@ fun SettingsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BookPinTheme.colors.background),
+            .background(BookPinTheme.colors.bgCanvas),
     ) {
         SettingsTopBar(onBackClick = viewModel::onBackClick)
 
@@ -79,7 +79,7 @@ fun SettingsScreen(
             Text(
                 text = stringResource(Res.string.app_version),
                 style = BookPinTheme.typography.bodySmall,
-                color = BookPinTheme.colors.primaryContainer,
+                color = BookPinTheme.colors.textAccentMuted,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -94,7 +94,7 @@ fun SettingsScreen(
             description = stringResource(Res.string.logout_description),
             cancelText = stringResource(Res.string.cancel),
             confirmText = stringResource(Res.string.confirm_logout),
-            confirmButtonColor = BookPinTheme.colors.primary,
+            confirmButtonColor = BookPinTheme.colors.buttonPrimary,
             onDismiss = viewModel::onLogoutDismiss,
             onConfirm = viewModel::onLogoutConfirm,
         )
@@ -120,7 +120,7 @@ private fun SettingsTopBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(BookPinTheme.colors.background)
+            .background(BookPinTheme.colors.bgCanvas)
             .height(68.dp)
             .padding(horizontal = 12.dp),
         contentAlignment = Alignment.Center,
@@ -128,7 +128,7 @@ private fun SettingsTopBar(
         Text(
             text = stringResource(Res.string.settings_title),
             style = BookPinTheme.typography.headlineSmall,
-            color = BookPinTheme.colors.onSurface,
+            color = BookPinTheme.colors.textPrimary,
         )
 
         IconButton(
@@ -141,7 +141,7 @@ private fun SettingsTopBar(
                 painter = painterResource(Res.drawable.ic_arrow_back),
                 contentDescription = stringResource(Res.string.cd_back),
                 modifier = Modifier.size(20.dp),
-                tint = BookPinTheme.colors.onSurface,
+                tint = BookPinTheme.colors.textPrimary,
             )
         }
     }
@@ -156,7 +156,7 @@ private fun ProfileCard(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = BookPinTheme.colors.surface,
+                color = BookPinTheme.colors.bgSurface,
                 shape = RoundedCornerShape(16.dp),
             ).padding(20.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -166,7 +166,7 @@ private fun ProfileCard(
             modifier = Modifier
                 .size(56.dp)
                 .background(
-                    color = BookPinTheme.colors.surfaceVariant,
+                    color = BookPinTheme.colors.bgMuted,
                     shape = CircleShape,
                 ),
             contentAlignment = Alignment.Center,
@@ -175,7 +175,7 @@ private fun ProfileCard(
                 painter = painterResource(Res.drawable.ic_person),
                 contentDescription = null,
                 modifier = Modifier.size(28.dp),
-                tint = BookPinTheme.colors.onSurfaceVariant,
+                tint = BookPinTheme.colors.iconDefault,
             )
         }
 
@@ -185,12 +185,12 @@ private fun ProfileCard(
             Text(
                 text = profileName,
                 style = BookPinTheme.typography.titleMedium,
-                color = BookPinTheme.colors.onSurface,
+                color = BookPinTheme.colors.textPrimary,
             )
             Text(
                 text = accountType,
                 style = BookPinTheme.typography.bodySmall,
-                color = BookPinTheme.colors.onSurfaceVariant,
+                color = BookPinTheme.colors.textSecondary,
             )
         }
     }
@@ -206,7 +206,7 @@ private fun AchievementSection(
         Text(
             text = stringResource(Res.string.achievements_title),
             style = BookPinTheme.typography.bodyMedium,
-            color = BookPinTheme.colors.onSurfaceVariant,
+            color = BookPinTheme.colors.textSecondary,
             modifier = Modifier.padding(start = 4.dp),
         )
 
@@ -214,7 +214,7 @@ private fun AchievementSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = BookPinTheme.colors.surface,
+                    color = BookPinTheme.colors.bgSurface,
                     shape = RoundedCornerShape(16.dp),
                 ).padding(16.dp),
         ) {
@@ -246,18 +246,18 @@ private fun AchievementItem(
             Text(
                 text = achievement.title,
                 style = BookPinTheme.typography.bodyMedium,
-                color = BookPinTheme.colors.onSurface,
+                color = BookPinTheme.colors.textPrimary,
             )
             Text(
                 text = achievement.description,
                 style = BookPinTheme.typography.bodySmall,
-                color = BookPinTheme.colors.onSurfaceVariant,
+                color = BookPinTheme.colors.textSecondary,
                 maxLines = 1,
             )
             Text(
                 text = achievement.date,
                 style = BookPinTheme.typography.bodySmall,
-                color = BookPinTheme.colors.primaryContainer,
+                color = BookPinTheme.colors.textAccentMuted,
             )
         }
     }
@@ -274,7 +274,7 @@ private fun SettingsSection(
         Text(
             text = stringResource(Res.string.settings_section_title),
             style = BookPinTheme.typography.bodyMedium,
-            color = BookPinTheme.colors.onSurfaceVariant,
+            color = BookPinTheme.colors.textSecondary,
             modifier = Modifier.padding(start = 4.dp),
         )
 
@@ -282,7 +282,7 @@ private fun SettingsSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = BookPinTheme.colors.surface,
+                    color = BookPinTheme.colors.bgSurface,
                     shape = RoundedCornerShape(16.dp),
                 ),
         ) {
@@ -293,7 +293,7 @@ private fun SettingsSection(
             )
 
             HorizontalDivider(
-                color = BookPinTheme.colors.surfaceVariant,
+                color = BookPinTheme.colors.bgMuted,
                 thickness = 0.6.dp,
             )
 
@@ -311,7 +311,7 @@ private fun SettingsItem(
     iconRes: org.jetbrains.compose.resources.DrawableResource,
     text: String,
     onClick: () -> Unit,
-    textColor: androidx.compose.ui.graphics.Color = BookPinTheme.colors.onSurface,
+    textColor: androidx.compose.ui.graphics.Color = BookPinTheme.colors.textPrimary,
 ) {
     Row(
         modifier = Modifier
@@ -360,13 +360,13 @@ private fun DeleteAccountItem(
             painter = painterResource(Res.drawable.ic_delete_account),
             contentDescription = null,
             modifier = Modifier.size(20.dp),
-            tint = BookPinTheme.colors.onSurfaceVariant,
+            tint = BookPinTheme.colors.textSecondary,
         )
 
         Text(
             text = stringResource(Res.string.delete_account),
             style = BookPinTheme.typography.bodyMedium,
-            color = BookPinTheme.colors.onSurfaceVariant,
+            color = BookPinTheme.colors.textSecondary,
             modifier = Modifier.weight(1f),
         )
 
@@ -374,7 +374,7 @@ private fun DeleteAccountItem(
             painter = painterResource(Res.drawable.ic_chevron_right),
             contentDescription = null,
             modifier = Modifier.size(20.dp),
-            tint = BookPinTheme.colors.onSurfaceVariant,
+            tint = BookPinTheme.colors.textSecondary,
         )
     }
 }
