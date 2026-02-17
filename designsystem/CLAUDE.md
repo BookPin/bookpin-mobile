@@ -47,26 +47,23 @@
 
 ### Font Family
 - **Figma**: Inter, Noto Sans KR
-- **Code**: Apple SD Gothic Neo (`AppleSDGothicNeo`)
+- **Code**: Apple SD Gothic Neo (`AppleSDGothicNeo`) — Normal, Medium, SemiBold, Bold, ExtraBold
 
 ### Size Mapping
-| Figma Size | Weight | Theme Token | 용도 |
-|------------|--------|-------------|------|
-| 36sp | Medium | `typography.displayLarge` | - |
-| 32sp | Medium | `typography.displayMedium` | - |
-| 28sp | Medium | `typography.displaySmall` | 앱 타이틀 (30sp로 조정) |
-| 24sp | Normal | `typography.headlineLarge` | 책 표지 플레이스홀더 |
-| 20sp | Normal | `typography.headlineMedium` | 섹션 제목 ("내 책장") |
-| 18sp | Normal | `typography.headlineSmall` | - |
-| 20sp | Normal | `typography.titleLarge` | - |
-| 16sp | Medium | `typography.titleMedium` | 버튼 텍스트 ("책 추가") |
-| 14sp | Medium | `typography.titleSmall` | 책 제목 |
-| 16sp | Normal | `typography.bodyLarge` | 인용문 본문 |
-| 14sp | Normal | `typography.bodyMedium` | 서브타이틀, 저자 |
-| 12sp | Normal | `typography.bodySmall` | 라벨 ("오늘의 문구") |
-| 14sp | Medium | `typography.labelLarge` | - |
-| 12sp | Medium | `typography.labelMedium` | 책 저자, 북마크 수, 퍼센트 (Bold) |
-| 11sp | Medium | `typography.labelSmall` | 페이지 수 (10sp로 조정) |
+| Size | Weight | Theme Token | 용도 |
+|------|--------|-------------|------|
+| 24sp | ExtraBold | `typography.headlineLarge` | 앱 타이틀, 주요 헤딩 |
+| 20sp | Bold | `typography.headlineMedium` | 섹션 제목, 책 제목 |
+| 18sp | Medium | `typography.headlineSmall` | 입력 필드, 서브 헤딩 |
+| 20sp | Bold | `typography.titleLarge` | (현재 미사용, 예비) |
+| 16sp | SemiBold | `typography.titleMedium` | 버튼 텍스트, 링크 |
+| 14sp | Medium | `typography.titleSmall` | 부가 정보, 소형 텍스트 |
+| 16sp | Bold | `typography.bodyLarge` | 인용문 본문 |
+| 14sp | Medium | `typography.bodyMedium` | 서브타이틀, 저자 |
+| 12sp | Normal | `typography.bodySmall` | 라벨, 설명 텍스트 |
+| 14sp | Bold | `typography.labelLarge` | (현재 미사용, 예비) |
+| 12sp | Medium | `typography.labelMedium` | 메타 정보, 수치 |
+| 11sp | Normal | `typography.labelSmall` | 페이지 수 등 초소형 |
 
 ---
 
@@ -156,6 +153,6 @@ fun ExampleCard() {
 
 2. **색상 직접 사용 금지**: Figma에서 가져온 hex 색상을 직접 사용하지 말고, 위 매핑표를 참고하여 `BookPinTheme.colors.*`를 사용하세요.
 
-3. **폰트 크기 조정**: Figma의 정확한 크기가 Theme에 없을 경우 `.copy(fontSize = X.sp)`로 조정합니다.
+3. **`.copy()` 사용 금지**: 가장 가까운 토큰을 선택하세요. fontFamily 변경이 필요한 예외적 경우만 `.copy()` 허용됩니다.
 
 4. **이미지 에셋**: Figma의 localhost URL 이미지는 임시 참고용이며, 실제 구현 시 `composeResources/drawable/`에 에셋을 추가해야 합니다.
