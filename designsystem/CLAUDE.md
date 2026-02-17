@@ -55,7 +55,6 @@
 ### 특수 색상 매핑
 | Figma 표현 | 테마 토큰 사용법 | 용도 |
 |-----------|----------------|------|
-| `#DCC7A8` | `Color(0xFFDCC7A8)` | 그라데이션 하단 색상 (테마 외) |
 | `#FFFFFF` 50% | `colors.textOnAccent.copy(alpha = 0.5f)` | 반투명 텍스트 |
 | Brown 6% alpha | `colors.shadow.copy(alpha = 0.06f)` | 그림자 색상 |
 
@@ -100,7 +99,6 @@ Modifier.shadow(
 Brush.verticalGradient(
     colors = listOf(
         BookPinTheme.colors.bgMuted,          // #E8DCC4
-        Color(0xFFDCC7A8),                     // 하단 색상
     ),
 )
 ```
@@ -147,7 +145,6 @@ fun ExampleCard() {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         BookPinTheme.colors.bgMuted,
-                        Color(0xFFDCC7A8),
                     ),
                 ),
                 shape = RoundedCornerShape(16.dp),

@@ -116,7 +116,7 @@ internal fun bookPinTypography(): BookPinTypography {
             ),
             bodyLarge = TextStyle(
                 fontFamily = appleFontFamily,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 lineHeight = 24.sp,
             ),
@@ -134,7 +134,7 @@ internal fun bookPinTypography(): BookPinTypography {
             ),
             labelLarge = TextStyle(
                 fontFamily = appleFontFamily,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
             ),
