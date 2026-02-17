@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -120,9 +119,7 @@ private fun SearchTopBar(
     ) {
         Text(
             text = stringResource(Res.string.search_title),
-            style = BookPinTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold,
-            ),
+            style = BookPinTheme.typography.headlineMedium,
             color = BookPinTheme.colors.onSurface,
         )
 
@@ -279,9 +276,7 @@ private fun SearchResultItem(
         ) {
             Text(
                 text = book.title,
-                style = BookPinTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.Bold,
-                ),
+                style = BookPinTheme.typography.headlineMedium,
                 color = BookPinTheme.colors.onSurface,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,

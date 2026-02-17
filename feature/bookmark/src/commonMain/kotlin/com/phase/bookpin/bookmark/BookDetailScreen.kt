@@ -22,7 +22,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -172,9 +171,7 @@ private fun BookDetailHeader(
 
             Text(
                 text = book.title,
-                style = BookPinTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.Medium,
-                ),
+                style = BookPinTheme.typography.headlineMedium,
                 color = Color.White,
             )
 
@@ -223,9 +220,7 @@ private fun BookDetailStats(
                 ) {
                     Text(
                         text = "$currentPage",
-                        style = BookPinTheme.typography.headlineLarge.copy(
-                            fontWeight = FontWeight.SemiBold,
-                        ),
+                        style = BookPinTheme.typography.headlineMedium,
                         color = BookPinTheme.colors.onSurface,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -238,9 +233,7 @@ private fun BookDetailStats(
 
                 Text(
                     text = stringResource(Res.string.progress_format, progressPercent),
-                    style = BookPinTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.Medium,
-                    ),
+                    style = BookPinTheme.typography.titleSmall,
                     color = BookPinTheme.colors.primary,
                 )
             }

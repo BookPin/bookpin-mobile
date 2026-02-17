@@ -86,7 +86,7 @@ fun AuthScreen(
 
             Text(
                 text = stringResource(Res.string.app_name),
-                style = BookPinTheme.typography.displayLarge,
+                style = BookPinTheme.typography.headlineLarge,
                 color = BookPinTheme.colors.onSecondary,
             )
 
