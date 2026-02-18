@@ -39,10 +39,7 @@ internal fun BookItemCard(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(
-                elevation = 2.dp,
-                shape = RoundedCornerShape(16.dp),
-            ).background(
+            .background(
                 color = BookPinTheme.colors.bgElevated,
                 shape = RoundedCornerShape(16.dp),
             ).clickable(onClick = onClick)
