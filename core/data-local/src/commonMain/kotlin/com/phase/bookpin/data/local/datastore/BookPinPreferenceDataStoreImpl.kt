@@ -13,9 +13,9 @@ class BookPinPreferenceDataStoreImpl(
     private val dataStore: DataStore<Preferences>
 ) : BookPinPreferenceDataStore {
 
-    override fun getString(key: DataStoreKey): Flow<String> =
+    override fun getString(key: DataStoreKey): Flow<String?> =
         dataStore.data.map { preferences ->
-            preferences[stringPreferencesKey(key.key)] ?: ""
+            preferences[stringPreferencesKey(key.key)]
         }
 
     override suspend fun saveString(key: DataStoreKey, value: String) {

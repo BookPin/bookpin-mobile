@@ -50,7 +50,7 @@ internal fun createHttpClient(
     install(Auth) {
         bearer {
             loadTokens {
-                loadBearerTokens(local)
+                loadBearerTokens(local).getOrNull()
             }
 
             refreshTokens {
@@ -85,11 +85,14 @@ internal fun createHttpClient(
 
 private suspend fun loadBearerTokens(
     local: BookPinPreferenceDataStore,
-): BearerTokens {
-    return BearerTokens(
-        accessToken = local.getString(DataStoreKey.ACCESS_TOKEN).first(),
-        refreshToken = local.getString(DataStoreKey.REFRESH_TOKEN).first(),
-    )
+): Result<BearerTokens> {
+    val accessToken = local.getString(DataStoreKey.ACCESS_TOKEN).first()
+    val refreshToken = local.getString(DataStoreKey.REFRESH_TOKEN).first()
+    if (accessToken.isNullOrEmpty()) {
+        return Result.failure(IllegalStateException())
+    }
+
+    return Result.success(BearerTokens(accessToken = accessToken, refreshToken = refreshToken))
 }
 
 private suspend fun refreshBearerTokens(
@@ -103,7 +106,7 @@ private suspend fun refreshBearerTokens(
     }
 
     val refreshToken = local.getString(DataStoreKey.REFRESH_TOKEN).first()
-    if (refreshToken.isBlank()) {
+    if (refreshToken.isNullOrEmpty()) {
         listener.onSessionExpired()
         return null
     }
@@ -155,7 +158,7 @@ private suspend fun isRefreshTokenExpired(local: BookPinPreferenceDataStore): Bo
         .getString(DataStoreKey.REFRESH_TOKEN_EXPIRED_AT)
         .first()
 
-    if (expiredAt.isEmpty()) {
+    if (expiredAt.isNullOrEmpty()) {
         return true
     }
 
