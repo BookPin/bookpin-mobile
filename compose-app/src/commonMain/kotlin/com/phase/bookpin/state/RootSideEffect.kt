@@ -5,5 +5,5 @@ sealed interface RootSideEffect {
         val message: String,
     ) : RootSideEffect
 
-    data object NavigateToAuth : RootSideEffect
+    data object NavigateToSplash : RootSideEffect
 }

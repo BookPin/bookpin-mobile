@@ -13,12 +13,12 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
-import com.phase.bookpin.navigation.AuthRoute
 import com.phase.bookpin.navigation.BookDetailRoute
 import com.phase.bookpin.navigation.BookPinNavHost
 import com.phase.bookpin.navigation.HomeRoute
 import com.phase.bookpin.navigation.SearchRoute
 import com.phase.bookpin.navigation.SettingsRoute
+import com.phase.bookpin.navigation.SplashRoute
 import com.phase.bookpin.navigation.navSerializersModule
 import com.phase.bookpin.state.RootSideEffect
 import com.phase.bookpin.state.RootViewModel
@@ -44,7 +44,7 @@ fun BookPinApp(
             SavedStateConfiguration {
                 serializersModule = navSerializersModule
             },
-            HomeRoute,
+            SplashRoute,
         )
 
         viewModel.sideEffect.collectSideEffect { sideEffect ->
@@ -53,9 +53,9 @@ fun BookPinApp(
                     snackbarHostState.showSnackbar(sideEffect.message)
                 }
 
-                is RootSideEffect.NavigateToAuth -> {
+                is RootSideEffect.NavigateToSplash -> {
                     backStack.clear()
-                    backStack.add(AuthRoute)
+                    backStack.add(SplashRoute)
                 }
             }
         }
@@ -87,7 +87,7 @@ fun BookPinApp(
                     },
                     onLogout = {
                         backStack.clear()
-                        backStack.add(AuthRoute)
+                        backStack.add(SplashRoute)
                     },
                 )
             }

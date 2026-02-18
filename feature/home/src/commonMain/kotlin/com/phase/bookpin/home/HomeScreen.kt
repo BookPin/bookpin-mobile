@@ -313,7 +313,7 @@ private fun CurrentlyReadingCard(
             ) {
                 Text(
                     text = book.title.take(2),
-                    style = BookPinTheme.typography.headlineMedium,
+                    style = BookPinTheme.typography.headlineSmall,
                     color = BookPinTheme.colors.textOnAccent.copy(alpha = 0.5f),
                 )
             }

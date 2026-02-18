@@ -6,7 +6,7 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 
 @Serializable
-data object AuthRoute : NavKey
+data object SplashRoute : NavKey
 
 @Serializable
 data object HomeRoute : NavKey
@@ -24,7 +24,7 @@ data object SettingsRoute : NavKey
 
 val navSerializersModule = SerializersModule {
     polymorphic(NavKey::class) {
-        subclass(AuthRoute::class, AuthRoute.serializer())
+        subclass(SplashRoute::class, SplashRoute.serializer())
         subclass(HomeRoute::class, HomeRoute.serializer())
         subclass(SearchRoute::class, SearchRoute.serializer())
         subclass(BookDetailRoute::class, BookDetailRoute.serializer())
