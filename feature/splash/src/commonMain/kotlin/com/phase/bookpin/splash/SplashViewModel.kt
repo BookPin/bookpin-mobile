@@ -18,7 +18,7 @@ class SplashViewModel(
     private val deviceRepository: DeviceRepository,
     private val authRepository: AuthRepository,
 ) : BaseViewModel<SplashState, SplashSideEffect>() {
-    override fun createInitialState(): SplashState = SplashState()
+    override fun createInitialState(): SplashState = SplashState
 
     init {
         startSplash()
@@ -28,11 +28,15 @@ class SplashViewModel(
         viewModelScope.launch {
             val start = Clock.System.now()
 
-            login().onFailure {
-                postSideEffect(
-                    SplashSideEffect.ShowSnackbar((Res.string.retry)),
-                )
-                return@launch
+            val deviceIdResult = deviceRepository.getDeviceId()
+            if (deviceIdResult.isFailure) {
+                val loginResult = login()
+                if (loginResult.isFailure) {
+                    postSideEffect(
+                        SplashSideEffect.ShowSnackbar((Res.string.retry)),
+                    )
+                    return@launch
+                }
             }
 
             val elapsed = Clock.System.now() - start
@@ -47,15 +51,14 @@ class SplashViewModel(
 
     @OptIn(ExperimentalUuidApi::class)
     private suspend fun login(): Result<Unit> {
-        deviceRepository.getDeviceId().onSuccess {
-            return Result.success(Unit)
-        }
-
         val newDeviceId = Uuid.random().toString()
         val loginResult = authRepository.login(DeviceAuthToken(newDeviceId))
-        return loginResult.also {
+
+        if (loginResult.isSuccess) {
             deviceRepository.saveDeviceId(newDeviceId)
         }
+
+        return loginResult
     }
 
     companion object {
