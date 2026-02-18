@@ -1,5 +1,6 @@
 package com.phase.bookpin.data.di
 
+import com.phase.bookpin.data.api.auth.SessionEventListener
 import com.phase.bookpin.data.auth.AuthRepositoryImpl
 import com.phase.bookpin.data.auth.SessionRepositoryImpl
 import com.phase.bookpin.domain.auth.AuthRepository
@@ -10,5 +11,8 @@ import org.koin.dsl.module
 
 val dataModule = module {
     singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
-    singleOf(::SessionRepositoryImpl) { bind<SessionRepository>() }
+    singleOf(::SessionRepositoryImpl) {
+        bind<SessionRepository>()
+        bind<SessionEventListener>()
+    }
 }
