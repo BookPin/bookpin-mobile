@@ -1,4 +1,4 @@
-package com.phase.bookpin.model
+package com.phase.bookpin.model.auth
 
 sealed interface SessionEvent {
     data object SessionExpired : SessionEvent

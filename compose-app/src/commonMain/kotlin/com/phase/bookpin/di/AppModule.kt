@@ -3,7 +3,6 @@ package com.phase.bookpin.di
 import co.touchlab.kermit.Logger
 import com.phase.bookpin.auth.di.authModule
 import com.phase.bookpin.bookmark.di.bookDetailModule
-import com.phase.bookpin.data.auth.com.phase.bookpin.data.auth.dataAuthModule
 import com.phase.bookpin.data.di.dataModule
 import com.phase.bookpin.data.local.di.dataLocalModule
 import com.phase.bookpin.data.remote.di.dataRemoteModule
@@ -22,7 +21,6 @@ val appModule = module {
         bookDetailModule,
         settingsModule,
         dataModule,
-        dataAuthModule,
         dataLocalModule,
         dataRemoteModule,
     )

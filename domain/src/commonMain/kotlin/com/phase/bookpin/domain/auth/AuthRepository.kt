@@ -1,7 +1,7 @@
 package com.phase.bookpin.domain.auth
 
-import com.phase.bookpin.model.SocialAuthToken
+import com.phase.bookpin.model.auth.DeviceAuthToken
 
 interface AuthRepository {
-    suspend fun login(token: SocialAuthToken): Result<Unit>
+    suspend fun login(token: DeviceAuthToken): Result<Unit>
 }

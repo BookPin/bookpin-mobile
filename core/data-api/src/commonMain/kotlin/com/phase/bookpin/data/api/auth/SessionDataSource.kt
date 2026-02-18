@@ -1,9 +1,9 @@
-package com.phase.bookpin.data.api.session
+package com.phase.bookpin.data.api.auth
 
-import com.phase.bookpin.model.SessionEvent
+import com.phase.bookpin.model.auth.SessionEvent
 import kotlinx.coroutines.flow.Flow
 
-interface SessionEventDataSource {
+interface SessionDataSource {
     val events: Flow<SessionEvent>
     fun emitSessionExpired()
     fun emitInvalidRefreshToken()

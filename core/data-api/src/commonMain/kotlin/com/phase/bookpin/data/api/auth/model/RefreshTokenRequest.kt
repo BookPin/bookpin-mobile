@@ -1,4 +1,4 @@
-package com.phase.bookpin.data.api.auth
+package com.phase.bookpin.data.api.auth.model
 
 import kotlinx.serialization.Serializable
 

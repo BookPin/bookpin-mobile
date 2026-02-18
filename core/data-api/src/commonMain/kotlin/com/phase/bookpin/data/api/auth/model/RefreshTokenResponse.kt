@@ -1,11 +1,9 @@
-package com.phase.bookpin.data.api.auth
+package com.phase.bookpin.data.api.auth.model
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginResponse(
-    val userId: Long,
+data class RefreshTokenResponse(
     val accessToken: String,
     val refreshToken: String,
-    val isNewUser: Boolean,
 )
