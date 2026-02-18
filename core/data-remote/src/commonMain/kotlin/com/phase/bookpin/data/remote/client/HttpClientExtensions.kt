@@ -3,7 +3,6 @@ package com.phase.bookpin.data.remote.client
 import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.auth.AuthCircuitBreaker
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
 import io.ktor.http.isSuccess
@@ -42,7 +41,3 @@ suspend inline fun <reified T> HttpClient.safeRequest(
             }
         }
     }
-
-internal fun HttpRequestBuilder.markAsRefreshTokenRequest() {
-    attributes.put(AuthCircuitBreaker, Unit)
-}

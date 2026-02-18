@@ -118,7 +118,7 @@ fun AuthScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        viewModel.loginWithKakao()
+                        viewModel.login()
                     },
                 painter = painterResource(Res.drawable.kakao_login),
                 contentDescription = stringResource(Res.string.cd_kakao_login),

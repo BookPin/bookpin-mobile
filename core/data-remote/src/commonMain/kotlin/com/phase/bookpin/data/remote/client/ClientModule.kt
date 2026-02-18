@@ -1,10 +1,10 @@
 package com.phase.bookpin.data.remote.client
 
-import com.phase.bookpin.data.api.auth.RefreshTokenRequest
-import com.phase.bookpin.data.api.auth.RefreshTokenResponse
+import com.phase.bookpin.data.api.auth.SessionEventListener
+import com.phase.bookpin.data.api.auth.model.RefreshTokenRequest
+import com.phase.bookpin.data.api.auth.model.RefreshTokenResponse
 import com.phase.bookpin.data.api.datastore.BookPinPreferenceDataStore
 import com.phase.bookpin.data.api.datastore.DataStoreKey
-import com.phase.bookpin.data.api.session.SessionEventDataSource
 import com.phase.bookpin.data.remote.BuildKonfig
 import com.phase.bookpin.data.remote.BuildKonfig.AMAZON_S3
 import io.ktor.client.HttpClient
@@ -38,7 +38,7 @@ expect fun createPlatformHttpClient(block: HttpClientConfig<*>.() -> Unit): Http
 internal fun createHttpClient(
     refreshClient: HttpClient,
     local: BookPinPreferenceDataStore,
-    sessionEventDataSource: SessionEventDataSource,
+    sessionEventListener: SessionEventListener,
     logger: KermitLogger,
 ): HttpClient = createPlatformHttpClient {
 
@@ -50,11 +50,11 @@ internal fun createHttpClient(
     install(Auth) {
         bearer {
             loadTokens {
-                loadBearerTokens(local)
+                loadBearerTokens(local).getOrNull()
             }
 
             refreshTokens {
-                refreshBearerTokens(refreshClient, local, sessionEventDataSource)
+                refreshBearerTokens(refreshClient, local, sessionEventListener)
             }
 
             sendWithoutRequest {
@@ -85,26 +85,29 @@ internal fun createHttpClient(
 
 private suspend fun loadBearerTokens(
     local: BookPinPreferenceDataStore,
-): BearerTokens {
-    return BearerTokens(
-        accessToken = local.getString(DataStoreKey.ACCESS_TOKEN).first(),
-        refreshToken = local.getString(DataStoreKey.REFRESH_TOKEN).first(),
-    )
+): Result<BearerTokens> {
+    val accessToken = local.getString(DataStoreKey.ACCESS_TOKEN).first()
+    val refreshToken = local.getString(DataStoreKey.REFRESH_TOKEN).first()
+    if (accessToken.isNullOrEmpty()) {
+        return Result.failure(IllegalStateException())
+    }
+
+    return Result.success(BearerTokens(accessToken = accessToken, refreshToken = refreshToken))
 }
 
 private suspend fun refreshBearerTokens(
     refreshClient: HttpClient,
     local: BookPinPreferenceDataStore,
-    sessionEventDataSource: SessionEventDataSource,
+    listener: SessionEventListener,
 ): BearerTokens? {
     if (isRefreshTokenExpired(local)) {
-        sessionEventDataSource.emitSessionExpired()
+        listener.onSessionExpired()
         return null
     }
 
     val refreshToken = local.getString(DataStoreKey.REFRESH_TOKEN).first()
-    if (refreshToken.isBlank()) {
-        sessionEventDataSource.emitSessionExpired()
+    if (refreshToken.isNullOrEmpty()) {
+        listener.onSessionExpired()
         return null
     }
 
@@ -119,7 +122,7 @@ private suspend fun refreshBearerTokens(
         BearerTokens(response.accessToken, response.refreshToken)
     }.onFailure { throwable ->
         if (throwable.shouldLogoutOnRefreshFailure()) {
-            sessionEventDataSource.emitInvalidRefreshToken()
+            listener.onInvalidRefreshToken()
         }
     }.getOrNull()
 }
@@ -155,7 +158,7 @@ private suspend fun isRefreshTokenExpired(local: BookPinPreferenceDataStore): Bo
         .getString(DataStoreKey.REFRESH_TOKEN_EXPIRED_AT)
         .first()
 
-    if (expiredAt.isEmpty()) {
+    if (expiredAt.isNullOrEmpty()) {
         return true
     }
 

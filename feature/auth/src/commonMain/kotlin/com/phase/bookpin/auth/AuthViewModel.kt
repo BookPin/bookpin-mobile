@@ -5,26 +5,23 @@ import bookpin.auth.generated.resources.Res
 import bookpin.auth.generated.resources.retry
 import com.phase.bookpin.common.BaseViewModel
 import com.phase.bookpin.domain.auth.AuthRepository
-import com.phase.bookpin.domain.kakao.KakaoAuth
+import com.phase.bookpin.domain.device.GetOrCreateDeviceIdUseCase
+import com.phase.bookpin.model.auth.DeviceAuthToken
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
     private val repository: AuthRepository,
-    private val kakaoAuth: KakaoAuth,
+    private val getDeviceId: GetOrCreateDeviceIdUseCase,
 ) : BaseViewModel<AuthState, AuthSideEffect>() {
     override fun createInitialState(): AuthState = AuthState()
 
-    fun loginWithKakao() {
+    fun login() {
         reduce { state.copy(isLoading = true) }
-        viewModelScope.launch {
-            val kakaoToken = kakaoAuth.loginWithKakao().getOrElse {
-                postSideEffect(AuthSideEffect.ShowSnackbar(Res.string.retry))
-                reduce { state.copy(isLoading = false) }
-                return@launch
-            }
 
+        viewModelScope.launch {
+            val deviceId = getDeviceId()
             repository
-                .login(kakaoToken)
+                .login(DeviceAuthToken(deviceId))
                 .onSuccess {
                     postSideEffect(AuthSideEffect.NavigateToHome)
                 }.onFailure {

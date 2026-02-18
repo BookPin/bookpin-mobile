@@ -1,11 +1,8 @@
 package com.phase.bookpin.settings
 
 import com.phase.bookpin.common.BaseViewModel
-import com.phase.bookpin.domain.kakao.KakaoAuth
 
-class SettingsViewModel(
-    private val kakaoAuth: KakaoAuth,
-) : BaseViewModel<SettingsState, SettingsSideEffect>() {
+class SettingsViewModel : BaseViewModel<SettingsState, SettingsSideEffect>() {
     override fun createInitialState(): SettingsState = SettingsState()
 
     fun onBackClick() {
@@ -26,7 +23,6 @@ class SettingsViewModel(
 
     fun onLogoutConfirm() {
         reduce { copy(showLogoutDialog = false) }
-        kakaoAuth.logout()
         postSideEffect(SettingsSideEffect.Logout)
     }
 
@@ -40,7 +36,6 @@ class SettingsViewModel(
 
     fun onDeleteAccountConfirm() {
         reduce { copy(showDeleteAccountDialog = false) }
-        kakaoAuth.revoke()
         postSideEffect(SettingsSideEffect.DeleteAccount)
     }
 }

@@ -42,7 +42,6 @@ kotlin {
             implementation(projects.core.dataApi)
             implementation(projects.core.dataRemote)
             implementation(projects.core.dataLocal)
-            implementation(projects.core.dataAuth)
 
             implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.kermit)

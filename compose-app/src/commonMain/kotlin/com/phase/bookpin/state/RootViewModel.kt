@@ -2,8 +2,8 @@ package com.phase.bookpin.state
 
 import androidx.lifecycle.viewModelScope
 import com.phase.bookpin.common.BaseViewModel
-import com.phase.bookpin.domain.session.SessionRepository
-import com.phase.bookpin.model.SessionEvent
+import com.phase.bookpin.domain.auth.SessionRepository
+import com.phase.bookpin.model.auth.SessionEvent
 import kotlinx.coroutines.launch
 
 class RootViewModel(
