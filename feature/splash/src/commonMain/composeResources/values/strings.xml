@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="app_name">BookPin</string>
-    <string name="tagline">멈춘 자리마다 책갈피</string>
+    <string name="splash_title">책을 다 읽지 않아도 괜찮아요</string>
+    <string name="splash_subtitle">멈춘 자리마다 기록을 남길 수 있어요</string>
     <string name="cd_app_icon">BookPin 앱 아이콘</string>
     <string name="retry">다시 시도</string>
 </resources>
