@@ -22,6 +22,7 @@ import bookpin.splash.generated.resources.splash_title
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -41,7 +42,7 @@ fun SplashScreen(
             }
 
             is SplashSideEffect.ShowSnackbar -> {
-                snackbarHost.showSnackbar(it.message)
+                snackbarHost.showSnackbar(getString(it.message))
             }
         }
     }

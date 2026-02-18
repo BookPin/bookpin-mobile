@@ -9,7 +9,6 @@ import com.phase.bookpin.domain.device.DeviceRepository
 import com.phase.bookpin.model.auth.DeviceAuthToken
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.getString
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.uuid.ExperimentalUuidApi
@@ -31,7 +30,7 @@ class SplashViewModel(
 
             login().onFailure {
                 postSideEffect(
-                    SplashSideEffect.ShowSnackbar(getString(Res.string.retry)),
+                    SplashSideEffect.ShowSnackbar((Res.string.retry)),
                 )
                 return@launch
             }
