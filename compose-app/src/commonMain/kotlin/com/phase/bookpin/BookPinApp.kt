@@ -66,6 +66,7 @@ fun BookPinApp(
             Scaffold(
                 snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
                 modifier = Modifier.fillMaxSize(),
+                containerColor = BookPinTheme.colors.bgCanvas,
             ) {
                 BookPinNavHost(
                     backStack = backStack,

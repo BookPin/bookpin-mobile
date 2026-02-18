@@ -1,70 +1,42 @@
 package com.phase.bookpin.home
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bookpin.home.generated.resources.Res
-import bookpin.home.generated.resources.add
-import bookpin.home.generated.resources.add_book
-import bookpin.home.generated.resources.app_name
-import bookpin.home.generated.resources.bookmark
-import bookpin.home.generated.resources.cd_bookmark
-import bookpin.home.generated.resources.cd_settings
-import bookpin.home.generated.resources.chevron_right
 import bookpin.home.generated.resources.currently_reading
 import bookpin.home.generated.resources.empty_bookshelf
-import bookpin.home.generated.resources.empty_reading_subtitle
-import bookpin.home.generated.resources.empty_reading_title
-import bookpin.home.generated.resources.leave_bookmark
 import bookpin.home.generated.resources.my_bookshelf
-import bookpin.home.generated.resources.setting
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.designsystem.component.BPLoadingScreen
+import com.phase.bookpin.home.component.BookAddButton
+import com.phase.bookpin.home.component.BookItemCard
+import com.phase.bookpin.home.component.CurrentlyReadingCard
+import com.phase.bookpin.home.component.HomeTopBar
 import com.phase.bookpin.model.book.BookItem
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import kotlin.math.absoluteValue
 
 @Composable
 fun HomeScreen(
@@ -101,63 +73,30 @@ fun HomeScreen(
                 onClick = viewModel::onAddBookClick,
             )
         },
-        containerColor = BookPinTheme.colors.bgCanvas,
     ) { innerPadding ->
+        if (state.isLoading) {
+            BPLoadingScreen(modifier = Modifier.padding(innerPadding))
+            return@Scaffold
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            CurrentlyReadingSection(
-                book = state.bookItems.firstOrNull(),
-                onAddBookmarkClick = { state.bookItems.firstOrNull()?.let { viewModel.onAddBookmarkClick(it.id) } },
-                onAddBookClick = viewModel::onAddBookClick,
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
+            val currentReadingBook = state.bookItems.firstOrNull()
+            AnimatedVisibility(currentReadingBook != null) {
+                CurrentlyReadingSection(
+                    bookItem = requireNotNull(currentReadingBook),
+                    onAddBookmarkClick = { state.bookItems.firstOrNull()?.let { viewModel.onAddBookmarkClick(it.id) } },
+                )
+            }
 
             BookShelfSection(
-                books = state.bookItems,
+                bookItems = state.bookItems,
                 onBookClick = viewModel::onBookClick,
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-    }
-}
-
-@Composable
-private fun HomeTopBar(
-    onSettingsClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(
-            text = stringResource(Res.string.app_name),
-            style = BookPinTheme.typography.headlineLarge,
-            color = BookPinTheme.colors.textPrimary,
-        )
-
-        IconButton(
-            onClick = onSettingsClick,
-            modifier = Modifier
-                .size(36.dp)
-                .background(
-                    color = BookPinTheme.colors.bgSurface,
-                    shape = CircleShape,
-                ),
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.setting),
-                contentDescription = stringResource(Res.string.cd_settings),
-                modifier = Modifier.size(20.dp),
-                tint = BookPinTheme.colors.iconDefault,
             )
         }
     }
@@ -165,436 +104,64 @@ private fun HomeTopBar(
 
 @Composable
 private fun CurrentlyReadingSection(
-    book: BookItem?,
+    bookItem: BookItem,
     onAddBookmarkClick: () -> Unit,
-    onAddBookClick: () -> Unit,
 ) {
-    Text(
-        text = stringResource(Res.string.currently_reading),
-        style = BookPinTheme.typography.titleLarge,
-        color = BookPinTheme.colors.textPrimary,
-    )
+    Column {
+        Text(
+            text = stringResource(Res.string.currently_reading),
+            style = BookPinTheme.typography.titleLarge,
+            color = BookPinTheme.colors.textPrimary,
+        )
 
-    Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-    if (book != null) {
         CurrentlyReadingCard(
-            book = book,
+            bookItem = bookItem,
             onAddBookmarkClick = onAddBookmarkClick,
         )
-    } else {
-        EmptyReadingCard(onClick = onAddBookClick)
-    }
-}
-
-@Composable
-private fun BookAddButton(
-    onClick: () -> Unit,
-) {
-    Button(
-        onClick = onClick,
-        shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = BookPinTheme.colors.bgMuted,
-            contentColor = BookPinTheme.colors.textPrimary,
-        ),
-        elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = 2.dp,
-            pressedElevation = 6.dp,
-        ),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.add),
-                contentDescription = null,
-                modifier = Modifier.size(16.dp),
-            )
-            Text(
-                text = stringResource(Res.string.add_book),
-                style = BookPinTheme.typography.titleMedium,
-            )
-        }
-    }
-}
-
-@Composable
-private fun EmptyReadingCard(
-    onClick: () -> Unit,
-) {
-    Card(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .shadow(
-                elevation = 2.dp,
-                shape = RoundedCornerShape(16.dp),
-                ambientColor = BookPinTheme.colors.shadow.copy(alpha = 0.06f),
-                spotColor = BookPinTheme.colors.shadow.copy(alpha = 0.06f),
-            ),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = BookPinTheme.colors.bgElevated),
-        border = BorderStroke(
-            width = 0.615.dp,
-            color = BookPinTheme.colors.borderDefault,
-        ),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(Res.string.empty_reading_title),
-                    style = BookPinTheme.typography.bodyLarge,
-                    color = BookPinTheme.colors.textPrimary,
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = stringResource(Res.string.empty_reading_subtitle),
-                    style = BookPinTheme.typography.bodySmall,
-                    color = BookPinTheme.colors.textTertiary,
-                )
-            }
-
-            Icon(
-                painter = painterResource(Res.drawable.chevron_right),
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = BookPinTheme.colors.iconDefault,
-            )
-        }
-    }
-}
-
-@Composable
-private fun CurrentlyReadingCard(
-    book: BookItem,
-    onAddBookmarkClick: () -> Unit,
-) {
-    val coverColors = listOf(
-        BookPinTheme.colors.accentPrimary,
-        BookPinTheme.colors.accentSecondary,
-    )
-    val colorIndex = book.id.hashCode().absoluteValue % coverColors.size
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .shadow(
-                elevation = 8.dp,
-                shape = RoundedCornerShape(28.dp),
-                ambientColor = BookPinTheme.colors.shadow.copy(alpha = 0.06f),
-                spotColor = BookPinTheme.colors.shadow.copy(alpha = 0.06f),
-            ).background(
-                color = BookPinTheme.colors.bgElevated,
-                shape = RoundedCornerShape(28.dp),
-            ).border(
-                width = 0.615.dp,
-                color = BookPinTheme.colors.bgSurface,
-                shape = RoundedCornerShape(28.dp),
-            ).padding(24.dp),
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Box(
-                modifier = Modifier
-                    .width(96.dp)
-                    .height(144.dp)
-                    .shadow(
-                        elevation = 4.dp,
-                        shape = RoundedCornerShape(12.dp),
-                    ).background(
-                        color = coverColors[colorIndex],
-                        shape = RoundedCornerShape(12.dp),
-                    ).clip(RoundedCornerShape(12.dp)),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = book.title.take(2),
-                    style = BookPinTheme.typography.bodyLarge,
-                    color = BookPinTheme.colors.textOnAccent.copy(alpha = 0.5f),
-                )
-            }
-
-            Spacer(modifier = Modifier.width(20.dp))
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(144.dp),
-            ) {
-                Text(
-                    text = book.title,
-                    style = BookPinTheme.typography.bodyLarge,
-                    color = BookPinTheme.colors.textPrimary,
-                    maxLines = 1,
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                ) {
-                    Text(
-                        text = book.author,
-                        style = BookPinTheme.typography.titleSmall,
-                        color = BookPinTheme.colors.textSecondary,
-                    )
-
-                    Box(
-                        modifier = Modifier
-                            .size(4.dp)
-                            .background(
-                                color = BookPinTheme.colors.borderDefault,
-                                shape = CircleShape,
-                            ),
-                    )
-
-                    Text(
-                        text = "${book.bookmarkCount} 개",
-                        style = BookPinTheme.typography.labelMedium,
-                        color = BookPinTheme.colors.textAccent,
-                    )
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Row(
-                    verticalAlignment = Alignment.Bottom,
-                ) {
-                    Text(
-                        text = "${book.currentPage}p / ${book.totalPage}p ",
-                        style = BookPinTheme.typography.titleSmall,
-                        color = BookPinTheme.colors.textSecondary,
-                    )
-
-                    Text(
-                        text = "${book.progress}%",
-                        style = BookPinTheme.typography.titleSmall,
-                        color = BookPinTheme.colors.textAccent,
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(6.dp)
-                        .background(
-                            color = BookPinTheme.colors.bgSurface,
-                            shape = CircleShape,
-                        ),
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .fillMaxWidth((book.progress / 100f).toFloat())
-                            .background(
-                                color = BookPinTheme.colors.buttonPrimary,
-                                shape = CircleShape,
-                            ),
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = onAddBookmarkClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(32.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = BookPinTheme.colors.bgMuted,
-                    ),
-                    elevation = ButtonDefaults.buttonElevation(
-                        defaultElevation = 2.dp,
-                        pressedElevation = 6.dp,
-                    ),
-                    contentPadding = PaddingValues(0.dp),
-                ) {
-                    Text(
-                        text = stringResource(Res.string.leave_bookmark),
-                        style = BookPinTheme.typography.labelMedium,
-                        color = BookPinTheme.colors.textPrimary,
-                    )
-                }
-            }
-        }
     }
 }
 
 @Composable
 private fun BookShelfSection(
-    books: List<BookItem>,
+    bookItems: List<BookItem>,
     onBookClick: (Long) -> Unit,
 ) {
-    Text(
-        text = stringResource(Res.string.my_bookshelf),
-        style = BookPinTheme.typography.titleLarge,
-        color = BookPinTheme.colors.textPrimary,
-    )
+    Column {
+        Text(
+            text = stringResource(Res.string.my_bookshelf),
+            style = BookPinTheme.typography.titleLarge,
+            color = BookPinTheme.colors.textPrimary,
+        )
 
-    Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-    if (books.isNotEmpty()) {
+        if (bookItems.isEmpty()) {
+            Text(
+                text = stringResource(Res.string.empty_bookshelf),
+                style = BookPinTheme.typography.titleSmall,
+                color = BookPinTheme.colors.textSecondary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                textAlign = TextAlign.Center,
+            )
+            return
+        }
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(bottom = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            items(books, key = { it.id }) { book ->
-                BookCard(
-                    book = book,
-                    onClick = { onBookClick(book.id) },
+            items(bookItems, key = { it.id }) { bookItem ->
+                BookItemCard(
+                    bookItem = bookItem,
+                    onClick = { onBookClick(bookItem.id) },
                 )
             }
-        }
-    } else {
-        Text(
-            text = stringResource(Res.string.empty_bookshelf),
-            style = BookPinTheme.typography.titleSmall,
-            color = BookPinTheme.colors.textSecondary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp),
-            textAlign = TextAlign.Center,
-        )
-    }
-}
-
-@Composable
-private fun BookCard(
-    book: BookItem,
-    onClick: () -> Unit,
-) {
-    val coverColors = listOf(
-        BookPinTheme.colors.accentPrimary,
-        BookPinTheme.colors.accentSecondary,
-    )
-    val colorIndex = book.id.hashCode().absoluteValue % coverColors.size
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .shadow(
-                elevation = 2.dp,
-                shape = RoundedCornerShape(16.dp),
-            ).background(
-                color = BookPinTheme.colors.bgElevated,
-                shape = RoundedCornerShape(16.dp),
-            ).clickable(onClick = onClick)
-            .padding(16.dp),
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(128.dp)
-                .background(
-                    color = coverColors[colorIndex],
-                    shape = RoundedCornerShape(16.dp),
-                ).clip(RoundedCornerShape(16.dp)),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = book.title.take(2),
-                style = BookPinTheme.typography.bodyLarge,
-                color = BookPinTheme.colors.textOnAccent.copy(alpha = 0.5f),
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.height(
-                12.dp,
-            ),
-        )
-
-        Text(
-            text = book.title,
-            style = BookPinTheme.typography.titleSmall,
-            color = BookPinTheme.colors.textPrimary,
-            maxLines = 1,
-        )
-
-        Text(
-            text = book.author,
-            style = BookPinTheme.typography.bodySmall,
-            color = BookPinTheme.colors.textSecondary,
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "${book.currentPage} / ${book.totalPage} ",
-                    style = BookPinTheme.typography.labelSmall,
-                    color = BookPinTheme.colors.textSecondary,
-                )
-
-                Text(
-                    text = "(${book.progress}%)",
-                    style = BookPinTheme.typography.labelMedium,
-                    color = BookPinTheme.colors.textAccent,
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.padding(start = 4.dp),
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.bookmark),
-                    contentDescription = stringResource(Res.string.cd_bookmark),
-                    modifier = Modifier.size(14.dp),
-                    tint = Color.Unspecified,
-                )
-
-                Text(
-                    text = "${book.bookmarkCount}",
-                    style = BookPinTheme.typography.labelMedium,
-                    color = BookPinTheme.colors.textPrimary.copy(alpha = 0.8f),
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(6.dp)
-                .background(
-                    color = BookPinTheme.colors.bgSurface,
-                    shape = CircleShape,
-                ),
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth((book.progress / 100f).toFloat())
-                    .background(
-                        color = BookPinTheme.colors.buttonPrimary,
-                        shape = CircleShape,
-                    ),
-            )
         }
     }
 }
