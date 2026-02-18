@@ -164,7 +164,7 @@ private fun CurrentlyReadingSection(
 ) {
     Text(
         text = stringResource(Res.string.currently_reading),
-        style = BookPinTheme.typography.headlineMedium,
+        style = BookPinTheme.typography.titleLarge,
         color = BookPinTheme.colors.textPrimary,
     )
 
@@ -244,7 +244,7 @@ private fun EmptyReadingCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = stringResource(Res.string.empty_reading_title),
-                    style = BookPinTheme.typography.titleLarge,
+                    style = BookPinTheme.typography.bodyLarge,
                     color = BookPinTheme.colors.textPrimary,
                 )
 
@@ -252,7 +252,7 @@ private fun EmptyReadingCard(
 
                 Text(
                     text = stringResource(Res.string.empty_reading_subtitle),
-                    style = BookPinTheme.typography.titleSmall,
+                    style = BookPinTheme.typography.bodySmall,
                     color = BookPinTheme.colors.textTertiary,
                 )
             }
@@ -313,7 +313,7 @@ private fun CurrentlyReadingCard(
             ) {
                 Text(
                     text = book.title.take(2),
-                    style = BookPinTheme.typography.headlineSmall,
+                    style = BookPinTheme.typography.bodyLarge,
                     color = BookPinTheme.colors.textOnAccent.copy(alpha = 0.5f),
                 )
             }
@@ -327,7 +327,7 @@ private fun CurrentlyReadingCard(
             ) {
                 Text(
                     text = book.title,
-                    style = BookPinTheme.typography.headlineSmall,
+                    style = BookPinTheme.typography.bodyLarge,
                     color = BookPinTheme.colors.textPrimary,
                     maxLines = 1,
                 )
@@ -435,7 +435,7 @@ private fun BookShelfSection(
 ) {
     Text(
         text = stringResource(Res.string.my_bookshelf),
-        style = BookPinTheme.typography.headlineSmall,
+        style = BookPinTheme.typography.titleLarge,
         color = BookPinTheme.colors.textPrimary,
     )
 
@@ -503,7 +503,7 @@ private fun BookCard(
         ) {
             Text(
                 text = book.title.take(2),
-                style = BookPinTheme.typography.titleLarge,
+                style = BookPinTheme.typography.bodyLarge,
                 color = BookPinTheme.colors.textOnAccent.copy(alpha = 0.5f),
             )
         }
@@ -519,7 +519,7 @@ private fun BookCard(
 
         Text(
             text = book.author,
-            style = BookPinTheme.typography.labelMedium,
+            style = BookPinTheme.typography.bodySmall,
             color = BookPinTheme.colors.textSecondary,
         )
 
