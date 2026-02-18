@@ -5,11 +5,11 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import com.phase.bookpin.auth.AuthScreen
 import com.phase.bookpin.bookmark.BookDetailScreen
 import com.phase.bookpin.home.HomeScreen
 import com.phase.bookpin.search.SearchScreen
 import com.phase.bookpin.settings.SettingsScreen
+import com.phase.bookpin.splash.SplashScreen
 
 @Composable
 fun BookPinNavHost(
@@ -24,8 +24,8 @@ fun BookPinNavHost(
     NavDisplay(
         backStack = backStack,
         entryProvider = entryProvider {
-            entry<AuthRoute> {
-                AuthScreen(
+            entry<SplashRoute> {
+                SplashScreen(
                     onNavigateToHome = onNavigateToHome,
                 )
             }
