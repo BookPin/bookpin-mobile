@@ -31,6 +31,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,6 +59,8 @@ import bookpin.home.generated.resources.setting
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.model.book.BookItem
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -67,7 +70,7 @@ import kotlin.math.absoluteValue
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     onNavigateToSearch: () -> Unit = {},
-    onNavigateToBookDetail: (String) -> Unit = {},
+    onNavigateToBookDetail: (Long) -> Unit = {},
     onNavigateToSettings: () -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -76,13 +79,17 @@ fun HomeScreen(
     viewModel.sideEffect.collectSideEffect {
         when (it) {
             is HomeSideEffect.ShowSnackbar -> {
-                snackbarHost.showSnackbar(it.message)
+                snackbarHost.showSnackbar(getString(it.message))
             }
             HomeSideEffect.NavigateToSettings -> onNavigateToSettings()
             is HomeSideEffect.NavigateToBookDetail -> onNavigateToBookDetail(it.bookId)
             is HomeSideEffect.NavigateToAddBookmark -> {}
             HomeSideEffect.NavigateToAddBook -> onNavigateToSearch()
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.onEnterScreen()
     }
 
     Scaffold(
@@ -103,15 +110,15 @@ fun HomeScreen(
                 .padding(horizontal = 20.dp),
         ) {
             CurrentlyReadingSection(
-                book = state.books.firstOrNull(),
-                onAddBookmarkClick = { state.books.firstOrNull()?.let { viewModel.onAddBookmarkClick(it.id) } },
+                book = state.bookItems.firstOrNull(),
+                onAddBookmarkClick = { state.bookItems.firstOrNull()?.let { viewModel.onAddBookmarkClick(it.id) } },
                 onAddBookClick = viewModel::onAddBookClick,
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             BookShelfSection(
-                books = state.books,
+                books = state.bookItems,
                 onBookClick = viewModel::onBookClick,
             )
 
@@ -158,7 +165,7 @@ private fun HomeTopBar(
 
 @Composable
 private fun CurrentlyReadingSection(
-    book: Book?,
+    book: BookItem?,
     onAddBookmarkClick: () -> Unit,
     onAddBookClick: () -> Unit,
 ) {
@@ -269,7 +276,7 @@ private fun EmptyReadingCard(
 
 @Composable
 private fun CurrentlyReadingCard(
-    book: Book,
+    book: BookItem,
     onAddBookmarkClick: () -> Unit,
 ) {
     val coverColors = listOf(
@@ -354,7 +361,7 @@ private fun CurrentlyReadingCard(
                     )
 
                     Text(
-                        text = "${book.readingDays}일째",
+                        text = "${book.bookmarkCount} 개",
                         style = BookPinTheme.typography.labelMedium,
                         color = BookPinTheme.colors.textAccent,
                     )
@@ -366,13 +373,13 @@ private fun CurrentlyReadingCard(
                     verticalAlignment = Alignment.Bottom,
                 ) {
                     Text(
-                        text = "${book.currentPage}p / ${book.totalPages}p ",
+                        text = "${book.currentPage}p / ${book.totalPage}p ",
                         style = BookPinTheme.typography.titleSmall,
                         color = BookPinTheme.colors.textSecondary,
                     )
 
                     Text(
-                        text = "${book.progressPercent}%",
+                        text = "${book.progress}%",
                         style = BookPinTheme.typography.titleSmall,
                         color = BookPinTheme.colors.textAccent,
                     )
@@ -392,7 +399,7 @@ private fun CurrentlyReadingCard(
                     Box(
                         modifier = Modifier
                             .fillMaxHeight()
-                            .fillMaxWidth(book.progressPercent / 100f)
+                            .fillMaxWidth((book.progress / 100f).toFloat())
                             .background(
                                 color = BookPinTheme.colors.buttonPrimary,
                                 shape = CircleShape,
@@ -430,8 +437,8 @@ private fun CurrentlyReadingCard(
 
 @Composable
 private fun BookShelfSection(
-    books: List<Book>,
-    onBookClick: (String) -> Unit,
+    books: List<BookItem>,
+    onBookClick: (Long) -> Unit,
 ) {
     Text(
         text = stringResource(Res.string.my_bookshelf),
@@ -470,7 +477,7 @@ private fun BookShelfSection(
 
 @Composable
 private fun BookCard(
-    book: Book,
+    book: BookItem,
     onClick: () -> Unit,
 ) {
     val coverColors = listOf(
@@ -508,7 +515,11 @@ private fun BookCard(
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(
+            modifier = Modifier.height(
+                12.dp,
+            ),
+        )
 
         Text(
             text = book.title,
@@ -532,13 +543,13 @@ private fun BookCard(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "${book.currentPage} / ${book.totalPages} ",
+                    text = "${book.currentPage} / ${book.totalPage} ",
                     style = BookPinTheme.typography.labelSmall,
                     color = BookPinTheme.colors.textSecondary,
                 )
 
                 Text(
-                    text = "(${book.progressPercent}%)",
+                    text = "(${book.progress}%)",
                     style = BookPinTheme.typography.labelMedium,
                     color = BookPinTheme.colors.textAccent,
                 )
@@ -578,7 +589,7 @@ private fun BookCard(
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .fillMaxWidth(book.progressPercent / 100f)
+                    .fillMaxWidth((book.progress / 100f).toFloat())
                     .background(
                         color = BookPinTheme.colors.buttonPrimary,
                         shape = CircleShape,

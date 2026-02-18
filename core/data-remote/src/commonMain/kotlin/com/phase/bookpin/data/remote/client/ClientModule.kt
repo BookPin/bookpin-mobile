@@ -41,7 +41,6 @@ internal fun createHttpClient(
     sessionEventListener: SessionEventListener,
     logger: KermitLogger,
 ): HttpClient = createPlatformHttpClient {
-
     defaultRequest {
         header(HttpHeaders.ContentType, ContentType.Application.Json)
         url(BuildKonfig.BASE_URL)
@@ -100,11 +99,6 @@ private suspend fun refreshBearerTokens(
     local: BookPinPreferenceDataStore,
     listener: SessionEventListener,
 ): BearerTokens? {
-    if (isRefreshTokenExpired(local)) {
-        listener.onSessionExpired()
-        return null
-    }
-
     val refreshToken = local.getString(DataStoreKey.REFRESH_TOKEN).first()
     if (refreshToken.isNullOrEmpty()) {
         listener.onSessionExpired()
@@ -121,7 +115,7 @@ private suspend fun refreshBearerTokens(
         local.saveString(DataStoreKey.REFRESH_TOKEN, response.refreshToken)
         BearerTokens(response.accessToken, response.refreshToken)
     }.onFailure { throwable ->
-        if (throwable.shouldLogoutOnRefreshFailure()) {
+        if (throwable.shouldReAuthenticateFailure()) {
             listener.onInvalidRefreshToken()
         }
     }.getOrNull()
@@ -153,16 +147,7 @@ internal fun createRefreshHttpClient(logger: KermitLogger): HttpClient = createP
     }
 }
 
-private suspend fun isRefreshTokenExpired(local: BookPinPreferenceDataStore): Boolean {
-    val expiredAt = local
-        .getString(DataStoreKey.REFRESH_TOKEN_EXPIRED_AT)
-        .first()
-
-    if (expiredAt.isNullOrEmpty()) {
-        return true
-    }
-
-    return runCatching {
-        Instant.parse(expiredAt) <= Clock.System.now()
-    }.getOrDefault(true)
+private fun Throwable.shouldReAuthenticateFailure(): Boolean {
+    if (this !is RemoteException) return false
+    return status == 401 || status == 403
 }

@@ -36,7 +36,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BookDetailScreen(
-    bookId: String,
+    bookId: Long,
     onNavigateBack: () -> Unit = {},
 ) {
     val viewModel: BookDetailViewModel = koinViewModel()
