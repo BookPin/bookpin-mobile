@@ -24,7 +24,7 @@ class SplashViewModel(
         startSplash()
     }
 
-    fun startSplash() {
+    private fun startSplash() {
         viewModelScope.launch {
             val start = Clock.System.now()
 
