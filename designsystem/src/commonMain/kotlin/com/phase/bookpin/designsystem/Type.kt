@@ -99,8 +99,8 @@ internal fun bookPinTypography(): BookPinTypography {
             titleLarge = TextStyle(
                 fontFamily = appleFontFamily,
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                lineHeight = 28.sp,
+                fontSize = 18.sp,
+                lineHeight = 26.sp,
             ),
             titleMedium = TextStyle(
                 fontFamily = appleFontFamily,

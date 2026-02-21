@@ -1,31 +1,38 @@
 package com.phase.bookpin.home
 
+import androidx.lifecycle.viewModelScope
+import bookpin.home.generated.resources.Res
+import bookpin.home.generated.resources.unknown_error_message
 import com.phase.bookpin.common.BaseViewModel
+import com.phase.bookpin.domain.book.BookRepository
+import kotlinx.coroutines.launch
 
-class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>() {
-    override fun createInitialState(): HomeState = HomeState(
-        books = listOf(
-            Book(
-                id = "1",
-                title = "미드나잇 라이브러리",
-                author = "매트 헤이그",
-                coverImageUrl = "",
-                currentPage = 208,
-                totalPages = 320,
-                bookmarkCount = 12,
-                readingDays = 1,
-            ),
-            Book(
-                id = "2",
-                title = "아주 작은 습관의 힘",
-                author = "제임스 클리어",
-                coverImageUrl = "",
-                currentPage = 112,
-                totalPages = 280,
-                bookmarkCount = 8,
-            ),
-        ),
-    )
+class HomeViewModel(
+    private val bookRepository: BookRepository,
+) : BaseViewModel<HomeState, HomeSideEffect>() {
+    override fun createInitialState(): HomeState = HomeState()
+
+    fun onEnterScreen() {
+        reduce {
+            state.copy(isLoading = true)
+        }
+
+        viewModelScope.launch {
+            bookRepository
+                .getBookItems()
+                .onSuccess { items ->
+                    reduce {
+                        state.copy(bookItems = items)
+                    }
+                }.onFailure {
+                    postSideEffect(
+                        HomeSideEffect.ShowSnackbar(Res.string.unknown_error_message),
+                    )
+                }.also {
+                    reduce { state.copy(isLoading = false) }
+                }
+        }
+    }
 
     fun onSettingsClick() {
         postSideEffect(HomeSideEffect.NavigateToSettings)
@@ -35,11 +42,11 @@ class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>() {
         postSideEffect(HomeSideEffect.NavigateToAddBook)
     }
 
-    fun onBookClick(bookId: String) {
+    fun onBookClick(bookId: Long) {
         postSideEffect(HomeSideEffect.NavigateToBookDetail(bookId))
     }
 
-    fun onAddBookmarkClick(bookId: String) {
+    fun onAddBookmarkClick(bookId: Long) {
         postSideEffect(HomeSideEffect.NavigateToAddBookmark(bookId))
     }
 }

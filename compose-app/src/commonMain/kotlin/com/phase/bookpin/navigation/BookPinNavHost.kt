@@ -16,7 +16,7 @@ fun BookPinNavHost(
     backStack: NavBackStack<NavKey>,
     onNavigateToHome: () -> Unit,
     onNavigateToSearch: () -> Unit,
-    onNavigateToBookDetail: (String) -> Unit,
+    onNavigateToBookDetail: (Long) -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateBack: () -> Unit,
     onLogout: () -> Unit,

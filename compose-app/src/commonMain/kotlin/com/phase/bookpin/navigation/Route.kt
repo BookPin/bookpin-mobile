@@ -16,7 +16,7 @@ data object SearchRoute : NavKey
 
 @Serializable
 data class BookDetailRoute(
-    val bookId: String,
+    val bookId: Long,
 ) : NavKey
 
 @Serializable

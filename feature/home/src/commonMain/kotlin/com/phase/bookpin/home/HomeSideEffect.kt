@@ -1,15 +1,17 @@
 package com.phase.bookpin.home
 
+import org.jetbrains.compose.resources.StringResource
+
 sealed interface HomeSideEffect {
     data class ShowSnackbar(
-        val message: String,
+        val message: StringResource,
     ) : HomeSideEffect
     data object NavigateToSettings : HomeSideEffect
     data class NavigateToBookDetail(
-        val bookId: String,
+        val bookId: Long,
     ) : HomeSideEffect
     data object NavigateToAddBook : HomeSideEffect
     data class NavigateToAddBookmark(
-        val bookId: String,
+        val bookId: Long,
     ) : HomeSideEffect
 }
