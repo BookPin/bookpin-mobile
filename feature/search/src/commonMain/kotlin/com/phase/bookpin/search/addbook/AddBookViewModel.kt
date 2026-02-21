@@ -21,7 +21,7 @@ class AddBookViewModel(
             copy(
                 title = title,
                 author = author,
-                totalPage = if (totalPage > 0) totalPage.toString() else "",
+                totalPage = totalPage,
                 imageUrl = imageUrl,
                 isbn = isbn,
             )
