@@ -1,6 +1,7 @@
 package com.phase.bookpin.designsystem.common
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.phase.bookpin.designsystem.BookPinTheme
 import kotlin.math.absoluteValue
@@ -15,8 +16,13 @@ object BookCoverColorPicker {
     }
 
     @Composable
-    private fun palette(): List<Color> = listOf(
-        BookPinTheme.colors.accentPrimary,
-        BookPinTheme.colors.accentSecondary,
-    )
+    private fun palette(): List<Color> {
+        val colors = BookPinTheme.colors
+        return remember(colors) {
+            listOf(
+                colors.accentPrimary,
+                colors.accentSecondary,
+            )
+        }
+    }
 }
