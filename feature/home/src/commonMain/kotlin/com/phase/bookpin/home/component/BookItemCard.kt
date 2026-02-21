@@ -128,7 +128,7 @@ internal fun BookItemCard(
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .fillMaxWidth((bookItem.progress / 100f).toFloat())
+                    .fillMaxWidth((bookItem.progress / 100.0).toFloat())
                     .background(
                         color = BookPinTheme.colors.buttonPrimary,
                         shape = CircleShape,
