@@ -88,9 +88,10 @@ fun HomeScreen(
         ) {
             val currentReadingBook = state.bookItems.firstOrNull()
             AnimatedVisibility(currentReadingBook != null) {
+                val book = currentReadingBook ?: return@AnimatedVisibility
                 CurrentlyReadingSection(
-                    bookItem = requireNotNull(currentReadingBook),
-                    onAddBookmarkClick = { viewModel.onAddBookmarkClick(currentReadingBook.id) },
+                    bookItem = book,
+                    onAddBookmarkClick = { viewModel.onAddBookmarkClick(book.id) },
                 )
             }
 
