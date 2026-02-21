@@ -27,6 +27,7 @@ import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
 import com.phase.bookpin.designsystem.component.BPTextField
+import com.phase.bookpin.model.search.BookSearchResult
 import com.phase.bookpin.search.component.SearchTopBar
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -37,7 +38,7 @@ fun SearchScreen(
     viewModel: SearchViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
     onNavigateToManualInput: () -> Unit = {},
-    onNavigateToBookDetail: (String) -> Unit = {},
+    onNavigateToAddBook: (BookSearchResult) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHost = LocalSnackbarHost.current
@@ -45,7 +46,7 @@ fun SearchScreen(
     viewModel.sideEffect.collectSideEffect {
         when (it) {
             is SearchSideEffect.ShowSnackbar -> snackbarHost.showSnackbar(it.message)
-            is SearchSideEffect.NavigateToBookDetail -> onNavigateToBookDetail(it.bookId)
+            is SearchSideEffect.NavigateToAddBook -> onNavigateToAddBook(it.result)
             SearchSideEffect.NavigateBack -> onNavigateBack()
             SearchSideEffect.NavigateToManualInput -> onNavigateToManualInput()
         }
@@ -179,19 +180,19 @@ private fun SearchEmptyNoResults(
 
 @Composable
 private fun SearchResultList(
-    results: List<SearchBook>,
-    onBookClick: (String) -> Unit,
+    results: List<BookSearchResult>,
+    onBookClick: (BookSearchResult) -> Unit,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         items(
             items = results,
-            key = { it.id },
+            key = { it.isbn },
         ) { book ->
             SearchResultItem(
                 book = book,
-                onClick = { onBookClick(book.id) },
+                onClick = { onBookClick(book) },
             )
         }
     }
@@ -199,13 +200,13 @@ private fun SearchResultList(
 
 @Composable
 private fun SearchResultItem(
-    book: SearchBook,
+    book: BookSearchResult,
     onClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(113.dp)
+            .height(114.dp)
             .border(
                 width = 1.dp,
                 color = BookPinTheme.colors.borderSubtle,
@@ -218,15 +219,13 @@ private fun SearchResultItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
-            model = book.coverImageUrl,
+            model = book.imageUrl,
             contentDescription = book.title,
             modifier = Modifier
                 .width(56.dp)
                 .height(80.dp)
-                .shadow(
-                    elevation = 4.dp,
-                    shape = RoundedCornerShape(12.dp),
-                ).background(BookPinTheme.colors.bgSurface),
+                .shadow(elevation = 4.dp)
+                .background(BookPinTheme.colors.bgSurface),
             contentScale = ContentScale.Crop,
         )
 

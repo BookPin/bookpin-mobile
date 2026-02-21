@@ -1,27 +1,58 @@
 package com.phase.bookpin.search
 
+import androidx.lifecycle.viewModelScope
 import com.phase.bookpin.common.BaseViewModel
+import com.phase.bookpin.domain.search.SearchRepository
+import com.phase.bookpin.model.search.BookSearchResult
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 
-class SearchViewModel : BaseViewModel<SearchState, SearchSideEffect>() {
+class SearchViewModel(
+    private val repository: SearchRepository,
+) : BaseViewModel<SearchState, SearchSideEffect>() {
+    private val queryInput: MutableStateFlow<String> = MutableStateFlow("")
+
     override fun createInitialState(): SearchState = SearchState()
 
+    init {
+        observeQueryInput()
+    }
+
     fun onQueryChange(query: String) {
+        queryInput.value = query
         reduce { copy(query = query) }
     }
 
-    fun onSearch() {
-        if (state.query.isBlank()) return
+    private fun observeQueryInput() {
+        viewModelScope.launch {
+            queryInput
+                .debounce(INPUT_DEBOUNCE_TIME)
+                .distinctUntilChanged()
+                .collect { query ->
+                    if (query.isNotBlank()) {
+                        searchBooks(query)
+                    }
+                }
+        }
+    }
 
+    private suspend fun searchBooks(query: String) {
         reduce { copy(isLoading = true, hasSearched = true) }
 
-        // TODO: Implement actual search logic with repository
-        // For now, simulate no results
-        reduce {
-            copy(
-                isLoading = false,
-                searchResults = emptyList(),
-            )
-        }
+        repository
+            .searchBooks(query)
+            .onSuccess { results ->
+                reduce { copy(isLoading = false, searchResults = results) }
+            }.onFailure { error ->
+                reduce { copy(isLoading = false, searchResults = emptyList()) }
+                postSideEffect(
+                    SearchSideEffect.ShowSnackbar(
+                        error.message ?: "검색 중 오류가 발생했습니다.",
+                    ),
+                )
+            }
     }
 
     fun onCloseClick() {
@@ -32,7 +63,11 @@ class SearchViewModel : BaseViewModel<SearchState, SearchSideEffect>() {
         postSideEffect(SearchSideEffect.NavigateToManualInput)
     }
 
-    fun onBookClick(bookId: String) {
-        postSideEffect(SearchSideEffect.NavigateToBookDetail(bookId))
+    fun onBookClick(result: BookSearchResult) {
+        postSideEffect(SearchSideEffect.NavigateToAddBook(result))
+    }
+
+    companion object {
+        private const val INPUT_DEBOUNCE_TIME = 500L
     }
 }
