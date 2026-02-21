@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BookSearchResultResponse(
     val title: String,
-    val author: String,
-    val imageUrl: String,
-    val totalPage: Int,
+    val author: String = "",
+    val imageUrl: String = "",
+    val totalPage: Int = -1,
     val isbn: String,
-    val publisher: String,
+    val publisher: String = "",
     val source: String,
 ) {
     fun toBookSearchResult(): BookSearchResult = BookSearchResult(
