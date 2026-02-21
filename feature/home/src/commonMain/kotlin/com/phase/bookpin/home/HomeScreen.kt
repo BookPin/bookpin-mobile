@@ -90,7 +90,7 @@ fun HomeScreen(
             AnimatedVisibility(currentReadingBook != null) {
                 CurrentlyReadingSection(
                     bookItem = requireNotNull(currentReadingBook),
-                    onAddBookmarkClick = { state.bookItems.firstOrNull()?.let { viewModel.onAddBookmarkClick(it.id) } },
+                    onAddBookmarkClick = { viewModel.onAddBookmarkClick(currentReadingBook.id) },
                 )
             }
 
