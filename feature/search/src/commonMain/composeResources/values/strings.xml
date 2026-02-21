@@ -7,8 +7,20 @@
     <string name="search_manual_input">직접 입력하기</string>
     <string name="search_manual_input_link">또는 직접 입력하기</string>
 
+    <!-- AddBook -->
+    <string name="addbook_title">책 정보 확인</string>
+    <string name="addbook_label_title">책 제목</string>
+    <string name="addbook_label_author">저자</string>
+    <string name="addbook_label_total_page">총 페이지 수</string>
+    <string name="addbook_placeholder_title">책 제목을 입력하세요</string>
+    <string name="addbook_placeholder_author">저자명을 입력하세요</string>
+    <string name="addbook_placeholder_total_page">전체 페이지 수를 입력해주세요</string>
+    <string name="addbook_submit">내 서재에 추가하기</string>
+
     <!-- Content Descriptions -->
     <string name="cd_close">닫기</string>
     <string name="cd_search">검색</string>
     <string name="cd_book">책</string>
+    <string name="cd_back">뒤로가기</string>
+    <string name="cd_edit">편집</string>
 </resources>
