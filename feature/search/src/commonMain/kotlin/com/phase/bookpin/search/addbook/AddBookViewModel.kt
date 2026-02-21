@@ -37,8 +37,8 @@ class AddBookViewModel(
     }
 
     fun onTotalPageChange(totalPage: String) {
-        val filtered = totalPage.filter { it.isDigit() }
-        reduce { copy(totalPage = filtered) }
+        val page = totalPage.toIntOrNull() ?: 0
+        reduce { copy(totalPage = page) }
     }
 
     fun onBackClick() {
@@ -58,7 +58,7 @@ class AddBookViewModel(
                     title = state.title,
                     author = state.author,
                     imageUrl = state.imageUrl,
-                    totalPage = state.totalPage.toInt(),
+                    totalPage = state.totalPage,
                 ).onSuccess {
                     postSideEffect(AddBookSideEffect.NavigateToHome)
                 }.onFailure { error ->
