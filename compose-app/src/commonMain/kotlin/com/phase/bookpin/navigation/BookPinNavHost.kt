@@ -8,6 +8,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.phase.bookpin.bookmark.BookDetailScreen
 import com.phase.bookpin.home.HomeScreen
 import com.phase.bookpin.search.SearchScreen
+import com.phase.bookpin.search.addbook.AddBookScreen
 import com.phase.bookpin.settings.SettingsScreen
 import com.phase.bookpin.splash.SplashScreen
 
@@ -17,6 +18,7 @@ fun BookPinNavHost(
     onNavigateToHome: () -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToBookDetail: (Long) -> Unit,
+    onNavigateToAddBook: (AddBookRoute) -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateBack: () -> Unit,
     onLogout: () -> Unit,
@@ -41,6 +43,31 @@ fun BookPinNavHost(
             entry<SearchRoute> {
                 SearchScreen(
                     onNavigateBack = onNavigateBack,
+                    onNavigateToManualInput = { onNavigateToAddBook(AddBookRoute()) },
+                    onNavigateToAddBook = { result ->
+                        onNavigateToAddBook(
+                            AddBookRoute(
+                                title = result.title,
+                                author = result.author,
+                                totalPage = result.totalPage,
+                                imageUrl = result.imageUrl,
+                                isbn = result.isbn,
+                            ),
+                        )
+                    },
+                )
+            }
+
+            entry<AddBookRoute> { route ->
+                AddBookScreen(
+                    title = route.title,
+                    author = route.author,
+                    totalPage = route.totalPage,
+                    imageUrl = route.imageUrl,
+                    isbn = route.isbn,
+                    onNavigateBack = onNavigateBack,
+                    onNavigateClose = onNavigateBack,
+                    onNavigateToHome = onNavigateToHome,
                 )
             }
 
