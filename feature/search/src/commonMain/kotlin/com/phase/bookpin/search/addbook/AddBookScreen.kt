@@ -1,7 +1,6 @@
 package com.phase.bookpin.search.addbook
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -26,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bookpin.search.generated.resources.*
 import coil3.compose.AsyncImage
 import com.phase.bookpin.common.extensions.collectSideEffect
+import com.phase.bookpin.common.extensions.noRippleClickable
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
 import com.phase.bookpin.designsystem.component.BPTextField
@@ -290,10 +290,3 @@ private fun AddBookBottomBar(
         }
     }
 }
-
-private fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier =
-    this.clickable(
-        interactionSource = null,
-        indication = null,
-        onClick = onClick,
-    )

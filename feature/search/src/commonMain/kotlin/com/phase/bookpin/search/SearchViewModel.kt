@@ -5,6 +5,7 @@ import com.phase.bookpin.common.BaseViewModel
 import com.phase.bookpin.domain.search.SearchRepository
 import com.phase.bookpin.model.search.BookSearchResult
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -30,9 +31,11 @@ class SearchViewModel(
             queryInput
                 .debounce(INPUT_DEBOUNCE_TIME)
                 .distinctUntilChanged()
-                .collect { query ->
+                .collectLatest { query ->
                     if (query.isNotBlank()) {
                         searchBooks(query)
+                    } else {
+                        reduce { copy(searchResults = emptyList(), hasSearched = false) }
                     }
                 }
         }

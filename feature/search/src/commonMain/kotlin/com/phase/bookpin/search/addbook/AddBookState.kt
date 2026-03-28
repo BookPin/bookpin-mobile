@@ -9,5 +9,5 @@ data class AddBookState(
     val isLoading: Boolean = false,
 ) {
     val isSubmitEnabled: Boolean
-        get() = title.isNotBlank() && author.isNotBlank() && totalPage > 0
+        get() = title.isNotBlank() && author.isNotBlank() && totalPage > 0 && !isLoading
 }
