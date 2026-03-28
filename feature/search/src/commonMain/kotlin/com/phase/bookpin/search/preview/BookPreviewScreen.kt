@@ -1,4 +1,4 @@
-package com.phase.bookpin.search.addbook
+package com.phase.bookpin.search.preview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -34,13 +34,13 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun AddBookScreen(
+fun BookPreviewScreen(
     title: String,
     author: String,
     totalPage: Int,
     imageUrl: String,
     isbn: String,
-    viewModel: AddBookViewModel = koinViewModel(),
+    viewModel: BookPreviewViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
     onNavigateClose: () -> Unit,
     onNavigateToHome: () -> Unit,
@@ -60,22 +60,22 @@ fun AddBookScreen(
 
     viewModel.sideEffect.collectSideEffect {
         when (it) {
-            is AddBookSideEffect.NavigateBack -> onNavigateBack()
-            is AddBookSideEffect.NavigateClose -> onNavigateClose()
-            is AddBookSideEffect.NavigateToHome -> onNavigateToHome()
-            is AddBookSideEffect.ShowSnackbar -> snackbarHost.showSnackbar(it.message)
+            is BookPreviewSideEffect.NavigateBack -> onNavigateBack()
+            is BookPreviewSideEffect.NavigateClose -> onNavigateClose()
+            is BookPreviewSideEffect.NavigateToHome -> onNavigateToHome()
+            is BookPreviewSideEffect.ShowSnackbar -> snackbarHost.showSnackbar(it.message)
         }
     }
 
     Scaffold(
         topBar = {
-            AddBookTopBar(
+            BookPreviewTopBar(
                 onBackClick = viewModel::onBackClick,
                 onCloseClick = viewModel::onCloseClick,
             )
         },
         bottomBar = {
-            AddBookBottomBar(
+            BookPreviewBottomBar(
                 isEnabled = state.isSubmitEnabled,
                 onClick = viewModel::onSubmit,
             )
@@ -96,28 +96,28 @@ fun AddBookScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             FormField(
-                label = stringResource(Res.string.addbook_label_title),
+                label = stringResource(Res.string.book_preview_label_title),
                 value = state.title,
                 onValueChange = viewModel::onTitleChange,
-                placeholder = stringResource(Res.string.addbook_placeholder_title),
+                placeholder = stringResource(Res.string.book_preview_placeholder_title),
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             FormField(
-                label = stringResource(Res.string.addbook_label_author),
+                label = stringResource(Res.string.book_preview_label_author),
                 value = state.author,
                 onValueChange = viewModel::onAuthorChange,
-                placeholder = stringResource(Res.string.addbook_placeholder_author),
+                placeholder = stringResource(Res.string.book_preview_placeholder_author),
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             FormField(
-                label = stringResource(Res.string.addbook_label_total_page),
+                label = stringResource(Res.string.book_preview_label_total_page),
                 value = state.totalPage.toString(),
                 onValueChange = viewModel::onTotalPageChange,
-                placeholder = stringResource(Res.string.addbook_placeholder_total_page),
+                placeholder = stringResource(Res.string.book_preview_placeholder_total_page),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             )
 
@@ -127,7 +127,7 @@ fun AddBookScreen(
 }
 
 @Composable
-private fun AddBookTopBar(
+private fun BookPreviewTopBar(
     onBackClick: () -> Unit,
     onCloseClick: () -> Unit,
 ) {
@@ -155,7 +155,7 @@ private fun AddBookTopBar(
             }
 
             Text(
-                text = stringResource(Res.string.addbook_title),
+                text = stringResource(Res.string.book_preview_title),
                 style = BookPinTheme.typography.headlineMedium,
                 color = BookPinTheme.colors.textPrimary,
             )
@@ -254,7 +254,7 @@ private fun FormField(
 }
 
 @Composable
-private fun AddBookBottomBar(
+private fun BookPreviewBottomBar(
     isEnabled: Boolean,
     onClick: () -> Unit,
 ) {
@@ -283,7 +283,7 @@ private fun AddBookBottomBar(
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = stringResource(Res.string.addbook_submit),
+                text = stringResource(Res.string.book_preview_submit),
                 style = BookPinTheme.typography.headlineSmall,
                 color = BookPinTheme.colors.textOnAccent,
             )

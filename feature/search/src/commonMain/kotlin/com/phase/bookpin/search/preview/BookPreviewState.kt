@@ -1,6 +1,6 @@
-package com.phase.bookpin.search.addbook
+package com.phase.bookpin.search.preview
 
-data class AddBookState(
+data class BookPreviewState(
     val title: String = "",
     val author: String = "",
     val totalPage: Int = -1,

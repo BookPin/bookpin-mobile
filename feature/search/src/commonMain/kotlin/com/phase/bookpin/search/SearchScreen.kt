@@ -38,7 +38,7 @@ fun SearchScreen(
     viewModel: SearchViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
     onNavigateToManualInput: () -> Unit = {},
-    onNavigateToAddBook: (BookSearchResult) -> Unit = {},
+    onNavigateToBookPreview: (BookSearchResult) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHost = LocalSnackbarHost.current
@@ -46,7 +46,7 @@ fun SearchScreen(
     viewModel.sideEffect.collectSideEffect {
         when (it) {
             is SearchSideEffect.ShowSnackbar -> snackbarHost.showSnackbar(it.message)
-            is SearchSideEffect.NavigateToAddBook -> onNavigateToAddBook(it.result)
+            is SearchSideEffect.NavigateToBookPreview -> onNavigateToBookPreview(it.result)
             SearchSideEffect.NavigateBack -> onNavigateBack()
             SearchSideEffect.NavigateToManualInput -> onNavigateToManualInput()
         }

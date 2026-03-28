@@ -1,14 +1,14 @@
-package com.phase.bookpin.search.addbook
+package com.phase.bookpin.search.preview
 
 import androidx.lifecycle.viewModelScope
 import com.phase.bookpin.common.BaseViewModel
 import com.phase.bookpin.domain.search.SearchRepository
 import kotlinx.coroutines.launch
 
-class AddBookViewModel(
+class BookPreviewViewModel(
     private val searchRepository: SearchRepository,
-) : BaseViewModel<AddBookState, AddBookSideEffect>() {
-    override fun createInitialState(): AddBookState = AddBookState()
+) : BaseViewModel<BookPreviewState, BookPreviewSideEffect>() {
+    override fun createInitialState(): BookPreviewState = BookPreviewState()
 
     fun initWithBookInfo(
         title: String,
@@ -42,11 +42,11 @@ class AddBookViewModel(
     }
 
     fun onBackClick() {
-        postSideEffect(AddBookSideEffect.NavigateBack)
+        postSideEffect(BookPreviewSideEffect.NavigateBack)
     }
 
     fun onCloseClick() {
-        postSideEffect(AddBookSideEffect.NavigateClose)
+        postSideEffect(BookPreviewSideEffect.NavigateClose)
     }
 
     fun onSubmit() {
@@ -60,11 +60,11 @@ class AddBookViewModel(
                     imageUrl = state.imageUrl,
                     totalPage = state.totalPage,
                 ).onSuccess {
-                    postSideEffect(AddBookSideEffect.NavigateToHome)
+                    postSideEffect(BookPreviewSideEffect.NavigateToHome)
                 }.onFailure { error ->
                     reduce { copy(isLoading = false) }
                     postSideEffect(
-                        AddBookSideEffect.ShowSnackbar(
+                        BookPreviewSideEffect.ShowSnackbar(
                             error.message ?: "책 추가에 실패했습니다.",
                         ),
                     )

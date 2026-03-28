@@ -67,7 +67,7 @@ class SearchViewModel(
     }
 
     fun onBookClick(result: BookSearchResult) {
-        postSideEffect(SearchSideEffect.NavigateToAddBook(result))
+        postSideEffect(SearchSideEffect.NavigateToBookPreview(result))
     }
 
     companion object {
