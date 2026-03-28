@@ -193,7 +193,6 @@ private fun BookCoverPreview(imageUrl: String) {
                 color = BookPinTheme.colors.buttonPrimary,
                 shape = RoundedCornerShape(16.dp),
             ),
-        contentAlignment = Alignment.TopEnd,
     ) {
         if (imageUrl.isNotBlank()) {
             AsyncImage(
@@ -201,24 +200,6 @@ private fun BookCoverPreview(imageUrl: String) {
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .padding(8.dp)
-                .size(32.dp)
-                .background(
-                    color = BookPinTheme.colors.bgElevated.copy(alpha = 0.9f),
-                    shape = CircleShape,
-                ),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_edit),
-                contentDescription = stringResource(Res.string.cd_edit),
-                modifier = Modifier.size(16.dp),
-                tint = BookPinTheme.colors.iconDefault,
             )
         }
     }

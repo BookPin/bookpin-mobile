@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -81,6 +82,15 @@ fun SearchScreen(
                     )
                 },
             )
+
+            if (state.isLoading) {
+                Spacer(modifier = Modifier.height(96.dp))
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    color = BookPinTheme.colors.accentPrimary,
+                )
+                return@Column
+            }
 
             if (!state.hasSearched) {
                 Spacer(modifier = Modifier.height(96.dp))
