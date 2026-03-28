@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -52,7 +53,10 @@ internal fun BookItemCard(
             contentAlignment = Alignment.Center,
         ) {
             AsyncImage(
-                modifier = Modifier.shadow(elevation = 4.dp),
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(112.dp)
+                    .shadow(elevation = 4.dp),
                 model = bookItem.imageUrl,
                 contentDescription = null,
             )
