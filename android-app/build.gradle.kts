@@ -19,6 +19,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.splashscreen)
     implementation(libs.material)
 
     implementation(platform(libs.androidx.compose.bom))
