@@ -87,7 +87,8 @@ fun SearchScreen(
                 Spacer(modifier = Modifier.height(96.dp))
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    color = BookPinTheme.colors.accentPrimary,
+                    color = BookPinTheme.colors.buttonPrimary,
+                    trackColor = BookPinTheme.colors.bgSurface,
                 )
                 return@Column
             }
