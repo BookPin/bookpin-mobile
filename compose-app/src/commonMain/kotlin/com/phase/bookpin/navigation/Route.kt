@@ -22,6 +22,15 @@ data class BookDetailRoute(
 @Serializable
 data object SettingsRoute : NavKey
 
+@Serializable
+data class BookPreviewRoute(
+    val title: String = "",
+    val author: String = "",
+    val totalPage: Int = -1,
+    val imageUrl: String = "",
+    val isbn: String = "",
+) : NavKey
+
 val navSerializersModule = SerializersModule {
     polymorphic(NavKey::class) {
         subclass(SplashRoute::class, SplashRoute.serializer())
@@ -29,5 +38,6 @@ val navSerializersModule = SerializersModule {
         subclass(SearchRoute::class, SearchRoute.serializer())
         subclass(BookDetailRoute::class, BookDetailRoute.serializer())
         subclass(SettingsRoute::class, SettingsRoute.serializer())
+        subclass(BookPreviewRoute::class, BookPreviewRoute.serializer())
     }
 }

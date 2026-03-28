@@ -80,6 +80,9 @@ fun BookPinApp(
                     onNavigateToBookDetail = { bookId ->
                         backStack.add(BookDetailRoute(bookId))
                     },
+                    onNavigateToBookPreview = { route ->
+                        backStack.add(route)
+                    },
                     onNavigateToSettings = {
                         backStack.add(SettingsRoute)
                     },
