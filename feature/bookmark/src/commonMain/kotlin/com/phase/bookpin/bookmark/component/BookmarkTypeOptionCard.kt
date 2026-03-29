@@ -1,4 +1,4 @@
-package com.phase.bookpin.designsystem.component
+package com.phase.bookpin.bookmark.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.phase.bookpin.designsystem.BookPinTheme
 
 @Composable
-fun BPOptionCard(
+fun BookmarkTypeOptionCard(
     icon: Painter,
     title: String,
     subtitle: String,

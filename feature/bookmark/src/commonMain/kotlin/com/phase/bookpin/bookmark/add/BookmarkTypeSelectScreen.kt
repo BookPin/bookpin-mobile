@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import bookpin.bookmark.generated.resources.*
+import com.phase.bookpin.bookmark.component.BookmarkTypeOptionCard
 import com.phase.bookpin.designsystem.BookPinTheme
-import com.phase.bookpin.designsystem.component.BPOptionCard
 import com.phase.bookpin.designsystem.component.BPTopBar
 import com.phase.bookpin.model.bookmark.BookmarkType
 import org.jetbrains.compose.resources.painterResource
@@ -46,7 +46,7 @@ fun BookmarkTypeSelectScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            BPOptionCard(
+            BookmarkTypeOptionCard(
                 icon = painterResource(Res.drawable.ic_camera),
                 title = stringResource(Res.string.bookmark_type_camera),
                 subtitle = stringResource(Res.string.bookmark_type_camera_desc),
@@ -55,7 +55,7 @@ fun BookmarkTypeSelectScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            BPOptionCard(
+            BookmarkTypeOptionCard(
                 icon = painterResource(Res.drawable.ic_gallery),
                 title = stringResource(Res.string.bookmark_type_gallery),
                 subtitle = stringResource(Res.string.bookmark_type_gallery_desc),
