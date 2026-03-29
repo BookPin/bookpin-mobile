@@ -8,6 +8,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import java.io.File
@@ -24,8 +26,8 @@ actual class ImagePickerLauncher(
 actual fun rememberImagePickerLauncher(
     onImagePicked: (String?) -> Unit,
 ): ImagePickerLauncher {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    var pendingCameraUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    var pendingCameraUri by rememberSaveable { mutableStateOf<String?>(null) }
 
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -37,19 +39,25 @@ actual fun rememberImagePickerLauncher(
         contract = ActivityResultContracts.TakePicture(),
     ) { success: Boolean ->
         if (success) {
-            onImagePicked(pendingCameraUri?.toString())
+            onImagePicked(pendingCameraUri)
         } else {
             onImagePicked(null)
         }
+    }
+
+    fun launchCameraWithUri() {
+        val uri = createImageUri(context)
+        pendingCameraUri = uri.toString()
+        cameraLauncher.launch(uri)
     }
 
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
     ) { granted: Boolean ->
         if (granted) {
-            val uri = createImageUri(context)
-            pendingCameraUri = uri
-            cameraLauncher.launch(uri)
+            launchCameraWithUri()
+        } else {
+            onImagePicked(null)
         }
     }
 
@@ -61,9 +69,7 @@ actual fun rememberImagePickerLauncher(
                         Manifest.permission.CAMERA,
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    val uri = createImageUri(context)
-                    pendingCameraUri = uri
-                    cameraLauncher.launch(uri)
+                    launchCameraWithUri()
                 } else {
                     cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
                 }

@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,13 +48,19 @@ fun AddBookmarkScreen(
         onImagePicked = viewModel::onPhotoUriChanged,
     )
 
+    val launchPicker = remember(imagePickerLauncher) {
+        { type: BookmarkType ->
+            when (type) {
+                BookmarkType.PHOTO_CAMERA -> imagePickerLauncher.launchCamera()
+                BookmarkType.PHOTO_GALLERY -> imagePickerLauncher.launchGallery()
+                BookmarkType.TEXT -> Unit
+            }
+        }
+    }
+
     LaunchedEffect(bookmarkType) {
         viewModel.initBookmarkType(bookmarkType)
-        when (bookmarkType) {
-            BookmarkType.PHOTO_CAMERA -> imagePickerLauncher.launchCamera()
-            BookmarkType.PHOTO_GALLERY -> imagePickerLauncher.launchGallery()
-            BookmarkType.TEXT -> Unit
-        }
+        launchPicker(bookmarkType)
     }
 
     viewModel.sideEffect.collectSideEffect {
@@ -86,13 +93,7 @@ fun AddBookmarkScreen(
             if (state.bookmarkType != BookmarkType.TEXT) {
                 PhotoSection(
                     photoUri = state.photoUri,
-                    onRetakeClick = {
-                        when (state.bookmarkType) {
-                            BookmarkType.PHOTO_CAMERA -> imagePickerLauncher.launchCamera()
-                            BookmarkType.PHOTO_GALLERY -> imagePickerLauncher.launchGallery()
-                            BookmarkType.TEXT -> Unit
-                        }
-                    },
+                    onRetakeClick = { launchPicker(state.bookmarkType) },
                 )
                 Spacer(modifier = Modifier.height(24.dp))
             }
