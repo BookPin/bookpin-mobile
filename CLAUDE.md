@@ -305,6 +305,10 @@ com.phase.bookpin
     └── FeatureDto.kt
 ```
 
+### 도메인 모델 규칙
+- `model/` 모듈의 도메인 모델(data class)에는 **디폴트 파라미터 값을 사용하지 않는다**
+- DTO(`core/data-api`)에서 매퍼를 통해 변환할 때 모든 값을 명시적으로 전달한다
+
 ### KtLint 규칙
 - Wildcard import 허용
 - @Composable 함수 대문자 시작 허용
