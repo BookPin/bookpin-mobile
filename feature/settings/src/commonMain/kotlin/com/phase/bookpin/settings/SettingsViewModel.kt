@@ -1,9 +1,30 @@
 package com.phase.bookpin.settings
 
+import androidx.lifecycle.viewModelScope
 import com.phase.bookpin.common.BaseViewModel
+import com.phase.bookpin.domain.book.BookRepository
+import kotlinx.coroutines.launch
 
-class SettingsViewModel : BaseViewModel<SettingsState, SettingsSideEffect>() {
+class SettingsViewModel(
+    private val bookRepository: BookRepository,
+) : BaseViewModel<SettingsState, SettingsSideEffect>() {
     override fun createInitialState(): SettingsState = SettingsState()
+
+    init {
+        loadLatestBookmark()
+    }
+
+    private fun loadLatestBookmark() {
+        viewModelScope.launch {
+            bookRepository
+                .getLatestBookmark()
+                .onSuccess { bookmark ->
+                    bookmark?.let {
+                        reduce { copy(latestBookmark = it) }
+                    }
+                }
+        }
+    }
 
     fun onBackClick() {
         postSideEffect(SettingsSideEffect.NavigateBack)

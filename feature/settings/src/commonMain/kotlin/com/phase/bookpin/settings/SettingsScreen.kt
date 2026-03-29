@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -24,6 +25,7 @@ import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
 import com.phase.bookpin.designsystem.component.BPConfirmDialog
+import com.phase.bookpin.model.book.LatestBookmark
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -67,7 +69,9 @@ fun SettingsScreen(
                 accountType = state.accountType,
             )
 
-            AchievementSection(achievements = state.achievements)
+            state.latestBookmark?.let { bookmark ->
+                LatestBookmarkSection(bookmark = bookmark)
+            }
 
             SettingsSection(
                 onContactClick = viewModel::onContactClick,
@@ -197,8 +201,8 @@ private fun ProfileCard(
 }
 
 @Composable
-private fun AchievementSection(
-    achievements: List<Achievement>,
+private fun LatestBookmarkSection(
+    bookmark: LatestBookmark,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -218,16 +222,14 @@ private fun AchievementSection(
                     shape = RoundedCornerShape(16.dp),
                 ).padding(16.dp),
         ) {
-            achievements.forEach { achievement ->
-                AchievementItem(achievement = achievement)
-            }
+            LatestBookmarkItem(bookmark = bookmark)
         }
     }
 }
 
 @Composable
-private fun AchievementItem(
-    achievement: Achievement,
+private fun LatestBookmarkItem(
+    bookmark: LatestBookmark,
 ) {
     Row(
         modifier = Modifier
@@ -236,7 +238,7 @@ private fun AchievementItem(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text(
-            text = achievement.emoji,
+            text = "\uD83D\uDCD6",
             fontSize = 24.sp,
         )
 
@@ -244,18 +246,26 @@ private fun AchievementItem(
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Text(
-                text = achievement.title,
+                text = bookmark.extractedText,
                 style = BookPinTheme.typography.bodyMedium,
                 color = BookPinTheme.colors.textPrimary,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = achievement.description,
+                text = bookmark.note,
                 style = BookPinTheme.typography.bodySmall,
                 color = BookPinTheme.colors.textSecondary,
                 maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = achievement.date,
+                text = "${bookmark.pageNumber}p",
+                style = BookPinTheme.typography.bodySmall,
+                color = BookPinTheme.colors.textSecondary,
+            )
+            Text(
+                text = bookmark.createdAt,
                 style = BookPinTheme.typography.bodySmall,
                 color = BookPinTheme.colors.textAccentMuted,
             )

@@ -5,6 +5,7 @@ import com.phase.bookpin.domain.book.BookRepository
 import com.phase.bookpin.model.book.BookDetail
 import com.phase.bookpin.model.book.BookItem
 import com.phase.bookpin.model.book.Bookmark
+import com.phase.bookpin.model.book.LatestBookmark
 
 class BookRepositoryImpl(
     private val dataSource: BookRemoteDataSource,
@@ -17,6 +18,10 @@ class BookRepositoryImpl(
 
     override suspend fun getBookDetail(bookId: Long): Result<BookDetail> {
         return dataSource.getBookDetail(bookId).mapCatching { it.toBookDetail() }
+    }
+
+    override suspend fun getLatestBookmark(): Result<LatestBookmark?> {
+        return dataSource.getLatestBookmark().mapCatching { it?.toLatestBookmark() }
     }
 
     override suspend fun getTextBookmarks(bookId: Long): Result<List<Bookmark>> {
