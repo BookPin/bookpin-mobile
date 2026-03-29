@@ -7,6 +7,23 @@
     <string name="tab_photo">사진</string>
     <string name="page_format">p.%1$d</string>
 
+    <!-- Add Bookmark -->
+    <string name="bookmark_add_title">책갈피 추가</string>
+    <string name="bookmark_type_question">어떤 방식으로 책갈피를 추가할까요?</string>
+    <string name="bookmark_type_camera">사진 촬영</string>
+    <string name="bookmark_type_camera_desc">OCR로 텍스트 추출</string>
+    <string name="bookmark_type_gallery">갤러리에서 선택</string>
+    <string name="bookmark_type_gallery_desc">기존 사진 불러오기</string>
+    <string name="bookmark_type_text">직접 입력하기</string>
+    <string name="bookmark_extracted_text">추출된 텍스트</string>
+    <string name="bookmark_content_label">책갈피 내용</string>
+    <string name="bookmark_extracted_text_placeholder">책갈피 내용을 입력하거나 수정하세요...</string>
+    <string name="bookmark_page_number">페이지 번호</string>
+    <string name="bookmark_page_placeholder">선택사항</string>
+    <string name="bookmark_personal_memo">개인 메모</string>
+    <string name="bookmark_memo_placeholder">생각을 기록하세요 (선택사항)</string>
+    <string name="bookmark_save">책갈피 저장</string>
+
     <!-- Content Descriptions -->
     <string name="cd_back">뒤로가기</string>
     <string name="cd_add_bookmark">북마크 추가</string>

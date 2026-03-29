@@ -10,7 +10,7 @@ data class RemoteException(
     val status: Int = -1,
     val detail: String = "알 수 없는 오류가 발생하였습니다.",
     val instance: String = "",
-) : Exception() {
+) : Exception(detail) {
     enum class NetworkExceptionViewType {
         TOAST
     }
