@@ -1,5 +1,5 @@
 package com.phase.bookpin.domain.image
 
 interface ImageRepository {
-    suspend fun getImageUrl(imageExtension: String): Result<String>
+    suspend fun uploadImage(imageBytes: ByteArray, imageExtension: String): Result<String>
 }

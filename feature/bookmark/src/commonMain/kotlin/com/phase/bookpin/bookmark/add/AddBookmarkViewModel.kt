@@ -42,8 +42,11 @@ class AddBookmarkViewModel(
             reduce { copy(isLoading = true) }
 
             val imageUrlResult = if (state.bookmarkType != BookmarkType.TEXT && state.photoUri != null) {
-                val extension = imageFileReader.getExtension(state.photoUri)
-                imageRepository.getImageUrl(extension)
+                runCatching {
+                    val extension = imageFileReader.getExtension(state.photoUri)
+                    val bytes = imageFileReader.readBytes(state.photoUri)
+                    imageRepository.uploadImage(bytes, extension).getOrThrow()
+                }
             } else {
                 Result.success("")
             }
@@ -52,7 +55,7 @@ class AddBookmarkViewModel(
                 reduce { copy(isLoading = false) }
                 postSideEffect(
                     AddBookmarkSideEffect.ShowSnackbar(
-                        error.message ?: "이미지 URL 발급에 실패했습니다.",
+                        error.message ?: "이미지 업로드에 실패했습니다.",
                     ),
                 )
                 return@launch
