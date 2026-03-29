@@ -24,6 +24,12 @@ class BookPinPreferenceDataStoreImpl(
         }
     }
 
+    override suspend fun remove(key: DataStoreKey) {
+        dataStore.edit { preferences ->
+            preferences.remove(stringPreferencesKey(key.key))
+        }
+    }
+
     override suspend fun clear() {
         dataStore.edit { preferences ->
             preferences.clear()

@@ -2,6 +2,7 @@ package com.phase.bookpin.data.auth
 
 import com.phase.bookpin.data.api.auth.SessionEventListener
 import com.phase.bookpin.data.api.datastore.BookPinPreferenceDataStore
+import com.phase.bookpin.data.api.datastore.DataStoreKey
 import com.phase.bookpin.domain.auth.SessionRepository
 import com.phase.bookpin.model.auth.SessionEvent
 import kotlinx.coroutines.channels.Channel
@@ -23,6 +24,8 @@ class SessionRepositoryImpl(
     }
 
     override suspend fun clearSession() {
-        preferenceDataStore.clear()
+        preferenceDataStore.remove(DataStoreKey.ACCESS_TOKEN)
+        preferenceDataStore.remove(DataStoreKey.REFRESH_TOKEN)
+        preferenceDataStore.remove(DataStoreKey.REFRESH_TOKEN_EXPIRED_AT)
     }
 }

@@ -6,6 +6,7 @@ import com.phase.bookpin.data.api.datastore.BookPinPreferenceDataStore
 import com.phase.bookpin.data.api.datastore.DataStoreKey
 import com.phase.bookpin.domain.auth.AuthRepository
 import com.phase.bookpin.model.auth.DeviceAuthToken
+import kotlinx.coroutines.flow.first
 
 class AuthRepositoryImpl(
     private val dataSource: AuthRemoteDataSource,
@@ -17,4 +18,11 @@ class AuthRepositoryImpl(
                 preferenceDataStore.saveString(DataStoreKey.ACCESS_TOKEN, response.accessToken)
                 preferenceDataStore.saveString(DataStoreKey.REFRESH_TOKEN, response.refreshToken)
             }
+
+    override suspend fun hasAccessToken(): Boolean {
+        val accessToken = preferenceDataStore
+            .getString(DataStoreKey.ACCESS_TOKEN)
+            .first()
+        return !accessToken.isNullOrEmpty()
+    }
 }
