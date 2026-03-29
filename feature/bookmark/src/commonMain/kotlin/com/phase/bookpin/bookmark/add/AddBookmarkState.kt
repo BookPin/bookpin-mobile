@@ -10,4 +10,6 @@ data class AddBookmarkState(
     val personalMemo: String = "",
     val isLoading: Boolean = false,
     val isOcrProcessing: Boolean = false,
-)
+) {
+    val isSaveEnabled: Boolean get() = pageNumber.toIntOrNull() != null
+}

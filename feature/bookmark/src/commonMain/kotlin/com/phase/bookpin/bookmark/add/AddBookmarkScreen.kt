@@ -28,6 +28,7 @@ import coil3.compose.AsyncImage
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.designsystem.component.BPLoadingScreen
 import com.phase.bookpin.designsystem.component.BPTextArea
 import com.phase.bookpin.designsystem.component.BPTopBar
 import com.phase.bookpin.model.bookmark.BookmarkType
@@ -69,8 +70,8 @@ fun AddBookmarkScreen(
         }
     }
 
-    LaunchedEffect(bookmarkType) {
-        viewModel.initBookmarkType(bookmarkType)
+    LaunchedEffect(bookId, bookmarkType) {
+        viewModel.init(bookId, bookmarkType)
         launchPicker(bookmarkType)
     }
 
@@ -84,132 +85,141 @@ fun AddBookmarkScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BookPinTheme.colors.bgCanvas),
-    ) {
-        BPTopBar(
-            title = stringResource(Res.string.bookmark_add_title),
-            onClose = viewModel::onCloseClick,
-        )
-
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp)
-                .padding(top = 24.dp, bottom = 32.dp),
+                .background(BookPinTheme.colors.bgCanvas),
         ) {
-            if (state.bookmarkType != BookmarkType.TEXT) {
-                PhotoSection(
-                    photoUri = state.photoUri,
-                    onRetakeClick = { launchPicker(state.bookmarkType) },
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-            }
-
-            Text(
-                text = if (state.bookmarkType != BookmarkType.TEXT) {
-                    stringResource(Res.string.bookmark_extracted_text)
-                } else {
-                    stringResource(Res.string.bookmark_content_label)
-                },
-                style = BookPinTheme.typography.titleSmall,
-                color = BookPinTheme.colors.textPrimary,
+            BPTopBar(
+                title = stringResource(Res.string.bookmark_add_title),
+                onClose = viewModel::onCloseClick,
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Box {
-                BPTextArea(
-                    value = state.extractedText,
-                    onValueChange = viewModel::onExtractedTextChanged,
-                    placeholder = stringResource(Res.string.bookmark_extracted_text_placeholder),
-                    minHeight = 172.dp,
-                )
-                if (state.isOcrProcessing) {
-                    Box(
-                        modifier = Modifier
-                            .matchParentSize()
-                            .background(
-                                BookPinTheme.colors.bgSurface.copy(alpha = 0.6f),
-                                RoundedCornerShape(12.dp),
-                            ),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        CircularProgressIndicator(
-                            color = BookPinTheme.colors.buttonPrimary,
-                            modifier = Modifier.size(36.dp),
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Text(
-                text = stringResource(Res.string.bookmark_page_number),
-                style = BookPinTheme.typography.titleSmall,
-                color = BookPinTheme.colors.textPrimary,
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            BPTextArea(
-                value = state.pageNumber,
-                onValueChange = viewModel::onPageNumberChanged,
-                placeholder = stringResource(Res.string.bookmark_page_placeholder),
-                minHeight = 48.dp,
-                modifier = Modifier.fillMaxWidth(0.5f),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Text(
-                text = stringResource(Res.string.bookmark_personal_memo),
-                style = BookPinTheme.typography.titleSmall,
-                color = BookPinTheme.colors.textPrimary,
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            BPTextArea(
-                value = state.personalMemo,
-                onValueChange = viewModel::onPersonalMemoChanged,
-                placeholder = stringResource(Res.string.bookmark_memo_placeholder),
-                minHeight = 100.dp,
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Button(
-                onClick = viewModel::onSaveBookmark,
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp),
-                shape = RoundedCornerShape(26.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = BookPinTheme.colors.buttonPrimary,
-                    contentColor = BookPinTheme.colors.textOnAccent,
-                ),
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 24.dp)
+                    .padding(top = 24.dp, bottom = 32.dp),
             ) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_check),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                    tint = BookPinTheme.colors.textOnAccent,
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
+                if (state.bookmarkType != BookmarkType.TEXT) {
+                    PhotoSection(
+                        photoUri = state.photoUri,
+                        onRetakeClick = { launchPicker(state.bookmarkType) },
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
 
                 Text(
-                    text = stringResource(Res.string.bookmark_save),
-                    style = BookPinTheme.typography.titleMedium,
-                    color = BookPinTheme.colors.textOnAccent,
+                    text = if (state.bookmarkType != BookmarkType.TEXT) {
+                        stringResource(Res.string.bookmark_extracted_text)
+                    } else {
+                        stringResource(Res.string.bookmark_content_label)
+                    },
+                    style = BookPinTheme.typography.titleSmall,
+                    color = BookPinTheme.colors.textPrimary,
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Box {
+                    BPTextArea(
+                        value = state.extractedText,
+                        onValueChange = viewModel::onExtractedTextChanged,
+                        placeholder = stringResource(Res.string.bookmark_extracted_text_placeholder),
+                        minHeight = 172.dp,
+                    )
+                    if (state.isOcrProcessing) {
+                        Box(
+                            modifier = Modifier
+                                .matchParentSize()
+                                .background(
+                                    BookPinTheme.colors.bgSurface.copy(alpha = 0.6f),
+                                    RoundedCornerShape(12.dp),
+                                ),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator(
+                                color = BookPinTheme.colors.buttonPrimary,
+                                modifier = Modifier.size(36.dp),
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Text(
+                    text = stringResource(Res.string.bookmark_page_number),
+                    style = BookPinTheme.typography.titleSmall,
+                    color = BookPinTheme.colors.textPrimary,
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                BPTextArea(
+                    value = state.pageNumber,
+                    onValueChange = viewModel::onPageNumberChanged,
+                    placeholder = stringResource(Res.string.bookmark_page_placeholder),
+                    minHeight = 48.dp,
+                    modifier = Modifier.fillMaxWidth(0.5f),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Text(
+                    text = stringResource(Res.string.bookmark_personal_memo),
+                    style = BookPinTheme.typography.titleSmall,
+                    color = BookPinTheme.colors.textPrimary,
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                BPTextArea(
+                    value = state.personalMemo,
+                    onValueChange = viewModel::onPersonalMemoChanged,
+                    placeholder = stringResource(Res.string.bookmark_memo_placeholder),
+                    minHeight = 100.dp,
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Button(
+                    onClick = viewModel::onSaveBookmark,
+                    enabled = state.isSaveEnabled,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(26.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = BookPinTheme.colors.buttonPrimary,
+                        contentColor = BookPinTheme.colors.textOnAccent,
+                        disabledContainerColor = BookPinTheme.colors.bgMuted,
+                        disabledContentColor = BookPinTheme.colors.textPlaceholder,
+                    ),
+                ) {
+                    Icon(
+                        painter = painterResource(Res.drawable.ic_check),
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = BookPinTheme.colors.textOnAccent,
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Text(
+                        text = stringResource(Res.string.bookmark_save),
+                        style = BookPinTheme.typography.titleMedium,
+                        color = BookPinTheme.colors.textOnAccent,
+                    )
+                }
             }
+        }
+
+        if (state.isLoading) {
+            BPLoadingScreen()
         }
     }
 }

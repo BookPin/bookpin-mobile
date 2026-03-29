@@ -2,16 +2,24 @@ package com.phase.bookpin.bookmark.add
 
 import androidx.lifecycle.viewModelScope
 import com.phase.bookpin.common.BaseViewModel
+import com.phase.bookpin.domain.book.BookRepository
+import com.phase.bookpin.domain.image.ImageRepository
 import com.phase.bookpin.model.bookmark.BookmarkType
 import kotlinx.coroutines.launch
 
 class AddBookmarkViewModel(
     private val textRecognizer: TextRecognizer,
+    private val bookRepository: BookRepository,
+    private val imageRepository: ImageRepository,
+    private val imageFileReader: ImageFileReader,
 ) : BaseViewModel<AddBookmarkState, AddBookmarkSideEffect>() {
     override fun createInitialState(): AddBookmarkState = AddBookmarkState()
 
-    fun initBookmarkType(type: BookmarkType) {
-        reduce { copy(bookmarkType = type) }
+    private var bookId: Long = 0L
+
+    fun init(bookId: Long, bookmarkType: BookmarkType) {
+        this.bookId = bookId
+        reduce { copy(bookmarkType = bookmarkType) }
     }
 
     fun onExtractedTextChanged(text: String) {
@@ -27,8 +35,59 @@ class AddBookmarkViewModel(
     }
 
     fun onSaveBookmark() {
-        // TODO: API 연동 후 구현
-        postSideEffect(AddBookmarkSideEffect.BookmarkSaved)
+        val state = uiState.value
+        if (state.isLoading) return
+
+        val pageNumber = state.pageNumber.toIntOrNull()
+        if (pageNumber == null) {
+            postSideEffect(AddBookmarkSideEffect.ShowSnackbar("페이지 번호를 입력해주세요."))
+            return
+        }
+
+        viewModelScope.launch {
+            reduce { copy(isLoading = true) }
+
+            val imageUrlResult = if (state.bookmarkType != BookmarkType.TEXT && state.photoUri != null) {
+                runCatching {
+                    val extension = imageFileReader.getExtension(state.photoUri)
+                    val bytes = imageFileReader.readBytes(state.photoUri)
+                    imageRepository.uploadImage(bytes, extension).getOrThrow()
+                }
+            } else {
+                Result.success("")
+            }
+
+            imageUrlResult.onFailure { error ->
+                reduce { copy(isLoading = false) }
+                postSideEffect(
+                    AddBookmarkSideEffect.ShowSnackbar(
+                        error.message ?: "이미지 업로드에 실패했습니다.",
+                    ),
+                )
+                return@launch
+            }
+
+            val imageUrl = imageUrlResult.getOrThrow()
+
+            bookRepository
+                .createBookmark(
+                    bookId = bookId,
+                    pageNumber = pageNumber,
+                    extractedText = state.extractedText,
+                    note = state.personalMemo,
+                    imageUrl = imageUrl,
+                ).onSuccess {
+                    reduce { copy(isLoading = false) }
+                    postSideEffect(AddBookmarkSideEffect.BookmarkSaved)
+                }.onFailure { error ->
+                    reduce { copy(isLoading = false) }
+                    postSideEffect(
+                        AddBookmarkSideEffect.ShowSnackbar(
+                            error.message ?: "책갈피 저장에 실패했습니다.",
+                        ),
+                    )
+                }
+        }
     }
 
     fun onPhotoUriChanged(uri: String?) {
