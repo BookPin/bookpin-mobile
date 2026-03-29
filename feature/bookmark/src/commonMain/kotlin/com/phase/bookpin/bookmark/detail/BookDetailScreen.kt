@@ -8,12 +8,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +32,8 @@ import coil3.compose.AsyncImage
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.model.book.BookDetail
+import com.phase.bookpin.model.book.Bookmark
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -43,6 +47,10 @@ fun BookDetailScreen(
     val viewModel: BookDetailViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHost = LocalSnackbarHost.current
+
+    LaunchedEffect(bookId) {
+        viewModel.init(bookId)
+    }
 
     viewModel.sideEffect.collectSideEffect {
         when (it) {
@@ -71,59 +79,69 @@ fun BookDetailScreen(
             }
         },
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(BookPinTheme.colors.bgCanvas),
-            contentPadding = PaddingValues(bottom = paddingValues.calculateBottomPadding() + 80.dp),
-        ) {
-            item {
-                BookDetailHeader(
-                    book = state.book,
-                    onBackClick = viewModel::onBackClick,
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(
+                    color = BookPinTheme.colors.buttonPrimary,
                 )
             }
-
-            item {
-                BookDetailStats(
-                    currentPage = state.book.currentPage,
-                    totalPages = state.book.totalPages,
-                    progressPercent = state.book.progressPercent,
-                    onMarkAsCompleteClick = viewModel::onMarkAsCompleteClick,
-                )
-            }
-
-            item {
-                BookDetailTabs(
-                    selectedTab = state.selectedTab,
-                    textCount = viewModel.textBookmarkCount,
-                    photoCount = viewModel.photoBookmarkCount,
-                    onTabSelected = viewModel::onTabSelected,
-                )
-            }
-
-            val filteredBookmarks = state.bookmarks.filter { it.type == state.selectedTab }
-            if (state.selectedTab == BookmarkTab.TEXT) {
-                items(filteredBookmarks, key = { it.id }) { bookmark ->
-                    BookmarkItem(bookmark = bookmark)
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(BookPinTheme.colors.bgCanvas),
+                contentPadding = PaddingValues(bottom = paddingValues.calculateBottomPadding() + 80.dp),
+            ) {
+                item {
+                    BookDetailHeader(
+                        book = state.book,
+                        onBackClick = viewModel::onBackClick,
+                    )
                 }
-            } else {
-                items(filteredBookmarks.chunked(2)) { rowItems ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 24.dp)
-                            .padding(top = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        rowItems.forEach { bookmark ->
-                            PhotoBookmarkItem(
-                                bookmark = bookmark,
-                                modifier = Modifier.weight(1f),
-                            )
-                        }
-                        if (rowItems.size == 1) {
-                            Spacer(modifier = Modifier.weight(1f))
+
+                item {
+                    BookDetailStats(
+                        currentPage = state.book.currentPage,
+                        totalPages = state.book.totalPage,
+                        progressPercent = (state.book.progress * 100).toInt(),
+                        onMarkAsCompleteClick = viewModel::onMarkAsCompleteClick,
+                    )
+                }
+
+                item {
+                    BookDetailTabs(
+                        selectedTab = state.selectedTab,
+                        textCount = state.textBookmarks.size,
+                        photoCount = state.photoBookmarks.size,
+                        onTabSelected = viewModel::onTabSelected,
+                    )
+                }
+
+                if (state.selectedTab == BookmarkTab.TEXT) {
+                    items(state.textBookmarks, key = { it.id }) { bookmark ->
+                        TextBookmarkItem(bookmark = bookmark)
+                    }
+                } else {
+                    items(state.photoBookmarks.chunked(2)) { rowItems ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp)
+                                .padding(top = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            rowItems.forEach { bookmark ->
+                                PhotoBookmarkItem(
+                                    bookmark = bookmark,
+                                    modifier = Modifier.weight(1f),
+                                )
+                            }
+                            if (rowItems.size == 1) {
+                                Spacer(modifier = Modifier.weight(1f))
+                            }
                         }
                     }
                 }
@@ -354,7 +372,7 @@ private fun TabItem(
 }
 
 @Composable
-private fun BookmarkItem(
+private fun TextBookmarkItem(
     bookmark: Bookmark,
 ) {
     Column(
@@ -379,16 +397,16 @@ private fun BookmarkItem(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = bookmark.quote,
+            text = bookmark.extractedText,
             style = BookPinTheme.typography.bodyLarge,
             color = BookPinTheme.colors.textPrimary,
         )
 
-        if (bookmark.memo.isNotEmpty()) {
+        if (bookmark.note.isNotEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = bookmark.memo,
+                text = bookmark.note,
                 style = BookPinTheme.typography.bodyMedium.copy(
                     fontStyle = FontStyle.Italic,
                 ),
@@ -424,7 +442,7 @@ private fun PhotoBookmarkItem(
                 .background(BookPinTheme.colors.bgSurface),
             contentAlignment = Alignment.Center,
         ) {
-            if (bookmark.photoUrl.isNullOrEmpty()) {
+            if (bookmark.imageUrl.isEmpty()) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_photo),
                     contentDescription = null,
@@ -433,7 +451,7 @@ private fun PhotoBookmarkItem(
                 )
             } else {
                 AsyncImage(
-                    model = bookmark.photoUrl,
+                    model = bookmark.imageUrl,
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
@@ -453,18 +471,18 @@ private fun PhotoBookmarkItem(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = bookmark.quote,
+                text = bookmark.extractedText,
                 style = BookPinTheme.typography.bodyMedium,
                 color = BookPinTheme.colors.textPrimary,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
             )
 
-            if (bookmark.memo.isNotEmpty()) {
+            if (bookmark.note.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = bookmark.memo,
+                    text = bookmark.note,
                     style = BookPinTheme.typography.labelSmall.copy(
                         fontStyle = FontStyle.Italic,
                     ),
