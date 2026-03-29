@@ -69,8 +69,8 @@ fun AddBookmarkScreen(
         }
     }
 
-    LaunchedEffect(bookmarkType) {
-        viewModel.initBookmarkType(bookmarkType)
+    LaunchedEffect(bookId, bookmarkType) {
+        viewModel.init(bookId, bookmarkType)
         launchPicker(bookmarkType)
     }
 
