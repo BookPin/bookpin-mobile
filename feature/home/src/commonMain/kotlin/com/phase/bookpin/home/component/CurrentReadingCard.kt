@@ -63,6 +63,9 @@ internal fun CurrentlyReadingCard(
                 contentAlignment = Alignment.Center,
             ) {
                 AsyncImage(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(144.dp),
                     model = bookItem.imageUrl,
                     contentDescription = null,
                 )
