@@ -188,6 +188,7 @@ fun AddBookmarkScreen(
 
                 Button(
                     onClick = viewModel::onSaveBookmark,
+                    enabled = state.isSaveEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
@@ -195,6 +196,8 @@ fun AddBookmarkScreen(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = BookPinTheme.colors.buttonPrimary,
                         contentColor = BookPinTheme.colors.textOnAccent,
+                        disabledContainerColor = BookPinTheme.colors.bgMuted,
+                        disabledContentColor = BookPinTheme.colors.textPlaceholder,
                     ),
                 ) {
                     Icon(

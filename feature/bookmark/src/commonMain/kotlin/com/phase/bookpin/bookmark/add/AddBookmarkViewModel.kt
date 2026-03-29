@@ -38,6 +38,12 @@ class AddBookmarkViewModel(
         val state = uiState.value
         if (state.isLoading) return
 
+        val pageNumber = state.pageNumber.toIntOrNull()
+        if (pageNumber == null) {
+            postSideEffect(AddBookmarkSideEffect.ShowSnackbar("페이지 번호를 입력해주세요."))
+            return
+        }
+
         viewModelScope.launch {
             reduce { copy(isLoading = true) }
 
@@ -62,7 +68,6 @@ class AddBookmarkViewModel(
             }
 
             val imageUrl = imageUrlResult.getOrThrow()
-            val pageNumber = state.pageNumber.toIntOrNull() ?: 0
 
             bookRepository
                 .createBookmark(

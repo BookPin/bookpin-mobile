@@ -19,7 +19,8 @@
     <string name="bookmark_content_label">책갈피 내용</string>
     <string name="bookmark_extracted_text_placeholder">책갈피 내용을 입력하거나 수정하세요...</string>
     <string name="bookmark_page_number">페이지 번호</string>
-    <string name="bookmark_page_placeholder">선택사항</string>
+    <string name="bookmark_page_placeholder">페이지 번호를 입력하세요</string>
+    <string name="bookmark_page_required">페이지 번호를 입력해주세요.</string>
     <string name="bookmark_personal_memo">개인 메모</string>
     <string name="bookmark_memo_placeholder">생각을 기록하세요 (선택사항)</string>
     <string name="bookmark_save">책갈피 저장</string>
