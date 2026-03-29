@@ -51,7 +51,11 @@ PR 템플릿에 맞게 PR 내용을 작성합니다.
 4. **Base 브랜치**: 위에서 감지된 Base 브랜치를 `gh pr create --base` 옵션에 사용
 5. **이슈 연결**: 브랜치명에서 이슈 번호 추출 후 `closes #이슈번호`를 PR body에 포함
 6. **Assignee**: PR 생성/수정 시 `--assignee jeongjaino` 옵션 사용
-7. **적용**: `gh pr create --base {BASE_BRANCH} --assignee jeongjaino` 또는 `gh pr edit [PR번호] --body "$PR_BODY" --add-assignee jeongjaino` 사용
+7. **라벨 자동 분류**: 커밋 내용과 변경사항을 분석하여 아래 기준으로 라벨 1개를 선택하고 `--label` 옵션 사용
+   - `신규 기능`: 새로운 화면, 기능, API 연동 등 기존에 없던 기능 추가
+   - `버그 수정`: 기존 기능의 오류 수정, 크래시 해결
+   - `기타 작업`: 리팩토링, 의존성 추가, 설정 변경, 문서 작업 등 기능과 무관한 변경
+8. **적용**: `gh pr create --base {BASE_BRANCH} --assignee jeongjaino --label "{라벨명}"` 또는 `gh pr edit [PR번호] --body "$PR_BODY" --add-assignee jeongjaino --add-label "{라벨명}"` 사용
 
 ## 실행 절차
 
