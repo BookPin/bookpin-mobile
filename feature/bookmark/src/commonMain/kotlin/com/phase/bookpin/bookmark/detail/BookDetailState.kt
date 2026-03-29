@@ -1,4 +1,4 @@
-package com.phase.bookpin.bookmark
+package com.phase.bookpin.bookmark.detail
 
 data class BookDetailState(
     val book: BookDetail = BookDetail(),
