@@ -15,4 +15,6 @@
     <string name="cancel">취소</string>
     <string name="confirm_logout">로그아웃</string>
     <string name="confirm_delete">삭제하기</string>
+    <string name="view_all">전체 보기</string>
+    <string name="default_profile_name">독서하는 사람</string>
 </resources>

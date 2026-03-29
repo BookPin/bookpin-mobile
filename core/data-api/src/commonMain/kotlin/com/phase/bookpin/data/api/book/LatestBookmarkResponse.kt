@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class LatestBookmarkResponse(
     val id: Long,
     val bookId: Long,
+    val bookTitle: String = "",
     val pageNumber: Int = 0,
     val extractedText: String = "",
     val note: String = "",
@@ -16,6 +17,7 @@ data class LatestBookmarkResponse(
     fun toLatestBookmark(): LatestBookmark = LatestBookmark(
         id = id,
         bookId = bookId,
+        bookTitle = bookTitle,
         pageNumber = pageNumber,
         extractedText = extractedText,
         note = note,

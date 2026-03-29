@@ -1,6 +1,7 @@
 package com.phase.bookpin.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,12 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bookpin.settings.generated.resources.*
+import coil3.compose.AsyncImage
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
@@ -45,6 +49,9 @@ fun SettingsScreen(
             SettingsSideEffect.NavigateBack -> onNavigateBack()
             SettingsSideEffect.Logout -> onLogout()
             SettingsSideEffect.DeleteAccount -> onLogout()
+            SettingsSideEffect.NavigateToAllBookmarks -> {
+                // TODO: Navigate to all bookmarks screen
+            }
         }
     }
 
@@ -65,12 +72,17 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(4.dp))
 
             ProfileCard(
-                profileName = state.profileName,
+                profileName = state.profileName
+                    ?: stringResource(Res.string.default_profile_name),
+                profileImageUrl = state.profileImageUrl,
                 accountType = state.accountType,
             )
 
             state.latestBookmark?.let { bookmark ->
-                LatestBookmarkSection(bookmark = bookmark)
+                LatestBookmarkSection(
+                    bookmark = bookmark,
+                    onViewAllClick = viewModel::onViewAllBookmarksClick,
+                )
             }
 
             SettingsSection(
@@ -154,6 +166,7 @@ private fun SettingsTopBar(
 @Composable
 private fun ProfileCard(
     profileName: String,
+    profileImageUrl: String?,
     accountType: String,
 ) {
     Row(
@@ -166,21 +179,32 @@ private fun ProfileCard(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Box(
-            modifier = Modifier
-                .size(56.dp)
-                .background(
-                    color = BookPinTheme.colors.bgMuted,
-                    shape = CircleShape,
-                ),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_person),
+        if (profileImageUrl != null) {
+            AsyncImage(
+                model = profileImageUrl,
                 contentDescription = null,
-                modifier = Modifier.size(28.dp),
-                tint = BookPinTheme.colors.iconDefault,
+                modifier = Modifier
+                    .size(56.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop,
             )
+        } else {
+            Box(
+                modifier = Modifier
+                    .size(56.dp)
+                    .background(
+                        color = BookPinTheme.colors.bgMuted,
+                        shape = CircleShape,
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_person),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp),
+                    tint = BookPinTheme.colors.iconDefault,
+                )
+            }
         }
 
         Column(
@@ -203,16 +227,42 @@ private fun ProfileCard(
 @Composable
 private fun LatestBookmarkSection(
     bookmark: LatestBookmark,
+    onViewAllClick: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text(
-            text = stringResource(Res.string.achievements_title),
-            style = BookPinTheme.typography.bodyMedium,
-            color = BookPinTheme.colors.textSecondary,
-            modifier = Modifier.padding(start = 4.dp),
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = stringResource(Res.string.achievements_title),
+                style = BookPinTheme.typography.bodyMedium,
+                color = BookPinTheme.colors.textSecondary,
+            )
+
+            Row(
+                modifier = Modifier.clickable(onClick = onViewAllClick),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+            ) {
+                Text(
+                    text = stringResource(Res.string.view_all),
+                    style = BookPinTheme.typography.bodySmall,
+                    color = BookPinTheme.colors.textAccentMuted,
+                )
+                Icon(
+                    painter = painterResource(Res.drawable.ic_chevron_right),
+                    contentDescription = null,
+                    modifier = Modifier.size(14.dp),
+                    tint = BookPinTheme.colors.textAccentMuted,
+                )
+            }
+        }
 
         Column(
             modifier = Modifier
@@ -222,54 +272,66 @@ private fun LatestBookmarkSection(
                     shape = RoundedCornerShape(16.dp),
                 ).padding(16.dp),
         ) {
-            LatestBookmarkItem(bookmark = bookmark)
+            LatestBookmarkCard(bookmark = bookmark)
         }
     }
 }
 
 @Composable
-private fun LatestBookmarkItem(
+private fun LatestBookmarkCard(
     bookmark: LatestBookmark,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp),
+            .shadow(
+                elevation = 2.dp,
+                shape = RoundedCornerShape(16.dp),
+            ).background(
+                color = BookPinTheme.colors.bgCanvas,
+                shape = RoundedCornerShape(16.dp),
+            ).border(
+                width = 0.6.dp,
+                color = BookPinTheme.colors.borderSubtle,
+                shape = RoundedCornerShape(16.dp),
+            ).padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            text = "\uD83D\uDCD6",
-            fontSize = 24.sp,
-        )
-
         Column(
-            verticalArrangement = Arrangement.spacedBy(2.dp),
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             Text(
                 text = bookmark.extractedText,
-                style = BookPinTheme.typography.bodyMedium,
+                style = BookPinTheme.typography.bodyLarge,
                 color = BookPinTheme.colors.textPrimary,
-                maxLines = 2,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
+
+            val subtitle = buildString {
+                if (bookmark.bookTitle.isNotEmpty()) {
+                    append(bookmark.bookTitle)
+                    append(" \u00B7 ")
+                }
+                append(bookmark.createdAt)
+            }
             Text(
-                text = bookmark.note,
+                text = subtitle,
                 style = BookPinTheme.typography.bodySmall,
                 color = BookPinTheme.colors.textSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Text(
-                text = "${bookmark.pageNumber}p",
-                style = BookPinTheme.typography.bodySmall,
-                color = BookPinTheme.colors.textSecondary,
-            )
-            Text(
-                text = bookmark.createdAt,
-                style = BookPinTheme.typography.bodySmall,
-                color = BookPinTheme.colors.textAccentMuted,
-            )
         }
+
+        Icon(
+            painter = painterResource(Res.drawable.ic_chevron_right),
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = BookPinTheme.colors.iconDefault,
+        )
     }
 }
 
