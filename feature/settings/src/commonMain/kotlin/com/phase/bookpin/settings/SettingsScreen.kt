@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bookpin.settings.generated.resources.*
 import coil3.compose.AsyncImage
 import com.phase.bookpin.common.extensions.collectSideEffect
+import com.phase.bookpin.common.extensions.toFormattedDate
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
 import com.phase.bookpin.designsystem.component.BPConfirmDialog
@@ -221,12 +222,16 @@ private fun LatestBookmarkSection(
     onViewAllClick: () -> Unit,
 ) {
     Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = BookPinTheme.colors.bgSurface,
+                shape = RoundedCornerShape(16.dp),
+            ).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 4.dp),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -255,16 +260,7 @@ private fun LatestBookmarkSection(
             }
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = BookPinTheme.colors.bgSurface,
-                    shape = RoundedCornerShape(16.dp),
-                ).padding(16.dp),
-        ) {
-            LatestBookmarkCard(bookmark = bookmark)
-        }
+        LatestBookmarkCard(bookmark = bookmark)
     }
 }
 
@@ -306,7 +302,7 @@ private fun LatestBookmarkCard(
                     append(bookmark.bookTitle)
                     append(" \u00B7 ")
                 }
-                append(bookmark.createdAt)
+                append(bookmark.createdAt.toFormattedDate())
             }
             Text(
                 text = subtitle,
