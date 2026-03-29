@@ -3,15 +3,35 @@ package com.phase.bookpin.settings
 import androidx.lifecycle.viewModelScope
 import com.phase.bookpin.common.BaseViewModel
 import com.phase.bookpin.domain.book.BookRepository
+import com.phase.bookpin.domain.user.UserRepository
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val bookRepository: BookRepository,
+    private val userRepository: UserRepository,
 ) : BaseViewModel<SettingsState, SettingsSideEffect>() {
     override fun createInitialState(): SettingsState = SettingsState()
 
     init {
+        loadUserProfile()
         loadLatestBookmark()
+    }
+
+    private fun loadUserProfile() {
+        viewModelScope.launch {
+            userRepository
+                .getUser()
+                .onSuccess { user ->
+                    reduce {
+                        copy(
+                            profileName = user.nickname,
+                            profileImageUrl = user.profileImageUrl.ifEmpty { null },
+                        )
+                    }
+                }.onFailure {
+                    postSideEffect(SettingsSideEffect.ShowSnackbar("프로필 정보를 불러오지 못했습니다."))
+                }
+        }
     }
 
     private fun loadLatestBookmark() {
@@ -32,6 +52,11 @@ class SettingsViewModel(
 
     fun onContactClick() {
         postSideEffect(SettingsSideEffect.ShowSnackbar("문의하기 기능은 준비 중입니다."))
+    }
+
+    fun onViewAllBookmarksClick() {
+        // TODO: Navigate to all bookmarks screen when available
+        postSideEffect(SettingsSideEffect.NavigateToAllBookmarks)
     }
 
     fun onLogoutClick() {
