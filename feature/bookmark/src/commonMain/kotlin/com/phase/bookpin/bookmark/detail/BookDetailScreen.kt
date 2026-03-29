@@ -106,7 +106,7 @@ fun BookDetailScreen(
                     BookDetailStats(
                         currentPage = state.book.currentPage,
                         totalPages = state.book.totalPage,
-                        progressPercent = (state.book.progress * 100).toInt(),
+                        progressPercent = state.book.progress.toInt(),
                         onMarkAsCompleteClick = viewModel::onMarkAsCompleteClick,
                     )
                 }
