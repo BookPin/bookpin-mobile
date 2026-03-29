@@ -185,6 +185,8 @@ private fun ProfileCard(
                     .size(56.dp)
                     .clip(CircleShape),
                 contentScale = ContentScale.Crop,
+                error = painterResource(Res.drawable.ic_person),
+                fallback = painterResource(Res.drawable.ic_person),
             )
         } else {
             Box(
