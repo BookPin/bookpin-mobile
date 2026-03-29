@@ -41,6 +41,7 @@ kotlin {
             implementation(projects.model)
             implementation(projects.domain)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.coil.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

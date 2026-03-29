@@ -27,5 +27,8 @@ class SessionRepositoryImpl(
         preferenceDataStore.remove(DataStoreKey.ACCESS_TOKEN)
         preferenceDataStore.remove(DataStoreKey.REFRESH_TOKEN)
         preferenceDataStore.remove(DataStoreKey.REFRESH_TOKEN_EXPIRED_AT)
+        preferenceDataStore.remove(DataStoreKey.USER_ID)
+        preferenceDataStore.remove(DataStoreKey.USER_NICKNAME)
+        preferenceDataStore.remove(DataStoreKey.USER_PROFILE_IMAGE_URL)
     }
 }

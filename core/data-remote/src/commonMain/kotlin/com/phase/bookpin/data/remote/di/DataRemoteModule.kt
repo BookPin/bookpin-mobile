@@ -4,10 +4,12 @@ import com.phase.bookpin.data.api.auth.AuthRemoteDataSource
 import com.phase.bookpin.data.api.book.BookRemoteDataSource
 import com.phase.bookpin.data.api.image.ImageRemoteDataSource
 import com.phase.bookpin.data.api.search.SearchRemoteDataSource
+import com.phase.bookpin.data.api.user.UserRemoteDataSource
 import com.phase.bookpin.data.remote.auth.AuthRemoteDataSourceImpl
 import com.phase.bookpin.data.remote.book.BookRemoteDataSourceImpl
 import com.phase.bookpin.data.remote.image.ImageRemoteDataSourceImpl
 import com.phase.bookpin.data.remote.search.SearchRemoteDataSourceImpl
+import com.phase.bookpin.data.remote.user.UserRemoteDataSourceImpl
 import com.phase.bookpin.data.remote.client.createHttpClient
 import com.phase.bookpin.data.remote.client.createRefreshHttpClient
 import io.ktor.client.HttpClient
@@ -35,6 +37,9 @@ val dataRemoteModule = module {
     }
     single<SearchRemoteDataSource> {
         SearchRemoteDataSourceImpl(httpClient = get())
+    }
+    single<UserRemoteDataSource> {
+        UserRemoteDataSourceImpl(httpClient = get())
     }
     single<ImageRemoteDataSource> {
         ImageRemoteDataSourceImpl(httpClient = get())
