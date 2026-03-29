@@ -12,12 +12,12 @@ class UserRepositoryImpl(
     private val preferenceDataStore: BookPinPreferenceDataStore,
 ) : UserRepository {
     override suspend fun getUser(): Result<User> {
-        val cachedId = preferenceDataStore.getString(DataStoreKey.USER_ID).first()
+        val cachedId = preferenceDataStore.getString(DataStoreKey.USER_ID).first()?.toLongOrNull()
         val cachedNickname = preferenceDataStore.getString(DataStoreKey.USER_NICKNAME).first()
         val cachedImage = preferenceDataStore.getString(DataStoreKey.USER_PROFILE_IMAGE_URL).first()
 
         if (cachedId != null && cachedNickname != null) {
-            return Result.success(User(cachedId.toLong(), cachedNickname, cachedImage.orEmpty()))
+            return Result.success(User(cachedId, cachedNickname, cachedImage.orEmpty()))
         }
 
         return remoteDataSource.getUser().mapCatching { response ->

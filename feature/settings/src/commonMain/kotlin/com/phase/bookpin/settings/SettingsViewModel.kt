@@ -28,6 +28,8 @@ class SettingsViewModel(
                             profileImageUrl = user.profileImageUrl.ifEmpty { null },
                         )
                     }
+                }.onFailure {
+                    postSideEffect(SettingsSideEffect.ShowSnackbar("프로필 정보를 불러오지 못했습니다."))
                 }
         }
     }
