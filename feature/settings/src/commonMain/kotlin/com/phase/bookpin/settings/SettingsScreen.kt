@@ -187,7 +187,7 @@ private fun ProfileCard(
                 ),
             contentAlignment = Alignment.Center,
         ) {
-            if (profileImageUrl != null) {
+            if (!profileImageUrl.isNullOrEmpty()) {
                 AsyncImage(
                     model = profileImageUrl,
                     contentDescription = null,
