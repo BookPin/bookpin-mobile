@@ -1,4 +1,4 @@
-package com.phase.bookpin.bookmark
+package com.phase.bookpin.bookmark.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

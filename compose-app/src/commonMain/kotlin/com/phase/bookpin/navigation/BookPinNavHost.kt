@@ -5,7 +5,7 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import com.phase.bookpin.bookmark.BookDetailScreen
+import com.phase.bookpin.bookmark.detail.BookDetailScreen
 import com.phase.bookpin.home.HomeScreen
 import com.phase.bookpin.search.SearchScreen
 import com.phase.bookpin.search.preview.BookPreviewScreen
