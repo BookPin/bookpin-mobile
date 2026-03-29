@@ -49,7 +49,9 @@ PR 템플릿에 맞게 PR 내용을 작성합니다.
 2. **변경된 점**: 커밋 메시지와 diff를 분석하여 의미있는 변경사항 정리
 3. **체크리스트**: 기본 항목 포함
 4. **Base 브랜치**: 위에서 감지된 Base 브랜치를 `gh pr create --base` 옵션에 사용
-5. **적용**: `gh pr create --base {BASE_BRANCH}` 또는 `gh pr edit [PR번호] --body "$PR_BODY"` 사용
+5. **이슈 연결**: 브랜치명에서 이슈 번호 추출 후 `closes #이슈번호`를 PR body에 포함
+6. **Assignee**: PR 생성/수정 시 `--assignee jeongjaino` 옵션 사용
+7. **적용**: `gh pr create --base {BASE_BRANCH} --assignee jeongjaino` 또는 `gh pr edit [PR번호] --body "$PR_BODY" --add-assignee jeongjaino` 사용
 
 ## 실행 절차
 
