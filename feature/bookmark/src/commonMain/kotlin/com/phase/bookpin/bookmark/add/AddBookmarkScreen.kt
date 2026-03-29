@@ -1,6 +1,7 @@
 package com.phase.bookpin.bookmark.add
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,10 +17,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bookpin.bookmark.generated.resources.*
+import coil3.compose.AsyncImage
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
@@ -40,8 +43,17 @@ fun AddBookmarkScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHost = LocalSnackbarHost.current
 
+    val imagePickerLauncher = rememberImagePickerLauncher(
+        onImagePicked = viewModel::onPhotoUriChanged,
+    )
+
     LaunchedEffect(bookmarkType) {
         viewModel.initBookmarkType(bookmarkType)
+        when (bookmarkType) {
+            BookmarkType.PHOTO_CAMERA -> imagePickerLauncher.launchCamera()
+            BookmarkType.PHOTO_GALLERY -> imagePickerLauncher.launchGallery()
+            BookmarkType.TEXT -> Unit
+        }
     }
 
     viewModel.sideEffect.collectSideEffect {
@@ -72,7 +84,16 @@ fun AddBookmarkScreen(
                 .padding(top = 24.dp, bottom = 32.dp),
         ) {
             if (state.bookmarkType != BookmarkType.TEXT) {
-                PhotoPlaceholder()
+                PhotoSection(
+                    photoUri = state.photoUri,
+                    onRetakeClick = {
+                        when (state.bookmarkType) {
+                            BookmarkType.PHOTO_CAMERA -> imagePickerLauncher.launchCamera()
+                            BookmarkType.PHOTO_GALLERY -> imagePickerLauncher.launchGallery()
+                            BookmarkType.TEXT -> Unit
+                        }
+                    },
+                )
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
@@ -164,20 +185,35 @@ fun AddBookmarkScreen(
 }
 
 @Composable
-private fun PhotoPlaceholder() {
+private fun PhotoSection(
+    photoUri: String?,
+    onRetakeClick: () -> Unit,
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .heightIn(min = 200.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(BookPinTheme.colors.bgSurface),
+            .background(BookPinTheme.colors.bgSurface)
+            .clickable(onClick = onRetakeClick),
         contentAlignment = Alignment.Center,
     ) {
-        Icon(
-            painter = painterResource(Res.drawable.ic_photo),
-            contentDescription = null,
-            modifier = Modifier.size(48.dp),
-            tint = BookPinTheme.colors.iconDefault,
-        )
+        if (photoUri != null) {
+            AsyncImage(
+                model = photoUri,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 200.dp, max = 400.dp),
+                contentScale = ContentScale.Fit,
+            )
+        } else {
+            Icon(
+                painter = painterResource(Res.drawable.ic_photo),
+                contentDescription = null,
+                modifier = Modifier.size(48.dp),
+                tint = BookPinTheme.colors.iconDefault,
+            )
+        }
     }
 }

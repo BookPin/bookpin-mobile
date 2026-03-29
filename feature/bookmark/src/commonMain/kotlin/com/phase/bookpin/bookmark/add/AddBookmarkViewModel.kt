@@ -27,6 +27,10 @@ class AddBookmarkViewModel : BaseViewModel<AddBookmarkState, AddBookmarkSideEffe
         postSideEffect(AddBookmarkSideEffect.BookmarkSaved)
     }
 
+    fun onPhotoUriChanged(uri: String?) {
+        reduce { copy(photoUri = uri) }
+    }
+
     fun onCloseClick() {
         postSideEffect(AddBookmarkSideEffect.NavigateBack)
     }
