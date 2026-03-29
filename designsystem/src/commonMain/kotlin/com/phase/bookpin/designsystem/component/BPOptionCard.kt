@@ -29,10 +29,10 @@ fun BPOptionCard(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .shadow(elevation = 2.dp, shape = shape)
-            .background(color = BookPinTheme.colors.bgElevated, shape = shape)
-            .border(width = 1.dp, color = BookPinTheme.colors.bgSurface, shape = shape)
+            .shadow(elevation = 2.dp, shape = shape, clip = false)
             .clip(shape)
+            .background(color = BookPinTheme.colors.bgElevated)
+            .border(width = 1.dp, color = BookPinTheme.colors.borderDefault, shape = shape)
             .clickable(onClick = onClick)
             .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically,

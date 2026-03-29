@@ -24,10 +24,12 @@ fun BPTopBar(
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val borderColor = BookPinTheme.colors.borderSubtle
+
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .drawBottomBorder()
+            .drawBottomBorder(borderColor)
             .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
         Text(
@@ -57,11 +59,11 @@ fun BPTopBar(
     }
 }
 
-private fun Modifier.drawBottomBorder(): Modifier = this.then(
+private fun Modifier.drawBottomBorder(color: Color): Modifier = this.then(
     Modifier.drawWithContent {
         drawContent()
         drawLine(
-            color = Color(0xFFF5EFE6),
+            color = color,
             start = Offset(0f, size.height),
             end = Offset(size.width, size.height),
             strokeWidth = 0.6.dp.toPx(),

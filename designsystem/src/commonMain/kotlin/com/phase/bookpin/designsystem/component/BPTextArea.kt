@@ -38,8 +38,8 @@ fun BPTextArea(
                 shape = shape,
             )
             .border(
-                width = 1.846.dp,
-                color = BookPinTheme.colors.bgSurface,
+                width = 1.dp,
+                color = BookPinTheme.colors.borderDefault,
                 shape = shape,
             ),
         textStyle = BookPinTheme.typography.bodyMedium.copy(
