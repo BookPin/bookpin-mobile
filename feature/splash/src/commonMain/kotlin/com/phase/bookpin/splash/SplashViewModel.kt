@@ -28,8 +28,7 @@ class SplashViewModel(
         viewModelScope.launch {
             val start = Clock.System.now()
 
-            val deviceIdResult = deviceRepository.getDeviceId()
-            if (deviceIdResult.isFailure) {
+            if (!authRepository.hasAccessToken()) {
                 val loginResult = login()
                 if (loginResult.isFailure) {
                     postSideEffect(
@@ -51,14 +50,9 @@ class SplashViewModel(
 
     @OptIn(ExperimentalUuidApi::class)
     private suspend fun login(): Result<Unit> {
-        val newDeviceId = Uuid.random().toString()
-        val loginResult = authRepository.login(DeviceAuthToken(newDeviceId))
-
-        if (loginResult.isSuccess) {
-            deviceRepository.saveDeviceId(newDeviceId)
-        }
-
-        return loginResult
+        val deviceId = deviceRepository.getDeviceId().getOrNull()
+            ?: Uuid.random().toString().also { deviceRepository.saveDeviceId(it) }
+        return authRepository.login(DeviceAuthToken(deviceId))
     }
 
     companion object {
