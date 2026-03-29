@@ -13,8 +13,10 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.navigation.AddBookmarkRoute
 import com.phase.bookpin.navigation.BookDetailRoute
 import com.phase.bookpin.navigation.BookPinNavHost
+import com.phase.bookpin.navigation.BookmarkTypeSelectRoute
 import com.phase.bookpin.navigation.HomeRoute
 import com.phase.bookpin.navigation.SearchRoute
 import com.phase.bookpin.navigation.SettingsRoute
@@ -79,6 +81,12 @@ fun BookPinApp(
                     },
                     onNavigateToBookDetail = { bookId ->
                         backStack.add(BookDetailRoute(bookId))
+                    },
+                    onNavigateToBookmarkTypeSelect = { bookId ->
+                        backStack.add(BookmarkTypeSelectRoute(bookId))
+                    },
+                    onNavigateToAddBookmark = { bookId, type ->
+                        backStack.add(AddBookmarkRoute(bookId, type))
                     },
                     onNavigateToBookPreview = { route ->
                         backStack.add(route)

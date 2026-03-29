@@ -5,8 +5,11 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import com.phase.bookpin.bookmark.add.AddBookmarkScreen
+import com.phase.bookpin.bookmark.add.BookmarkTypeSelectScreen
 import com.phase.bookpin.bookmark.detail.BookDetailScreen
 import com.phase.bookpin.home.HomeScreen
+import com.phase.bookpin.model.bookmark.BookmarkType
 import com.phase.bookpin.search.SearchScreen
 import com.phase.bookpin.search.preview.BookPreviewScreen
 import com.phase.bookpin.settings.SettingsScreen
@@ -18,6 +21,8 @@ fun BookPinNavHost(
     onNavigateToHome: () -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToBookDetail: (Long) -> Unit,
+    onNavigateToBookmarkTypeSelect: (Long) -> Unit,
+    onNavigateToAddBookmark: (Long, BookmarkType) -> Unit,
     onNavigateToBookPreview: (BookPreviewRoute) -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateBack: () -> Unit,
@@ -74,6 +79,24 @@ fun BookPinNavHost(
             entry<BookDetailRoute> { route ->
                 BookDetailScreen(
                     bookId = route.bookId,
+                    onNavigateBack = onNavigateBack,
+                    onNavigateToAddBookmark = { onNavigateToBookmarkTypeSelect(route.bookId) },
+                )
+            }
+
+            entry<BookmarkTypeSelectRoute> { route ->
+                BookmarkTypeSelectScreen(
+                    onNavigateBack = onNavigateBack,
+                    onNavigateToAddBookmark = { type ->
+                        onNavigateToAddBookmark(route.bookId, type)
+                    },
+                )
+            }
+
+            entry<AddBookmarkRoute> { route ->
+                AddBookmarkScreen(
+                    bookId = route.bookId,
+                    bookmarkType = route.bookmarkType,
                     onNavigateBack = onNavigateBack,
                 )
             }

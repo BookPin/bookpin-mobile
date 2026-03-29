@@ -38,6 +38,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun BookDetailScreen(
     bookId: Long,
     onNavigateBack: () -> Unit = {},
+    onNavigateToAddBookmark: () -> Unit = {},
 ) {
     val viewModel: BookDetailViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -49,9 +50,7 @@ fun BookDetailScreen(
                 snackbarHost.showSnackbar(it.message)
             }
             BookDetailSideEffect.NavigateBack -> onNavigateBack()
-            BookDetailSideEffect.NavigateToAddBookmark -> {
-                // TODO: Navigate to add bookmark screen
-            }
+            BookDetailSideEffect.NavigateToAddBookmark -> onNavigateToAddBookmark()
         }
     }
 
