@@ -9,4 +9,5 @@ data class AddBookmarkState(
     val pageNumber: String = "",
     val personalMemo: String = "",
     val isLoading: Boolean = false,
+    val isOcrProcessing: Boolean = false,
 )
