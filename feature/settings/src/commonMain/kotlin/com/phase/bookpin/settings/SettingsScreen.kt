@@ -178,27 +178,25 @@ private fun ProfileCard(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        if (profileImageUrl != null) {
-            AsyncImage(
-                model = profileImageUrl,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop,
-                error = painterResource(Res.drawable.ic_person),
-                fallback = painterResource(Res.drawable.ic_person),
-            )
-        } else {
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .background(
-                        color = BookPinTheme.colors.bgMuted,
-                        shape = CircleShape,
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
+        Box(
+            modifier = Modifier
+                .size(56.dp)
+                .background(
+                    color = BookPinTheme.colors.bgMuted,
+                    shape = CircleShape,
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (profileImageUrl != null) {
+                AsyncImage(
+                    model = profileImageUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
+                )
+            } else {
                 Icon(
                     painter = painterResource(Res.drawable.ic_person),
                     contentDescription = null,
