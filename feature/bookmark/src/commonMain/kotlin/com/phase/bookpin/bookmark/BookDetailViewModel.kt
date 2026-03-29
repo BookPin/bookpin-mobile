@@ -11,15 +11,15 @@ class BookDetailViewModel(
     override fun createInitialState(): BookDetailState = BookDetailState()
 
     fun init(bookId: Long) {
-        if (uiState.value.isLoading) return
-        reduce { copy(isLoading = true) }
         loadBookDetail(bookId)
         loadTextBookmarks(bookId)
         loadPhotoBookmarks(bookId)
     }
 
     private fun loadBookDetail(bookId: Long) {
+        if (uiState.value.isLoading) return
         viewModelScope.launch {
+            reduce { copy(isLoading = true) }
             bookRepository
                 .getBookDetail(bookId)
                 .onSuccess { book ->

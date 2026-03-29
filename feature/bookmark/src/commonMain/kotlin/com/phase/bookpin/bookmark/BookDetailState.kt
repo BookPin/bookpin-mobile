@@ -4,7 +4,7 @@ import com.phase.bookpin.model.book.BookDetail
 import com.phase.bookpin.model.book.Bookmark
 
 data class BookDetailState(
-    val book: BookDetail = BookDetail(),
+    val book: BookDetail = BookDetail.EMPTY,
     val textBookmarks: List<Bookmark> = emptyList(),
     val photoBookmarks: List<Bookmark> = emptyList(),
     val selectedTab: BookmarkTab = BookmarkTab.TEXT,

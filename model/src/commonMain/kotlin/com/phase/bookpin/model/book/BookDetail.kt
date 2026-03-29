@@ -1,12 +1,25 @@
 package com.phase.bookpin.model.book
 
 data class BookDetail(
-    val id: Long = 0,
-    val title: String = "",
-    val author: String = "",
-    val imageUrl: String = "",
-    val totalPage: Int = 0,
-    val currentPage: Int = 0,
-    val progress: Double = 0.0,
-    val isCompleted: Boolean = false,
-)
+    val id: Long,
+    val title: String,
+    val author: String,
+    val imageUrl: String,
+    val totalPage: Int,
+    val currentPage: Int,
+    val progress: Double,
+    val isCompleted: Boolean,
+) {
+    companion object {
+        val EMPTY = BookDetail(
+            id = 0,
+            title = "",
+            author = "",
+            imageUrl = "",
+            totalPage = 0,
+            currentPage = 0,
+            progress = 0.0,
+            isCompleted = false,
+        )
+    }
+}
