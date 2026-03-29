@@ -1,4 +1,4 @@
-package com.phase.bookpin.bookmark
+package com.phase.bookpin.bookmark.detail
 
 sealed interface BookDetailSideEffect {
     data class ShowSnackbar(

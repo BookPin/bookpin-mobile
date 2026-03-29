@@ -43,6 +43,9 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.koin.compose.viewmodel)
         }
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+        }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }

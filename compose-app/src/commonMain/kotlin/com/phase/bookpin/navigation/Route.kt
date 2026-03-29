@@ -1,6 +1,7 @@
 package com.phase.bookpin.navigation
 
 import androidx.navigation3.runtime.NavKey
+import com.phase.bookpin.model.bookmark.BookmarkType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -23,6 +24,17 @@ data class BookDetailRoute(
 data object SettingsRoute : NavKey
 
 @Serializable
+data class BookmarkTypeSelectRoute(
+    val bookId: Long,
+) : NavKey
+
+@Serializable
+data class AddBookmarkRoute(
+    val bookId: Long,
+    val bookmarkType: BookmarkType,
+) : NavKey
+
+@Serializable
 data class BookPreviewRoute(
     val title: String = "",
     val author: String = "",
@@ -37,6 +49,8 @@ val navSerializersModule = SerializersModule {
         subclass(HomeRoute::class, HomeRoute.serializer())
         subclass(SearchRoute::class, SearchRoute.serializer())
         subclass(BookDetailRoute::class, BookDetailRoute.serializer())
+        subclass(BookmarkTypeSelectRoute::class, BookmarkTypeSelectRoute.serializer())
+        subclass(AddBookmarkRoute::class, AddBookmarkRoute.serializer())
         subclass(SettingsRoute::class, SettingsRoute.serializer())
         subclass(BookPreviewRoute::class, BookPreviewRoute.serializer())
     }

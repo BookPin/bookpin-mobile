@@ -1,4 +1,4 @@
-package com.phase.bookpin.bookmark
+package com.phase.bookpin.bookmark.detail
 
 import com.phase.bookpin.model.book.BookDetail
 import com.phase.bookpin.model.book.Bookmark
