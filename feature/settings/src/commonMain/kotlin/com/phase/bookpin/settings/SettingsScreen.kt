@@ -75,7 +75,6 @@ fun SettingsScreen(
                 profileName = state.profileName
                     ?: stringResource(Res.string.default_profile_name),
                 profileImageUrl = state.profileImageUrl,
-                accountType = state.accountType,
             )
 
             state.latestBookmark?.let { bookmark ->
@@ -167,7 +166,6 @@ private fun SettingsTopBar(
 private fun ProfileCard(
     profileName: String,
     profileImageUrl: String?,
-    accountType: String,
 ) {
     Row(
         modifier = Modifier
@@ -207,20 +205,11 @@ private fun ProfileCard(
             }
         }
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Text(
-                text = profileName,
-                style = BookPinTheme.typography.titleMedium,
-                color = BookPinTheme.colors.textPrimary,
-            )
-            Text(
-                text = accountType,
-                style = BookPinTheme.typography.bodySmall,
-                color = BookPinTheme.colors.textSecondary,
-            )
-        }
+        Text(
+            text = profileName,
+            style = BookPinTheme.typography.titleMedium,
+            color = BookPinTheme.colors.textPrimary,
+        )
     }
 }
 
