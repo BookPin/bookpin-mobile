@@ -6,5 +6,5 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 actual val bookmarkPlatformModule: Module = module {
-    single { TextRecognizer(androidContext()) }
+    factory { TextRecognizer(androidContext()) }
 }
