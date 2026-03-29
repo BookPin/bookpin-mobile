@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,8 +45,18 @@ fun AddBookmarkScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHost = LocalSnackbarHost.current
 
+    val imageCropper = rememberImageCropper(
+        onImageCropped = viewModel::onCroppedImageReady,
+    )
+
     val imagePickerLauncher = rememberImagePickerLauncher(
-        onImagePicked = viewModel::onPhotoUriChanged,
+        onImagePicked = { uri ->
+            if (uri != null) {
+                imageCropper.launch(uri)
+            } else {
+                viewModel.onPhotoUriChanged(null)
+            }
+        },
     )
 
     val launchPicker = remember(imagePickerLauncher) {
@@ -110,12 +121,30 @@ fun AddBookmarkScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            BPTextArea(
-                value = state.extractedText,
-                onValueChange = viewModel::onExtractedTextChanged,
-                placeholder = stringResource(Res.string.bookmark_extracted_text_placeholder),
-                minHeight = 172.dp,
-            )
+            Box {
+                BPTextArea(
+                    value = state.extractedText,
+                    onValueChange = viewModel::onExtractedTextChanged,
+                    placeholder = stringResource(Res.string.bookmark_extracted_text_placeholder),
+                    minHeight = 172.dp,
+                )
+                if (state.isOcrProcessing) {
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .background(
+                                BookPinTheme.colors.bgSurface.copy(alpha = 0.6f),
+                                RoundedCornerShape(12.dp),
+                            ),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator(
+                            color = BookPinTheme.colors.buttonPrimary,
+                            modifier = Modifier.size(36.dp),
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
 

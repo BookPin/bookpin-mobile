@@ -45,6 +45,8 @@ kotlinStdlib = "2.3.0"
 runner = "1.7.0"
 core = "1.7.0"
 buildKonfig = "0.17.1"
+android-image-cropper = "4.7.0"
+mlkit-text-recognition = "16.0.1"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
@@ -114,6 +116,10 @@ androidx-runner = { group = "androidx.test", name = "runner", version.ref = "run
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
+
+android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "android-image-cropper" }
+mlkit-text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "mlkit-text-recognition" }
+mlkit-text-recognition-korean = { module = "com.google.mlkit:text-recognition-korean", version.ref = "mlkit-text-recognition" }
 
 [bundles]
 ktor-shared = [

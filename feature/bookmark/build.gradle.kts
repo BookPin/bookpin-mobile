@@ -45,6 +45,9 @@ kotlin {
         }
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
+            implementation(libs.android.image.cropper)
+            implementation(libs.mlkit.text.recognition)
+            implementation(libs.mlkit.text.recognition.korean)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
