@@ -76,6 +76,15 @@ fun BookPinApp(
                         backStack.clear()
                         backStack.add(HomeRoute)
                     },
+                    onPopBackToHome = {
+                        while (backStack.lastOrNull() !is HomeRoute) {
+                            backStack.removeLastOrNull() ?: break
+                        }
+                    },
+                    onPopBackToBookDetail = {
+                        backStack.removeLastOrNull() // AddBookmark
+                        backStack.removeLastOrNull() // BookmarkTypeSelect
+                    },
                     onNavigateToSearch = {
                         backStack.add(SearchRoute)
                     },

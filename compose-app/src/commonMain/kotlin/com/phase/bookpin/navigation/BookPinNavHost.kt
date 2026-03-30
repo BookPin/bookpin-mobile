@@ -19,6 +19,7 @@ import com.phase.bookpin.splash.SplashScreen
 fun BookPinNavHost(
     backStack: NavBackStack<NavKey>,
     onNavigateToHome: () -> Unit,
+    onPopBackToHome: () -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToBookDetail: (Long) -> Unit,
     onNavigateToBookmarkTypeSelect: (Long) -> Unit,
@@ -26,6 +27,7 @@ fun BookPinNavHost(
     onNavigateToBookPreview: (BookPreviewRoute) -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateBack: () -> Unit,
+    onPopBackToBookDetail: () -> Unit,
     onLogout: () -> Unit,
 ) {
     NavDisplay(
@@ -71,8 +73,8 @@ fun BookPinNavHost(
                     imageUrl = route.imageUrl,
                     isbn = route.isbn,
                     onNavigateBack = onNavigateBack,
-                    onNavigateClose = onNavigateBack,
-                    onNavigateToHome = onNavigateToHome,
+                    onNavigateClose = onPopBackToHome,
+                    onNavigateToHome = onPopBackToHome,
                 )
             }
 
@@ -81,7 +83,7 @@ fun BookPinNavHost(
                     bookId = route.bookId,
                     onNavigateBack = onNavigateBack,
                     onNavigateToAddBookmark = { onNavigateToBookmarkTypeSelect(route.bookId) },
-                    onNavigateToHome = onNavigateToHome,
+                    onNavigateToHome = onPopBackToHome,
                 )
             }
 
@@ -99,6 +101,7 @@ fun BookPinNavHost(
                     bookId = route.bookId,
                     bookmarkType = route.bookmarkType,
                     onNavigateBack = onNavigateBack,
+                    onPopBackToBookDetail = onPopBackToBookDetail,
                 )
             }
 
