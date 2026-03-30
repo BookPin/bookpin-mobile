@@ -64,8 +64,21 @@ class BookDetailViewModel(
     }
 
     fun onMarkAsCompleteClick() {
-        reduce { copy(book = book.copy(isCompleted = true)) }
-        postSideEffect(BookDetailSideEffect.ShowSnackbar("완독으로 표시되었습니다"))
+        val bookId = uiState.value.book.id
+        if (uiState.value.isLoading) return
+        viewModelScope.launch {
+            reduce { copy(isLoading = true) }
+            bookRepository
+                .completeBook(bookId)
+                .onSuccess {
+                    reduce { copy(isLoading = false, book = book.copy(isCompleted = true)) }
+                    postSideEffect(BookDetailSideEffect.ShowSnackbar("완독으로 표시되었습니다"))
+                    postSideEffect(BookDetailSideEffect.NavigateToHome)
+                }.onFailure { error ->
+                    reduce { copy(isLoading = false) }
+                    postSideEffect(BookDetailSideEffect.ShowSnackbar(error.message ?: "오류가 발생했습니다."))
+                }
+        }
     }
 
     fun onAddBookmarkClick() {

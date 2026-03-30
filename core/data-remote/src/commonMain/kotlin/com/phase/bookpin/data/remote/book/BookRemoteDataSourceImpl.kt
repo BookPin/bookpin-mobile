@@ -66,4 +66,12 @@ class BookRemoteDataSourceImpl(
             }
             setBody(request)
         }
+
+    override suspend fun completeBook(bookId: Long): Result<BookDetailResponse> =
+        httpClient.safeRequest {
+            url {
+                method = HttpMethod.Post
+                path("api/v1/books/$bookId/complete")
+            }
+        }
 }
