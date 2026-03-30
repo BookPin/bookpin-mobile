@@ -59,6 +59,31 @@ fun BPTopBar(
     }
 }
 
+@Composable
+fun BPTopBar(
+    modifier: Modifier = Modifier,
+    navigationIcon: @Composable (() -> Unit)? = null,
+    actions: @Composable (RowScope.() -> Unit)? = null,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+    ) {
+        if (navigationIcon != null) {
+            Box(modifier = Modifier.align(Alignment.CenterStart)) {
+                navigationIcon()
+            }
+        }
+
+        if (actions != null) {
+            Row(modifier = Modifier.align(Alignment.CenterEnd)) {
+                actions()
+            }
+        }
+    }
+}
+
 private fun Modifier.drawBottomBorder(color: Color): Modifier = this.then(
     Modifier.drawWithContent {
         drawContent()

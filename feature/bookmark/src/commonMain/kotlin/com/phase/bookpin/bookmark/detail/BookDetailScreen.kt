@@ -43,6 +43,7 @@ fun BookDetailScreen(
     bookId: Long,
     onNavigateBack: () -> Unit = {},
     onNavigateToAddBookmark: () -> Unit = {},
+    onNavigateToBookmarkDetail: (book: BookDetail, bookmark: Bookmark) -> Unit = { _, _ -> },
 ) {
     val viewModel: BookDetailViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -59,6 +60,9 @@ fun BookDetailScreen(
             }
             BookDetailSideEffect.NavigateBack -> onNavigateBack()
             BookDetailSideEffect.NavigateToAddBookmark -> onNavigateToAddBookmark()
+            is BookDetailSideEffect.NavigateToBookmarkDetail -> {
+                onNavigateToBookmarkDetail(state.book, it.bookmark)
+            }
         }
     }
 
@@ -122,7 +126,10 @@ fun BookDetailScreen(
 
                 if (state.selectedTab == BookmarkTab.TEXT) {
                     items(state.textBookmarks, key = { it.id }) { bookmark ->
-                        TextBookmarkItem(bookmark = bookmark)
+                        TextBookmarkItem(
+                            bookmark = bookmark,
+                            onClick = { viewModel.onBookmarkClick(bookmark) },
+                        )
                     }
                 } else {
                     items(state.photoBookmarks.chunked(2)) { rowItems ->
@@ -136,6 +143,7 @@ fun BookDetailScreen(
                             rowItems.forEach { bookmark ->
                                 PhotoBookmarkItem(
                                     bookmark = bookmark,
+                                    onClick = { viewModel.onBookmarkClick(bookmark) },
                                     modifier = Modifier.weight(1f),
                                 )
                             }
@@ -374,6 +382,7 @@ private fun TabItem(
 @Composable
 private fun TextBookmarkItem(
     bookmark: Bookmark,
+    onClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -386,7 +395,9 @@ private fun TextBookmarkItem(
             ).background(
                 color = BookPinTheme.colors.bgElevated,
                 shape = RoundedCornerShape(16.dp),
-            ).padding(16.dp),
+            ).clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(16.dp),
     ) {
         Text(
             text = stringResource(Res.string.page_format, bookmark.pageNumber),
@@ -419,6 +430,7 @@ private fun TextBookmarkItem(
 @Composable
 private fun PhotoBookmarkItem(
     bookmark: Bookmark,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -433,7 +445,8 @@ private fun PhotoBookmarkItem(
                 width = 0.5.dp,
                 color = BookPinTheme.colors.borderSubtle,
                 shape = RoundedCornerShape(16.dp),
-            ).clip(RoundedCornerShape(16.dp)),
+            ).clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick),
     ) {
         Box(
             modifier = Modifier
