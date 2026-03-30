@@ -52,4 +52,8 @@ class BookRepositoryImpl(
         )
         return dataSource.createBookmark(bookId, request).mapCatching { it.toBookmark() }
     }
+
+    override suspend fun completeBook(bookId: Long): Result<BookDetail> {
+        return dataSource.completeBook(bookId).mapCatching { it.toBookDetail() }
+    }
 }

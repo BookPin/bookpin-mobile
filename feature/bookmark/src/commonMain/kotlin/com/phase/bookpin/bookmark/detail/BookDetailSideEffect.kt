@@ -6,4 +6,5 @@ sealed interface BookDetailSideEffect {
     ) : BookDetailSideEffect
     data object NavigateBack : BookDetailSideEffect
     data object NavigateToAddBookmark : BookDetailSideEffect
+    data object NavigateToHome : BookDetailSideEffect
 }
