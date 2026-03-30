@@ -9,6 +9,10 @@ plugins {
 android {
     namespace = "com.phase.bookpin.androidapp"
 
+    defaultConfig {
+        applicationId = "com.phase.bookpin"
+    }
+
     buildFeatures {
         buildConfig = true
         compose = true
