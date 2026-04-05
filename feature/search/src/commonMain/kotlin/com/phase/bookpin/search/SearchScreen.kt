@@ -250,7 +250,7 @@ private fun SearchResultItem(
         ) {
             Text(
                 text = book.title,
-                style = BookPinTheme.typography.headlineMedium,
+                style = BookPinTheme.typography.titleMedium,
                 color = BookPinTheme.colors.textPrimary,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -260,7 +260,7 @@ private fun SearchResultItem(
 
             Text(
                 text = book.author,
-                style = BookPinTheme.typography.titleMedium,
+                style = BookPinTheme.typography.bodyMedium,
                 color = BookPinTheme.colors.textSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
