@@ -4,7 +4,7 @@ import com.phase.bookpin.data.api.book.BookDetailResponse
 import com.phase.bookpin.data.api.book.BookItemResponse
 import com.phase.bookpin.data.api.book.BookRemoteDataSource
 import com.phase.bookpin.data.api.book.BookmarkResponse
-import com.phase.bookpin.data.api.book.CreateBookmarkRequest
+import com.phase.bookpin.data.api.book.AddBookmarkRequest
 import com.phase.bookpin.data.api.book.LatestBookmarkResponse
 import com.phase.bookpin.data.remote.client.safeRequest
 import io.ktor.client.HttpClient
@@ -55,9 +55,9 @@ class BookRemoteDataSourceImpl(
             }
         }
 
-    override suspend fun createBookmark(
+    override suspend fun addBookmark(
         bookId: Long,
-        request: CreateBookmarkRequest,
+        request: AddBookmarkRequest,
     ): Result<BookmarkResponse> =
         httpClient.safeRequest {
             url {
@@ -72,6 +72,14 @@ class BookRemoteDataSourceImpl(
             url {
                 method = HttpMethod.Post
                 path("api/v1/books/$bookId/complete")
+            }
+        }
+
+    override suspend fun deleteBookmark(bookId: Long, bookmarkId: Long): Result<Unit> =
+        httpClient.safeRequest {
+            url {
+                method = HttpMethod.Delete
+                path("api/v1/books/$bookId/bookmarks/$bookmarkId")
             }
         }
 }

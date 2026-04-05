@@ -35,6 +35,20 @@ data class AddBookmarkRoute(
 ) : NavKey
 
 @Serializable
+data class BookmarkDetailRoute(
+    val bookId: Long,
+    val bookTitle: String,
+    val bookAuthor: String,
+    val bookImageUrl: String,
+    val bookmarkId: Long,
+    val pageNumber: Int,
+    val extractedText: String,
+    val note: String,
+    val imageUrl: String,
+    val createdAt: String,
+) : NavKey
+
+@Serializable
 data class BookPreviewRoute(
     val title: String = "",
     val author: String = "",
@@ -52,6 +66,7 @@ val navSerializersModule = SerializersModule {
         subclass(BookmarkTypeSelectRoute::class, BookmarkTypeSelectRoute.serializer())
         subclass(AddBookmarkRoute::class, AddBookmarkRoute.serializer())
         subclass(SettingsRoute::class, SettingsRoute.serializer())
+        subclass(BookmarkDetailRoute::class, BookmarkDetailRoute.serializer())
         subclass(BookPreviewRoute::class, BookPreviewRoute.serializer())
     }
 }

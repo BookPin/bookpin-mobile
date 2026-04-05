@@ -105,7 +105,7 @@ internal fun BookItemCard(
                     )
 
                     Text(
-                        text = "(${bookItem.progress}%)",
+                        text = "(${bookItem.progress.toInt()}%)",
                         style = BookPinTheme.typography.labelMedium,
                         color = BookPinTheme.colors.textAccent,
                     )

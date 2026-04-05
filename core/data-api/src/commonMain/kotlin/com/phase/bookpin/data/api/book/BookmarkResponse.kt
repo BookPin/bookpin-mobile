@@ -20,5 +20,6 @@ data class BookmarkResponse(
         extractedText = extractedText,
         note = note,
         imageUrl = imageUrl,
+        createdAt = createdAt,
     )
 }

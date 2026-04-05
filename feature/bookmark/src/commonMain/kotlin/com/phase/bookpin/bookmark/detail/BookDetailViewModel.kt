@@ -3,6 +3,7 @@ package com.phase.bookpin.bookmark.detail
 import androidx.lifecycle.viewModelScope
 import com.phase.bookpin.common.BaseViewModel
 import com.phase.bookpin.domain.book.BookRepository
+import com.phase.bookpin.model.book.Bookmark
 import kotlinx.coroutines.launch
 
 class BookDetailViewModel(
@@ -23,7 +24,7 @@ class BookDetailViewModel(
             bookRepository
                 .getBookDetail(bookId)
                 .onSuccess { book ->
-                    reduce { copy(book = book, isLoading = false, isCompleted = book.progress >= 100.0) }
+                    reduce { copy(book = book, isLoading = false, isCompleted = book.isCompleted) }
                 }.onFailure { error ->
                     reduce { copy(isLoading = false) }
                     postSideEffect(BookDetailSideEffect.ShowSnackbar(error.message ?: "오류가 발생했습니다."))
@@ -83,5 +84,9 @@ class BookDetailViewModel(
 
     fun onAddBookmarkClick() {
         postSideEffect(BookDetailSideEffect.NavigateToAddBookmark)
+    }
+
+    fun onBookmarkClick(bookmark: Bookmark) {
+        postSideEffect(BookDetailSideEffect.NavigateToBookmarkDetail(bookmark))
     }
 }

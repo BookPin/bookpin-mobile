@@ -57,7 +57,7 @@ class BookPreviewViewModel(
                     title = state.title,
                     author = state.author,
                     imageUrl = state.imageUrl,
-                    totalPage = state.totalPage.toInt(),
+                    totalPage = state.totalPage.toIntOrNull() ?: return@launch,
                 ).onSuccess {
                     postSideEffect(BookPreviewSideEffect.NavigateToHome)
                 }.onFailure { error ->
