@@ -28,6 +28,7 @@ import coil3.compose.AsyncImage
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.designsystem.component.BPCloseButton
 import com.phase.bookpin.designsystem.component.BPLoadingScreen
 import com.phase.bookpin.designsystem.component.BPTextArea
 import com.phase.bookpin.designsystem.component.BPTopBar
@@ -93,7 +94,8 @@ fun AddBookmarkScreen(
         ) {
             BPTopBar(
                 title = stringResource(Res.string.bookmark_add_title),
-                onClose = viewModel::onCloseClick,
+                actions = { BPCloseButton(onClick = viewModel::onCloseClick) },
+                showBottomBorder = true,
             )
 
             Column(

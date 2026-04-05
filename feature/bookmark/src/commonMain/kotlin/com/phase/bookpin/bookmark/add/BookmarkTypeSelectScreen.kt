@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import bookpin.bookmark.generated.resources.*
 import com.phase.bookpin.bookmark.component.BookmarkTypeOptionCard
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.designsystem.component.BPCloseButton
 import com.phase.bookpin.designsystem.component.BPTopBar
 import com.phase.bookpin.model.bookmark.BookmarkType
 import org.jetbrains.compose.resources.painterResource
@@ -29,7 +30,8 @@ fun BookmarkTypeSelectScreen(
     ) {
         BPTopBar(
             title = stringResource(Res.string.bookmark_add_title),
-            onClose = onNavigateBack,
+            actions = { BPCloseButton(onClick = onNavigateBack) },
+            showBottomBorder = true,
         )
 
         Column(
