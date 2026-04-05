@@ -41,6 +41,7 @@ fun AddBookmarkScreen(
     bookId: Long,
     bookmarkType: BookmarkType,
     onNavigateBack: () -> Unit,
+    onPopBackToBookDetail: () -> Unit,
 ) {
     val viewModel: AddBookmarkViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -81,7 +82,7 @@ fun AddBookmarkScreen(
                 snackbarHost.showSnackbar(it.message)
             }
             AddBookmarkSideEffect.NavigateBack -> onNavigateBack()
-            AddBookmarkSideEffect.BookmarkSaved -> onNavigateBack()
+            AddBookmarkSideEffect.BookmarkSaved -> onPopBackToBookDetail()
         }
     }
 
