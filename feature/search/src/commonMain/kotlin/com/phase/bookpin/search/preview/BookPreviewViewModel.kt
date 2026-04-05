@@ -21,7 +21,7 @@ class BookPreviewViewModel(
             copy(
                 title = title,
                 author = author,
-                totalPage = totalPage,
+                totalPage = if (totalPage > 0) totalPage.toString() else "",
                 imageUrl = imageUrl,
                 isbn = isbn,
             )
@@ -37,8 +37,7 @@ class BookPreviewViewModel(
     }
 
     fun onTotalPageChange(totalPage: String) {
-        val page = totalPage.toIntOrNull() ?: 0
-        reduce { copy(totalPage = page) }
+        reduce { copy(totalPage = totalPage) }
     }
 
     fun onBackClick() {
@@ -58,7 +57,7 @@ class BookPreviewViewModel(
                     title = state.title,
                     author = state.author,
                     imageUrl = state.imageUrl,
-                    totalPage = state.totalPage,
+                    totalPage = state.totalPage.toInt(),
                 ).onSuccess {
                     postSideEffect(BookPreviewSideEffect.NavigateToHome)
                 }.onFailure { error ->

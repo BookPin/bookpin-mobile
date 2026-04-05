@@ -23,7 +23,7 @@ class BookDetailViewModel(
             bookRepository
                 .getBookDetail(bookId)
                 .onSuccess { book ->
-                    reduce { copy(book = book, isLoading = false) }
+                    reduce { copy(book = book, isLoading = false, isCompleted = book.progress >= 100.0) }
                 }.onFailure { error ->
                     reduce { copy(isLoading = false) }
                     postSideEffect(BookDetailSideEffect.ShowSnackbar(error.message ?: "오류가 발생했습니다."))
@@ -71,7 +71,7 @@ class BookDetailViewModel(
             bookRepository
                 .completeBook(bookId)
                 .onSuccess {
-                    reduce { copy(isLoading = false, book = book.copy(isCompleted = true)) }
+                    reduce { copy(isLoading = false, isCompleted = true) }
                     postSideEffect(BookDetailSideEffect.ShowSnackbar("완독으로 표시되었습니다"))
                     postSideEffect(BookDetailSideEffect.NavigateToHome)
                 }.onFailure { error ->

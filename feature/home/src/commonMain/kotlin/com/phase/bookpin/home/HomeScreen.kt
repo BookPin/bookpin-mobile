@@ -55,7 +55,7 @@ fun HomeScreen(
             }
             HomeSideEffect.NavigateToSettings -> onNavigateToSettings()
             is HomeSideEffect.NavigateToBookDetail -> onNavigateToBookDetail(it.bookId)
-            is HomeSideEffect.NavigateToAddBookmark -> {}
+            is HomeSideEffect.NavigateToAddBookmark -> onNavigateToBookDetail(it.bookId)
             HomeSideEffect.NavigateToAddBook -> onNavigateToSearch()
         }
     }

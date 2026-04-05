@@ -66,18 +66,20 @@ fun BookDetailScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = viewModel::onAddBookmarkClick,
-                containerColor = BookPinTheme.colors.buttonPrimary,
-                contentColor = BookPinTheme.colors.iconOnAccent,
-                shape = CircleShape,
-                modifier = Modifier.size(56.dp),
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_add),
-                    contentDescription = stringResource(Res.string.cd_add_bookmark),
-                    modifier = Modifier.size(24.dp),
-                )
+            if (!state.isCompleted) {
+                FloatingActionButton(
+                    onClick = viewModel::onAddBookmarkClick,
+                    containerColor = BookPinTheme.colors.buttonPrimary,
+                    contentColor = BookPinTheme.colors.iconOnAccent,
+                    shape = CircleShape,
+                    modifier = Modifier.size(56.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(Res.drawable.ic_add),
+                        contentDescription = stringResource(Res.string.cd_add_bookmark),
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
             }
         },
     ) { paddingValues ->
@@ -109,6 +111,7 @@ fun BookDetailScreen(
                         currentPage = state.book.currentPage,
                         totalPages = state.book.totalPage,
                         progressPercent = state.book.progress.toInt(),
+                        isCompleted = state.isCompleted,
                         onMarkAsCompleteClick = viewModel::onMarkAsCompleteClick,
                     )
                 }
@@ -210,6 +213,7 @@ private fun BookDetailStats(
     currentPage: Int,
     totalPages: Int,
     progressPercent: Int,
+    isCompleted: Boolean,
     onMarkAsCompleteClick: () -> Unit,
 ) {
     Box(
@@ -293,7 +297,11 @@ private fun BookDetailStats(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = stringResource(Res.string.mark_as_complete),
+                    text = if (isCompleted) {
+                        stringResource(Res.string.restart_reading)
+                    } else {
+                        stringResource(Res.string.mark_as_complete)
+                    },
                     style = BookPinTheme.typography.titleSmall,
                     color = BookPinTheme.colors.textSecondary,
                 )

@@ -115,7 +115,7 @@ fun BookPreviewScreen(
 
             FormField(
                 label = stringResource(Res.string.book_preview_label_total_page),
-                value = state.totalPage.toString(),
+                value = state.totalPage,
                 onValueChange = viewModel::onTotalPageChange,
                 placeholder = stringResource(Res.string.book_preview_placeholder_total_page),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
