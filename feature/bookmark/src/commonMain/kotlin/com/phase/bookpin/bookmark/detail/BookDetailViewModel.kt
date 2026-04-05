@@ -3,6 +3,7 @@ package com.phase.bookpin.bookmark.detail
 import androidx.lifecycle.viewModelScope
 import com.phase.bookpin.common.BaseViewModel
 import com.phase.bookpin.domain.book.BookRepository
+import com.phase.bookpin.model.book.Bookmark
 import kotlinx.coroutines.launch
 
 class BookDetailViewModel(
@@ -83,5 +84,9 @@ class BookDetailViewModel(
 
     fun onAddBookmarkClick() {
         postSideEffect(BookDetailSideEffect.NavigateToAddBookmark)
+    }
+
+    fun onBookmarkClick(bookmark: Bookmark) {
+        postSideEffect(BookDetailSideEffect.NavigateToBookmarkDetail(bookmark))
     }
 }

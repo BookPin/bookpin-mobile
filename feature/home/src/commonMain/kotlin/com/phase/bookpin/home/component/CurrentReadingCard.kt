@@ -11,28 +11,22 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import bookpin.home.generated.resources.Res
-import bookpin.home.generated.resources.bookmark
-import bookpin.home.generated.resources.cd_bookmark
 import bookpin.home.generated.resources.leave_bookmark
 import coil3.compose.AsyncImage
 import com.phase.bookpin.designsystem.BookPinTheme
 import com.phase.bookpin.model.book.BookItem
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -83,44 +77,11 @@ internal fun CurrentlyReadingCard(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                ) {
-                    Text(
-                        text = bookItem.author,
-                        style = BookPinTheme.typography.titleSmall,
-                        color = BookPinTheme.colors.textSecondary,
-                    )
-
-                    Box(
-                        modifier = Modifier
-                            .size(4.dp)
-                            .background(
-                                color = BookPinTheme.colors.borderDefault,
-                                shape = CircleShape,
-                            ),
-                    )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        modifier = Modifier.padding(start = 4.dp),
-                    ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.bookmark),
-                            contentDescription = stringResource(Res.string.cd_bookmark),
-                            modifier = Modifier.size(14.dp),
-                            tint = Color.Unspecified,
-                        )
-
-                        Text(
-                            text = "${bookItem.bookmarkCount}",
-                            style = BookPinTheme.typography.labelMedium,
-                            color = BookPinTheme.colors.textPrimary.copy(alpha = 0.8f),
-                        )
-                    }
-                }
+                Text(
+                    text = bookItem.author,
+                    style = BookPinTheme.typography.titleSmall,
+                    color = BookPinTheme.colors.textSecondary,
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 

@@ -7,4 +7,5 @@ data class Bookmark(
     val extractedText: String,
     val note: String,
     val imageUrl: String,
+    val createdAt: String,
 )

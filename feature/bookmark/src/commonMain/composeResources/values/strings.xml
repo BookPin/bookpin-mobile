@@ -25,9 +25,18 @@
     <string name="bookmark_memo_placeholder">생각을 기록하세요 (선택사항)</string>
     <string name="bookmark_save">책갈피 저장</string>
 
+    <!-- Bookmark Detail -->
+    <string name="bookmark_detail_content">책 내용</string>
+    <string name="bookmark_detail_memo">개인 메모</string>
+    <string name="bookmark_delete_title">책갈피 삭제</string>
+    <string name="bookmark_delete_description">이 책갈피를 삭제하시겠습니까?</string>
+    <string name="bookmark_delete_cancel">취소</string>
+    <string name="bookmark_delete_confirm">삭제</string>
+
     <!-- Content Descriptions -->
     <string name="cd_back">뒤로가기</string>
     <string name="cd_add_bookmark">북마크 추가</string>
     <string name="cd_text_bookmark">텍스트 북마크</string>
     <string name="cd_photo_bookmark">사진 북마크</string>
+    <string name="cd_delete_bookmark">책갈피 삭제</string>
 </resources>

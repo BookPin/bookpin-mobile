@@ -8,6 +8,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.phase.bookpin.bookmark.add.AddBookmarkScreen
 import com.phase.bookpin.bookmark.add.BookmarkTypeSelectScreen
 import com.phase.bookpin.bookmark.detail.BookDetailScreen
+import com.phase.bookpin.bookmark.detail.BookmarkDetailScreen
 import com.phase.bookpin.home.HomeScreen
 import com.phase.bookpin.model.bookmark.BookmarkType
 import com.phase.bookpin.search.SearchScreen
@@ -23,9 +24,11 @@ fun BookPinNavHost(
     onNavigateToBookDetail: (Long) -> Unit,
     onNavigateToBookmarkTypeSelect: (Long) -> Unit,
     onNavigateToAddBookmark: (Long, BookmarkType) -> Unit,
+    onNavigateToBookmarkDetail: (BookmarkDetailRoute) -> Unit = {},
     onNavigateToBookPreview: (BookPreviewRoute) -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateBackToBookDetail: () -> Unit,
     onLogout: () -> Unit,
 ) {
     NavDisplay(
@@ -82,6 +85,38 @@ fun BookPinNavHost(
                     onNavigateBack = onNavigateBack,
                     onNavigateToAddBookmark = { onNavigateToBookmarkTypeSelect(route.bookId) },
                     onNavigateToHome = onNavigateToHome,
+                    onNavigateToBookmarkDetail = { book, bookmark ->
+                        onNavigateToBookmarkDetail(
+                            BookmarkDetailRoute(
+                                bookId = book.id,
+                                bookTitle = book.title,
+                                bookAuthor = book.author,
+                                bookImageUrl = book.imageUrl,
+                                bookmarkId = bookmark.id,
+                                pageNumber = bookmark.pageNumber,
+                                extractedText = bookmark.extractedText,
+                                note = bookmark.note,
+                                imageUrl = bookmark.imageUrl,
+                                createdAt = bookmark.createdAt,
+                            ),
+                        )
+                    },
+                )
+            }
+
+            entry<BookmarkDetailRoute> { route ->
+                BookmarkDetailScreen(
+                    bookId = route.bookId,
+                    bookmarkId = route.bookmarkId,
+                    bookTitle = route.bookTitle,
+                    bookAuthor = route.bookAuthor,
+                    bookImageUrl = route.bookImageUrl,
+                    pageNumber = route.pageNumber,
+                    extractedText = route.extractedText,
+                    note = route.note,
+                    imageUrl = route.imageUrl,
+                    createdAt = route.createdAt,
+                    onNavigateBack = onNavigateBack,
                 )
             }
 
@@ -99,6 +134,7 @@ fun BookPinNavHost(
                     bookId = route.bookId,
                     bookmarkType = route.bookmarkType,
                     onNavigateBack = onNavigateBack,
+                    onBookmarkSaved = onNavigateBackToBookDetail,
                 )
             }
 
