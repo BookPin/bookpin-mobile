@@ -5,6 +5,7 @@ sealed interface SettingsSideEffect {
         val message: String,
     ) : SettingsSideEffect
     data object NavigateBack : SettingsSideEffect
+    data object OpenContact : SettingsSideEffect
     data object Logout : SettingsSideEffect
     data object DeleteAccount : SettingsSideEffect
 }
