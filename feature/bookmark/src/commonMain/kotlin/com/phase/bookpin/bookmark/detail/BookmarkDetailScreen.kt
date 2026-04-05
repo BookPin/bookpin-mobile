@@ -11,6 +11,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,14 +25,20 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import bookpin.bookmark.generated.resources.*
 import coil3.compose.AsyncImage
+import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.designsystem.component.BPConfirmDialog
+import com.phase.bookpin.designsystem.component.BPLoadingScreen
 import com.phase.bookpin.designsystem.component.BPTopBar
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BookmarkDetailScreen(
+    bookId: Long,
+    bookmarkId: Long,
     bookTitle: String,
     bookAuthor: String,
     bookImageUrl: String,
@@ -40,9 +48,26 @@ fun BookmarkDetailScreen(
     imageUrl: String,
     createdAt: String,
     onNavigateBack: () -> Unit,
+    viewModel: BookmarkDetailViewModel = koinViewModel(),
 ) {
+    val state by viewModel.uiState.collectAsState()
     val snackbarHost = LocalSnackbarHost.current
-    val deletePreparingMessage = stringResource(Res.string.bookmark_detail_delete_preparing)
+
+    viewModel.sideEffect.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is BookmarkDetailSideEffect.ShowSnackbar -> {
+                snackbarHost.showSnackbar(sideEffect.message)
+            }
+            is BookmarkDetailSideEffect.NavigateBack -> {
+                onNavigateBack()
+            }
+        }
+    }
+
+    if (state.isLoading) {
+        BPLoadingScreen()
+        return
+    }
 
     Column(
         modifier = Modifier
@@ -65,7 +90,7 @@ fun BookmarkDetailScreen(
             },
             actions = {
                 IconButton(
-                    onClick = { snackbarHost.showSnackbar(deletePreparingMessage) },
+                    onClick = { viewModel.onDeleteClick() },
                     modifier = Modifier.size(36.dp),
                 ) {
                     Icon(
@@ -77,6 +102,18 @@ fun BookmarkDetailScreen(
                 }
             },
         )
+
+        if (state.showDeleteDialog) {
+            BPConfirmDialog(
+                title = stringResource(Res.string.bookmark_delete_title),
+                description = stringResource(Res.string.bookmark_delete_description),
+                cancelText = stringResource(Res.string.bookmark_delete_cancel),
+                confirmText = stringResource(Res.string.bookmark_delete_confirm),
+                confirmButtonColor = BookPinTheme.colors.error,
+                onDismiss = viewModel::onDeleteDismiss,
+                onConfirm = { viewModel.onDeleteConfirm(bookId, bookmarkId) },
+            )
+        }
 
         Column(
             modifier = Modifier

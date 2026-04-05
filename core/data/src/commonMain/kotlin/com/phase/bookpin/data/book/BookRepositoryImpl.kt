@@ -56,4 +56,8 @@ class BookRepositoryImpl(
     override suspend fun completeBook(bookId: Long): Result<BookDetail> {
         return dataSource.completeBook(bookId).mapCatching { it.toBookDetail() }
     }
+
+    override suspend fun deleteBookmark(bookId: Long, bookmarkId: Long): Result<Unit> {
+        return dataSource.deleteBookmark(bookId, bookmarkId)
+    }
 }

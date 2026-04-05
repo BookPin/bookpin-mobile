@@ -87,6 +87,7 @@ fun BookPinNavHost(
                     onNavigateToBookmarkDetail = { book, bookmark ->
                         onNavigateToBookmarkDetail(
                             BookmarkDetailRoute(
+                                bookId = book.id,
                                 bookTitle = book.title,
                                 bookAuthor = book.author,
                                 bookImageUrl = book.imageUrl,
@@ -104,6 +105,8 @@ fun BookPinNavHost(
 
             entry<BookmarkDetailRoute> { route ->
                 BookmarkDetailScreen(
+                    bookId = route.bookId,
+                    bookmarkId = route.bookmarkId,
                     bookTitle = route.bookTitle,
                     bookAuthor = route.bookAuthor,
                     bookImageUrl = route.bookImageUrl,

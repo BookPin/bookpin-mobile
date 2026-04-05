@@ -74,4 +74,12 @@ class BookRemoteDataSourceImpl(
                 path("api/v1/books/$bookId/complete")
             }
         }
+
+    override suspend fun deleteBookmark(bookId: Long, bookmarkId: Long): Result<Unit> =
+        httpClient.safeRequest {
+            url {
+                method = HttpMethod.Delete
+                path("api/v1/books/$bookId/bookmarks/$bookmarkId")
+            }
+        }
 }

@@ -36,6 +36,7 @@ data class AddBookmarkRoute(
 
 @Serializable
 data class BookmarkDetailRoute(
+    val bookId: Long,
     val bookTitle: String,
     val bookAuthor: String,
     val bookImageUrl: String,

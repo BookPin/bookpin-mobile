@@ -25,4 +25,6 @@ interface BookRepository {
     ): Result<Bookmark>
 
     suspend fun completeBook(bookId: Long): Result<BookDetail>
+
+    suspend fun deleteBookmark(bookId: Long, bookmarkId: Long): Result<Unit>
 }
