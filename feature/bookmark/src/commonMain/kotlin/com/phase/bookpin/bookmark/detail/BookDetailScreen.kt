@@ -301,17 +301,17 @@ private fun BookDetailStats(
                         color = BookPinTheme.colors.bgSurface,
                         shape = RoundedCornerShape(12.dp),
                     ).clip(RoundedCornerShape(12.dp))
-                    .clickable(onClick = onMarkAsCompleteClick),
+                    .clickable(enabled = !isCompleted, onClick = onMarkAsCompleteClick),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = if (isCompleted) {
-                        stringResource(Res.string.restart_reading)
-                    } else {
-                        stringResource(Res.string.mark_as_complete)
-                    },
+                    text = stringResource(Res.string.mark_as_complete),
                     style = BookPinTheme.typography.titleSmall,
-                    color = BookPinTheme.colors.textSecondary,
+                    color = if (isCompleted) {
+                        BookPinTheme.colors.textSecondary.copy(alpha = 0.4f)
+                    } else {
+                        BookPinTheme.colors.textSecondary
+                    },
                 )
             }
         }
