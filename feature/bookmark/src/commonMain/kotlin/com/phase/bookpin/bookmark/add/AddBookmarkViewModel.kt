@@ -58,7 +58,7 @@ class AddBookmarkViewModel(
                     imageRepository.uploadImage(bytes, extension).getOrThrow()
                 }
             } else {
-                Result.success("")
+                Result.success(null)
             }
 
             imageUrlResult.onFailure { error ->
@@ -74,7 +74,7 @@ class AddBookmarkViewModel(
             val imageUrl = imageUrlResult.getOrThrow()
 
             bookRepository
-                .createBookmark(
+                .addBookmark(
                     bookId = bookId,
                     pageNumber = pageNumber,
                     extractedText = state.extractedText,

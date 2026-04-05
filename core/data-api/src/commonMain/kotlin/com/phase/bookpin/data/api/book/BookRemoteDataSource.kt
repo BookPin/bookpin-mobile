@@ -11,7 +11,7 @@ interface BookRemoteDataSource {
 
     suspend fun getPhotoBookmarks(bookId: Long): Result<List<BookmarkResponse>>
 
-    suspend fun createBookmark(bookId: Long, request: CreateBookmarkRequest): Result<BookmarkResponse>
+    suspend fun addBookmark(bookId: Long, request: AddBookmarkRequest): Result<BookmarkResponse>
 
     suspend fun completeBook(bookId: Long): Result<BookDetailResponse>
 

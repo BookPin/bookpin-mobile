@@ -16,12 +16,12 @@ interface BookRepository {
 
     suspend fun getPhotoBookmarks(bookId: Long): Result<List<Bookmark>>
 
-    suspend fun createBookmark(
+    suspend fun addBookmark(
         bookId: Long,
         pageNumber: Int,
         extractedText: String,
         note: String,
-        imageUrl: String,
+        imageUrl: String?,
     ): Result<Bookmark>
 
     suspend fun completeBook(bookId: Long): Result<BookDetail>
