@@ -11,4 +11,5 @@ sealed interface BookDetailSideEffect {
     data class NavigateToBookmarkDetail(
         val bookmark: Bookmark,
     ) : BookDetailSideEffect
+    data object NavigateToHome : BookDetailSideEffect
 }

@@ -83,6 +83,7 @@ fun BookPinNavHost(
                     bookId = route.bookId,
                     onNavigateBack = onNavigateBack,
                     onNavigateToAddBookmark = { onNavigateToBookmarkTypeSelect(route.bookId) },
+                    onNavigateToHome = onNavigateToHome,
                     onNavigateToBookmarkDetail = { book, bookmark ->
                         onNavigateToBookmarkDetail(
                             BookmarkDetailRoute(

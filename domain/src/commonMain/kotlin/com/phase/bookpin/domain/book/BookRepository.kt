@@ -23,4 +23,6 @@ interface BookRepository {
         note: String,
         imageUrl: String,
     ): Result<Bookmark>
+
+    suspend fun completeBook(bookId: Long): Result<BookDetail>
 }

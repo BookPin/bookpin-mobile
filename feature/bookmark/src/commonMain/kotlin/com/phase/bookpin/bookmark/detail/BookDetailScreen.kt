@@ -44,6 +44,7 @@ fun BookDetailScreen(
     onNavigateBack: () -> Unit = {},
     onNavigateToAddBookmark: () -> Unit = {},
     onNavigateToBookmarkDetail: (book: BookDetail, bookmark: Bookmark) -> Unit = { _, _ -> },
+    onNavigateToHome: () -> Unit = {},
 ) {
     val viewModel: BookDetailViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -63,6 +64,7 @@ fun BookDetailScreen(
             is BookDetailSideEffect.NavigateToBookmarkDetail -> {
                 onNavigateToBookmarkDetail(state.book, it.bookmark)
             }
+            BookDetailSideEffect.NavigateToHome -> onNavigateToHome()
         }
     }
 
