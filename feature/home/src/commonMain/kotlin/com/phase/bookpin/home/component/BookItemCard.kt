@@ -54,14 +54,25 @@ internal fun BookItemCard(
                 .height(128.dp),
             contentAlignment = Alignment.Center,
         ) {
-            AsyncImage(
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(112.dp)
-                    .shadow(elevation = 4.dp),
-                model = bookItem.imageUrl,
-                contentDescription = null,
-            )
+            if (bookItem.imageUrl.isNotBlank()) {
+                AsyncImage(
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(112.dp)
+                        .shadow(elevation = 4.dp)
+                        .background(color = BookPinTheme.colors.buttonPrimary),
+                    model = bookItem.imageUrl,
+                    contentDescription = null,
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(112.dp)
+                        .shadow(elevation = 4.dp)
+                        .background(color = BookPinTheme.colors.buttonPrimary),
+                )
+            }
 
             if (bookItem.isCompleted) {
                 CompletedBadge(modifier = Modifier.align(Alignment.TopEnd))

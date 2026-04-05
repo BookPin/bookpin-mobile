@@ -52,17 +52,21 @@ internal fun CurrentlyReadingCard(
         ) {
             Box(
                 modifier = Modifier
+                    .width(100.dp)
                     .height(144.dp)
-                    .shadow(elevation = 4.dp),
+                    .shadow(elevation = 4.dp)
+                    .background(color = BookPinTheme.colors.buttonPrimary),
                 contentAlignment = Alignment.Center,
             ) {
-                AsyncImage(
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(144.dp),
-                    model = bookItem.imageUrl,
-                    contentDescription = null,
-                )
+                if (bookItem.imageUrl.isNotBlank()) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .width(100.dp)
+                            .height(144.dp),
+                        model = bookItem.imageUrl,
+                        contentDescription = null,
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.width(20.dp))
