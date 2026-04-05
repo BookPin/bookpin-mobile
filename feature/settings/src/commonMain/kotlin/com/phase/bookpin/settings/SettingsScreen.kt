@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -43,11 +44,13 @@ fun SettingsScreen(
     val viewModel: SettingsViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHost = LocalSnackbarHost.current
+    val uriHandler = LocalUriHandler.current
 
     viewModel.sideEffect.collectSideEffect {
         when (it) {
             is SettingsSideEffect.ShowSnackbar -> snackbarHost.showSnackbar(it.message)
             SettingsSideEffect.NavigateBack -> onNavigateBack()
+            SettingsSideEffect.OpenContact -> uriHandler.openUri(KAKAO_CHANNEL_URL)
             SettingsSideEffect.Logout -> onLogout()
             SettingsSideEffect.DeleteAccount -> onLogout()
         }
@@ -399,3 +402,5 @@ private fun DeleteAccountItem(
         )
     }
 }
+
+private const val KAKAO_CHANNEL_URL = "http://pf.kakao.com/_UjUuX"

@@ -51,7 +51,7 @@ class SettingsViewModel(
     }
 
     fun onContactClick() {
-        postSideEffect(SettingsSideEffect.ShowSnackbar("문의하기 기능은 준비 중입니다."))
+        postSideEffect(SettingsSideEffect.OpenContact)
     }
 
     fun onLogoutClick() {
