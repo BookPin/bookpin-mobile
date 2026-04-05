@@ -8,5 +8,8 @@ data class BookItem(
     val totalPage: Int,
     val currentPage: Int,
     val progress: Double,
-    val bookmarkCount: Int
-)
+    val bookmarkCount: Int,
+) {
+    val isCompleted: Boolean
+        get() = progress >= 100.0
+}
