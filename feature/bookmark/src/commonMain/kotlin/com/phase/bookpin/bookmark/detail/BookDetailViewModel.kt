@@ -3,6 +3,7 @@ package com.phase.bookpin.bookmark.detail
 import androidx.lifecycle.viewModelScope
 import com.phase.bookpin.common.BaseViewModel
 import com.phase.bookpin.domain.book.BookRepository
+import com.phase.bookpin.model.book.Bookmark
 import kotlinx.coroutines.launch
 
 class BookDetailViewModel(
@@ -71,7 +72,7 @@ class BookDetailViewModel(
             bookRepository
                 .completeBook(bookId)
                 .onSuccess {
-                    reduce { copy(isLoading = false, book = book.copy(isCompleted = true)) }
+                    reduce { copy(isLoading = false) }
                     postSideEffect(BookDetailSideEffect.ShowSnackbar("완독으로 표시되었습니다"))
                     postSideEffect(BookDetailSideEffect.NavigateToHome)
                 }.onFailure { error ->
@@ -83,5 +84,9 @@ class BookDetailViewModel(
 
     fun onAddBookmarkClick() {
         postSideEffect(BookDetailSideEffect.NavigateToAddBookmark)
+    }
+
+    fun onBookmarkClick(bookmark: Bookmark) {
+        postSideEffect(BookDetailSideEffect.NavigateToBookmarkDetail(bookmark))
     }
 }

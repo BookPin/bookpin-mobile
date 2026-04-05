@@ -54,11 +54,6 @@ class SettingsViewModel(
         postSideEffect(SettingsSideEffect.ShowSnackbar("문의하기 기능은 준비 중입니다."))
     }
 
-    fun onViewAllBookmarksClick() {
-        // TODO: Navigate to all bookmarks screen when available
-        postSideEffect(SettingsSideEffect.NavigateToAllBookmarks)
-    }
-
     fun onLogoutClick() {
         reduce { copy(showLogoutDialog = true) }
     }

@@ -24,8 +24,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import bookpin.home.generated.resources.Res
+import bookpin.home.generated.resources.all_pages_read
 import bookpin.home.generated.resources.bookmark
 import bookpin.home.generated.resources.cd_bookmark
+import bookpin.home.generated.resources.completed_badge
 import coil3.compose.AsyncImage
 import com.phase.bookpin.designsystem.BookPinTheme
 import com.phase.bookpin.model.book.BookItem
@@ -52,14 +54,29 @@ internal fun BookItemCard(
                 .height(128.dp),
             contentAlignment = Alignment.Center,
         ) {
-            AsyncImage(
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(112.dp)
-                    .shadow(elevation = 4.dp),
-                model = bookItem.imageUrl,
-                contentDescription = null,
-            )
+            if (bookItem.imageUrl.isNotBlank()) {
+                AsyncImage(
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(112.dp)
+                        .shadow(elevation = 4.dp)
+                        .background(color = BookPinTheme.colors.buttonPrimary),
+                    model = bookItem.imageUrl,
+                    contentDescription = null,
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(112.dp)
+                        .shadow(elevation = 4.dp)
+                        .background(color = BookPinTheme.colors.buttonPrimary),
+                )
+            }
+
+            if (bookItem.isCompleted) {
+                CompletedBadge(modifier = Modifier.align(Alignment.TopEnd))
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -84,18 +101,26 @@ internal fun BookItemCard(
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            if (bookItem.isCompleted) {
                 Text(
-                    text = "${bookItem.currentPage} / ${bookItem.totalPage} ",
-                    style = BookPinTheme.typography.labelSmall,
-                    color = BookPinTheme.colors.textSecondary,
-                )
-
-                Text(
-                    text = "(${bookItem.progress}%)",
+                    text = stringResource(Res.string.all_pages_read, bookItem.totalPage),
                     style = BookPinTheme.typography.labelMedium,
-                    color = BookPinTheme.colors.textAccent,
+                    color = BookPinTheme.colors.textTertiary,
                 )
+            } else {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "${bookItem.currentPage} / ${bookItem.totalPage} ",
+                        style = BookPinTheme.typography.labelSmall,
+                        color = BookPinTheme.colors.textSecondary,
+                    )
+
+                    Text(
+                        text = "(${bookItem.progress.toInt()}%)",
+                        style = BookPinTheme.typography.labelMedium,
+                        color = BookPinTheme.colors.textAccent,
+                    )
+                }
             }
 
             Row(
@@ -140,4 +165,17 @@ internal fun BookItemCard(
             )
         }
     }
+}
+
+@Composable
+private fun CompletedBadge(modifier: Modifier = Modifier) {
+    Text(
+        text = stringResource(Res.string.completed_badge),
+        style = BookPinTheme.typography.labelSmall,
+        color = BookPinTheme.colors.textOnAccent,
+        modifier = modifier
+            .shadow(elevation = 2.dp, shape = CircleShape)
+            .background(color = BookPinTheme.colors.textPrimary, shape = CircleShape)
+            .padding(horizontal = 8.dp, vertical = 2.dp),
+    )
 }

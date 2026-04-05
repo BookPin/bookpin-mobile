@@ -50,9 +50,6 @@ fun SettingsScreen(
             SettingsSideEffect.NavigateBack -> onNavigateBack()
             SettingsSideEffect.Logout -> onLogout()
             SettingsSideEffect.DeleteAccount -> onLogout()
-            SettingsSideEffect.NavigateToAllBookmarks -> {
-                // TODO: Navigate to all bookmarks screen
-            }
         }
     }
 
@@ -81,7 +78,6 @@ fun SettingsScreen(
             state.latestBookmark?.let { bookmark ->
                 LatestBookmarkSection(
                     bookmark = bookmark,
-                    onViewAllClick = viewModel::onViewAllBookmarksClick,
                 )
             }
 
@@ -217,7 +213,6 @@ private fun ProfileCard(
 @Composable
 private fun LatestBookmarkSection(
     bookmark: LatestBookmark,
-    onViewAllClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -228,35 +223,11 @@ private fun LatestBookmarkSection(
             ).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = stringResource(Res.string.achievements_title),
-                style = BookPinTheme.typography.bodyMedium,
-                color = BookPinTheme.colors.textSecondary,
-            )
-
-            Row(
-                modifier = Modifier.clickable(onClick = onViewAllClick),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                Text(
-                    text = stringResource(Res.string.view_all),
-                    style = BookPinTheme.typography.bodySmall,
-                    color = BookPinTheme.colors.textAccentMuted,
-                )
-                Icon(
-                    painter = painterResource(Res.drawable.ic_chevron_right),
-                    contentDescription = null,
-                    modifier = Modifier.size(14.dp),
-                    tint = BookPinTheme.colors.textAccentMuted,
-                )
-            }
-        }
+        Text(
+            text = stringResource(Res.string.achievements_title),
+            style = BookPinTheme.typography.bodyMedium,
+            color = BookPinTheme.colors.textSecondary,
+        )
 
         LatestBookmarkCard(bookmark = bookmark)
     }
@@ -310,13 +281,6 @@ private fun LatestBookmarkCard(
                 overflow = TextOverflow.Ellipsis,
             )
         }
-
-        Icon(
-            painter = painterResource(Res.drawable.ic_chevron_right),
-            contentDescription = null,
-            modifier = Modifier.size(16.dp),
-            tint = BookPinTheme.colors.iconDefault,
-        )
     }
 }
 

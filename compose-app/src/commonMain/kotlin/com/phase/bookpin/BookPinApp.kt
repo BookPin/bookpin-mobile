@@ -92,6 +92,9 @@ fun BookPinApp(
                     onNavigateToBookDetail = { bookId ->
                         backStack.add(BookDetailRoute(bookId))
                     },
+                    onNavigateToBookmarkDetail = { route ->
+                        backStack.add(route)
+                    },
                     onNavigateToBookmarkTypeSelect = { bookId ->
                         backStack.add(BookmarkTypeSelectRoute(bookId))
                     },

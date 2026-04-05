@@ -13,6 +13,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ import coil3.compose.AsyncImage
 import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.designsystem.component.BPCloseButton
 import com.phase.bookpin.designsystem.component.BPLoadingScreen
 import com.phase.bookpin.designsystem.component.BPTextArea
 import com.phase.bookpin.designsystem.component.BPTopBar
@@ -72,8 +74,12 @@ fun AddBookmarkScreen(
     }
 
     LaunchedEffect(bookId, bookmarkType) {
-        viewModel.init(bookId, bookmarkType)
+        viewModel.onScreenEnter(bookId, bookmarkType)
         launchPicker(bookmarkType)
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { viewModel.onScreenExit() }
     }
 
     viewModel.sideEffect.collectSideEffect {
@@ -94,7 +100,8 @@ fun AddBookmarkScreen(
         ) {
             BPTopBar(
                 title = stringResource(Res.string.bookmark_add_title),
-                onClose = viewModel::onCloseClick,
+                actions = { BPCloseButton(onClick = viewModel::onCloseClick) },
+                showBottomBorder = true,
             )
 
             Column(

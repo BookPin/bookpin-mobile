@@ -1,7 +1,7 @@
 package com.phase.bookpin.data.book
 
 import com.phase.bookpin.data.api.book.BookRemoteDataSource
-import com.phase.bookpin.data.api.book.CreateBookmarkRequest
+import com.phase.bookpin.data.api.book.AddBookmarkRequest
 import com.phase.bookpin.domain.book.BookRepository
 import com.phase.bookpin.model.book.BookDetail
 import com.phase.bookpin.model.book.BookItem
@@ -37,23 +37,27 @@ class BookRepositoryImpl(
         }
     }
 
-    override suspend fun createBookmark(
+    override suspend fun addBookmark(
         bookId: Long,
         pageNumber: Int,
         extractedText: String,
         note: String,
-        imageUrl: String,
+        imageUrl: String?,
     ): Result<Bookmark> {
-        val request = CreateBookmarkRequest(
+        val request = AddBookmarkRequest(
             pageNumber = pageNumber,
             extractedText = extractedText,
             note = note,
             imageUrl = imageUrl,
         )
-        return dataSource.createBookmark(bookId, request).mapCatching { it.toBookmark() }
+        return dataSource.addBookmark(bookId, request).mapCatching { it.toBookmark() }
     }
 
     override suspend fun completeBook(bookId: Long): Result<BookDetail> {
         return dataSource.completeBook(bookId).mapCatching { it.toBookDetail() }
+    }
+
+    override suspend fun deleteBookmark(bookId: Long, bookmarkId: Long): Result<Unit> {
+        return dataSource.deleteBookmark(bookId, bookmarkId)
     }
 }

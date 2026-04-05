@@ -12,7 +12,6 @@ data class BookDetailResponse(
     val totalPage: Int = 0,
     val currentPage: Int = 0,
     val progress: Double = 0.0,
-    val isCompleted: Boolean = false,
     val createdAt: String = "",
 ) {
     fun toBookDetail(): BookDetail = BookDetail(
@@ -23,6 +22,6 @@ data class BookDetailResponse(
         totalPage = totalPage,
         currentPage = currentPage,
         progress = progress,
-        isCompleted = isCompleted,
+        isCompleted = totalPage == currentPage,
     )
 }

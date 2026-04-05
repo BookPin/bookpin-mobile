@@ -43,6 +43,7 @@ fun BookDetailScreen(
     bookId: Long,
     onNavigateBack: () -> Unit = {},
     onNavigateToAddBookmark: () -> Unit = {},
+    onNavigateToBookmarkDetail: (book: BookDetail, bookmark: Bookmark) -> Unit = { _, _ -> },
     onNavigateToHome: () -> Unit = {},
 ) {
     val viewModel: BookDetailViewModel = koinViewModel()
@@ -60,24 +61,29 @@ fun BookDetailScreen(
             }
             BookDetailSideEffect.NavigateBack -> onNavigateBack()
             BookDetailSideEffect.NavigateToAddBookmark -> onNavigateToAddBookmark()
+            is BookDetailSideEffect.NavigateToBookmarkDetail -> {
+                onNavigateToBookmarkDetail(state.book, it.bookmark)
+            }
             BookDetailSideEffect.NavigateToHome -> onNavigateToHome()
         }
     }
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = viewModel::onAddBookmarkClick,
-                containerColor = BookPinTheme.colors.buttonPrimary,
-                contentColor = BookPinTheme.colors.iconOnAccent,
-                shape = CircleShape,
-                modifier = Modifier.size(56.dp),
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_add),
-                    contentDescription = stringResource(Res.string.cd_add_bookmark),
-                    modifier = Modifier.size(24.dp),
-                )
+            if (!state.book.isCompleted) {
+                FloatingActionButton(
+                    onClick = viewModel::onAddBookmarkClick,
+                    containerColor = BookPinTheme.colors.buttonPrimary,
+                    contentColor = BookPinTheme.colors.iconOnAccent,
+                    shape = CircleShape,
+                    modifier = Modifier.size(56.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(Res.drawable.ic_add),
+                        contentDescription = stringResource(Res.string.cd_add_bookmark),
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
             }
         },
     ) { paddingValues ->
@@ -109,6 +115,7 @@ fun BookDetailScreen(
                         currentPage = state.book.currentPage,
                         totalPages = state.book.totalPage,
                         progressPercent = state.book.progress.toInt(),
+                        isCompleted = state.book.isCompleted,
                         onMarkAsCompleteClick = viewModel::onMarkAsCompleteClick,
                     )
                 }
@@ -124,7 +131,10 @@ fun BookDetailScreen(
 
                 if (state.selectedTab == BookmarkTab.TEXT) {
                     items(state.textBookmarks, key = { it.id }) { bookmark ->
-                        TextBookmarkItem(bookmark = bookmark)
+                        TextBookmarkItem(
+                            bookmark = bookmark,
+                            onClick = { viewModel.onBookmarkClick(bookmark) },
+                        )
                     }
                 } else {
                     items(state.photoBookmarks.chunked(2)) { rowItems ->
@@ -138,6 +148,7 @@ fun BookDetailScreen(
                             rowItems.forEach { bookmark ->
                                 PhotoBookmarkItem(
                                     bookmark = bookmark,
+                                    onClick = { viewModel.onBookmarkClick(bookmark) },
                                     modifier = Modifier.weight(1f),
                                 )
                             }
@@ -210,6 +221,7 @@ private fun BookDetailStats(
     currentPage: Int,
     totalPages: Int,
     progressPercent: Int,
+    isCompleted: Boolean,
     onMarkAsCompleteClick: () -> Unit,
 ) {
     Box(
@@ -289,13 +301,17 @@ private fun BookDetailStats(
                         color = BookPinTheme.colors.bgSurface,
                         shape = RoundedCornerShape(12.dp),
                     ).clip(RoundedCornerShape(12.dp))
-                    .clickable(onClick = onMarkAsCompleteClick),
+                    .clickable(enabled = !isCompleted, onClick = onMarkAsCompleteClick),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = stringResource(Res.string.mark_as_complete),
                     style = BookPinTheme.typography.titleSmall,
-                    color = BookPinTheme.colors.textSecondary,
+                    color = if (isCompleted) {
+                        BookPinTheme.colors.textSecondary.copy(alpha = 0.4f)
+                    } else {
+                        BookPinTheme.colors.textSecondary
+                    },
                 )
             }
         }
@@ -376,6 +392,7 @@ private fun TabItem(
 @Composable
 private fun TextBookmarkItem(
     bookmark: Bookmark,
+    onClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -388,7 +405,9 @@ private fun TextBookmarkItem(
             ).background(
                 color = BookPinTheme.colors.bgElevated,
                 shape = RoundedCornerShape(16.dp),
-            ).padding(16.dp),
+            ).clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(16.dp),
     ) {
         Text(
             text = stringResource(Res.string.page_format, bookmark.pageNumber),
@@ -421,6 +440,7 @@ private fun TextBookmarkItem(
 @Composable
 private fun PhotoBookmarkItem(
     bookmark: Bookmark,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -435,7 +455,8 @@ private fun PhotoBookmarkItem(
                 width = 0.5.dp,
                 color = BookPinTheme.colors.borderSubtle,
                 shape = RoundedCornerShape(16.dp),
-            ).clip(RoundedCornerShape(16.dp)),
+            ).clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick),
     ) {
         Box(
             modifier = Modifier

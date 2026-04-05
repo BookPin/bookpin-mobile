@@ -14,7 +14,7 @@ fun BPLoadingScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(BookPinTheme.colors.bgCanvas),
+            .background(BookPinTheme.colors.bgCanvas.copy(alpha = 0.6f)),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
