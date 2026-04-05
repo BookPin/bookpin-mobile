@@ -10,6 +10,5 @@ data class BookItem(
     val progress: Double,
     val bookmarkCount: Int,
 ) {
-    val isCompleted: Boolean
-        get() = progress >= 100.0
+    val isCompleted: Boolean = totalPage == currentPage
 }

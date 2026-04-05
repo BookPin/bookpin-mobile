@@ -70,7 +70,7 @@ fun BookDetailScreen(
 
     Scaffold(
         floatingActionButton = {
-            if (!state.isCompleted) {
+            if (!state.book.isCompleted) {
                 FloatingActionButton(
                     onClick = viewModel::onAddBookmarkClick,
                     containerColor = BookPinTheme.colors.buttonPrimary,
@@ -115,7 +115,7 @@ fun BookDetailScreen(
                         currentPage = state.book.currentPage,
                         totalPages = state.book.totalPage,
                         progressPercent = state.book.progress.toInt(),
-                        isCompleted = state.isCompleted,
+                        isCompleted = state.book.isCompleted,
                         onMarkAsCompleteClick = viewModel::onMarkAsCompleteClick,
                     )
                 }

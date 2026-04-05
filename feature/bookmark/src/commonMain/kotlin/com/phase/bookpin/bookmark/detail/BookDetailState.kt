@@ -9,7 +9,6 @@ data class BookDetailState(
     val photoBookmarks: List<Bookmark> = emptyList(),
     val selectedTab: BookmarkTab = BookmarkTab.TEXT,
     val isLoading: Boolean = false,
-    val isCompleted: Boolean = false,
 )
 
 enum class BookmarkTab {
