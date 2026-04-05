@@ -110,11 +110,6 @@ fun BookPinApp(
                     onNavigateBack = {
                         backStack.removeLastOrNull()
                     },
-                    onNavigateBackToBookDetail = {
-                        while (backStack.lastOrNull() !is BookDetailRoute) {
-                            backStack.removeLastOrNull() ?: break
-                        }
-                    },
                     onLogout = {
                         backStack.clear()
                         backStack.add(SplashRoute)
