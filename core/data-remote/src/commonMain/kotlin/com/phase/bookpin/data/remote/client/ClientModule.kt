@@ -114,11 +114,14 @@ private suspend fun refreshBearerTokens(
         local.saveString(DataStoreKey.ACCESS_TOKEN, response.accessToken)
         local.saveString(DataStoreKey.REFRESH_TOKEN, response.refreshToken)
         BearerTokens(response.accessToken, response.refreshToken)
-    }.onFailure { throwable ->
+    }.getOrElse { throwable ->
         if (throwable.shouldReAuthenticateFailure()) {
             listener.onInvalidRefreshToken()
+            null
+        } else {
+            loadBearerTokens(local).getOrNull()
         }
-    }.getOrNull()
+    }
 }
 
 internal fun createRefreshHttpClient(logger: KermitLogger): HttpClient = createPlatformHttpClient {
