@@ -163,7 +163,7 @@ private fun BookInfoSection(
     ) {
         AsyncImage(
             model = bookImageUrl,
-            contentDescription = null,
+            contentDescription = bookTitle,
             modifier = Modifier
                 .width(48.dp)
                 .height(72.dp)
@@ -194,7 +194,7 @@ private fun BookInfoSection(
             Spacer(modifier = Modifier.height(2.dp))
 
             Text(
-                text = "p.$pageNumber · $createdAt",
+                text = "${stringResource(Res.string.page_format, pageNumber)} · $createdAt",
                 style = BookPinTheme.typography.bodySmall,
                 color = BookPinTheme.colors.textSecondary,
             )
@@ -215,7 +215,7 @@ private fun BookmarkPhotoSection(
 ) {
     AsyncImage(
         model = imageUrl,
-        contentDescription = null,
+        contentDescription = stringResource(Res.string.cd_photo_bookmark),
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
