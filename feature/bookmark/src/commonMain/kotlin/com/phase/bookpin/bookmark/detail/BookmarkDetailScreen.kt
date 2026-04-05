@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import bookpin.bookmark.generated.resources.*
 import coil3.compose.AsyncImage
 import com.phase.bookpin.common.extensions.collectSideEffect
+import com.phase.bookpin.common.extensions.toFormattedDate
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
 import com.phase.bookpin.designsystem.component.BPConfirmDialog
@@ -194,7 +195,7 @@ private fun BookInfoSection(
             Spacer(modifier = Modifier.height(2.dp))
 
             Text(
-                text = "${stringResource(Res.string.page_format, pageNumber)} · $createdAt",
+                text = "${stringResource(Res.string.page_format, pageNumber)} · ${createdAt.toFormattedDate()}",
                 style = BookPinTheme.typography.bodySmall,
                 color = BookPinTheme.colors.textSecondary,
             )

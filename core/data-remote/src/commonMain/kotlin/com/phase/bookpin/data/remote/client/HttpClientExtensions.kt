@@ -23,7 +23,7 @@ suspend inline fun <reified T> HttpClient.safeRequest(
             Result.success(parsedBody as? T ?: responseBody)
         } else {
             val errorBody = response.body<RemoteException>()
-            Result.failure(errorBody)
+            Result.failure(errorBody.copy(status = response.status.value))
         }
     }.getOrElse { exception ->
         Logger.e(exception.message.toString())
