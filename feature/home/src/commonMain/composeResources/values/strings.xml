@@ -12,7 +12,7 @@
     <string name="unknown_error_message">알 수 없는 예외가 발생하였습니다</string>
 
     <string name="completed_badge">완독</string>
-    <string name="all_pages_read">%dp 모두 읽음</string>
+    <string name="all_pages_read">%1$dp 모두 읽음</string>
 
     <!-- Content Descriptions -->
     <string name="cd_bookpin_icon">BookPin 아이콘</string>
