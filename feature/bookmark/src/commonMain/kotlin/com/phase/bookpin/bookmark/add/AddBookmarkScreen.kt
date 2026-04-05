@@ -13,6 +13,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -42,6 +43,7 @@ fun AddBookmarkScreen(
     bookId: Long,
     bookmarkType: BookmarkType,
     onNavigateBack: () -> Unit,
+    onBookmarkSaved: () -> Unit,
 ) {
     val viewModel: AddBookmarkViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -72,8 +74,12 @@ fun AddBookmarkScreen(
     }
 
     LaunchedEffect(bookId, bookmarkType) {
-        viewModel.init(bookId, bookmarkType)
+        viewModel.onScreenEnter(bookId, bookmarkType)
         launchPicker(bookmarkType)
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { viewModel.onScreenExit() }
     }
 
     viewModel.sideEffect.collectSideEffect {
@@ -82,7 +88,7 @@ fun AddBookmarkScreen(
                 snackbarHost.showSnackbar(it.message)
             }
             AddBookmarkSideEffect.NavigateBack -> onNavigateBack()
-            AddBookmarkSideEffect.BookmarkSaved -> onNavigateBack()
+            AddBookmarkSideEffect.BookmarkSaved -> onBookmarkSaved()
         }
     }
 

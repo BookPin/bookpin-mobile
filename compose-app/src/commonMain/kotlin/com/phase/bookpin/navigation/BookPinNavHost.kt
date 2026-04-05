@@ -28,6 +28,7 @@ fun BookPinNavHost(
     onNavigateToBookPreview: (BookPreviewRoute) -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateBackToBookDetail: () -> Unit,
     onLogout: () -> Unit,
 ) {
     NavDisplay(
@@ -133,6 +134,7 @@ fun BookPinNavHost(
                     bookId = route.bookId,
                     bookmarkType = route.bookmarkType,
                     onNavigateBack = onNavigateBack,
+                    onBookmarkSaved = onNavigateBackToBookDetail,
                 )
             }
 

@@ -3,7 +3,6 @@ package com.phase.bookpin.search.preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -28,7 +27,9 @@ import com.phase.bookpin.common.extensions.collectSideEffect
 import com.phase.bookpin.common.extensions.noRippleClickable
 import com.phase.bookpin.common.snackbar.LocalSnackbarHost
 import com.phase.bookpin.designsystem.BookPinTheme
+import com.phase.bookpin.designsystem.component.BPCloseButton
 import com.phase.bookpin.designsystem.component.BPTextField
+import com.phase.bookpin.designsystem.component.BPTopBar
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -69,9 +70,22 @@ fun BookPreviewScreen(
 
     Scaffold(
         topBar = {
-            BookPreviewTopBar(
-                onBackClick = viewModel::onBackClick,
-                onCloseClick = viewModel::onCloseClick,
+            BPTopBar(
+                title = stringResource(Res.string.book_preview_title),
+                navigationIcon = {
+                    IconButton(
+                        onClick = viewModel::onBackClick,
+                        modifier = Modifier.size(36.dp),
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_arrow_back),
+                            contentDescription = stringResource(Res.string.cd_back),
+                            modifier = Modifier.size(20.dp),
+                            tint = BookPinTheme.colors.iconDefault,
+                        )
+                    }
+                },
+                actions = { BPCloseButton(onClick = viewModel::onCloseClick) },
             )
         },
         bottomBar = {
@@ -122,60 +136,6 @@ fun BookPreviewScreen(
             )
 
             Spacer(modifier = Modifier.height(24.dp))
-        }
-    }
-}
-
-@Composable
-private fun BookPreviewTopBar(
-    onBackClick: () -> Unit,
-    onCloseClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.size(40.dp),
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_arrow_back),
-                    contentDescription = stringResource(Res.string.cd_back),
-                    modifier = Modifier.size(24.dp),
-                    tint = BookPinTheme.colors.iconDefault,
-                )
-            }
-
-            Text(
-                text = stringResource(Res.string.book_preview_title),
-                style = BookPinTheme.typography.headlineMedium,
-                color = BookPinTheme.colors.textPrimary,
-            )
-        }
-
-        IconButton(
-            onClick = onCloseClick,
-            modifier = Modifier
-                .size(40.dp)
-                .background(
-                    color = BookPinTheme.colors.bgSurface,
-                    shape = CircleShape,
-                ),
-        ) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_close),
-                contentDescription = stringResource(Res.string.cd_close),
-                modifier = Modifier.size(24.dp),
-                tint = BookPinTheme.colors.iconDefault,
-            )
         }
     }
 }

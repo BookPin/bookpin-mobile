@@ -17,9 +17,13 @@ class AddBookmarkViewModel(
 
     private var bookId: Long = 0L
 
-    fun init(bookId: Long, bookmarkType: BookmarkType) {
+    fun onScreenEnter(bookId: Long, bookmarkType: BookmarkType) {
         this.bookId = bookId
         reduce { copy(bookmarkType = bookmarkType) }
+    }
+
+    fun onScreenExit() {
+        reduce { AddBookmarkState() }
     }
 
     fun onExtractedTextChanged(text: String) {
